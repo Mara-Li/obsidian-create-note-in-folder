@@ -1,9 +1,7 @@
 import {Plugin, WorkspaceLeaf} from "obsidian";
 import {DEFAULT_SETTINGS, DefaultOpening, NoteInFolderSettings} from "./interface";
 import {NoteInFolderSettingsTab} from "./settings";
-
-// Remember to rename these classes and interfaces!
-
+import {t} from "./i18n";
 
 export default class NoteInFolder extends Plugin {
 	settings: NoteInFolderSettings;
@@ -13,7 +11,6 @@ export default class NoteInFolder extends Plugin {
 		await this.loadSettings();
 		
 		this.addSettingTab(new NoteInFolderSettingsTab(this.app, this));
-		
 		const folders = this.settings.folder;
 		for (const folder of folders) {
 			this.addCommand({

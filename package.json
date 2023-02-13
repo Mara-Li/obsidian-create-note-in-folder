@@ -6,11 +6,15 @@
 	"scripts": {
 		"dev": "node esbuild.config.mjs",
 		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
-		"version": "node version-bump.mjs && git add manifest.json versions.json"
+		"version": "node version-bump.mjs && git add manifest.json versions.json",
+		"publish": "commit-and-tag-version"
+	},
+	"commit-and-tag-version" : {
+		"t": ""
 	},
 	"keywords": [],
-	"author": "",
-	"license": "MIT",
+	"author": "Mara-Li",
+	"license": "GNU General Public License v3.0",
 	"devDependencies": {
 		"@types/node": "^16.11.6",
 		"@typescript-eslint/eslint-plugin": "5.29.0",
@@ -22,6 +26,7 @@
 		"typescript": "4.7.4"
 	},
 	"dependencies": {
-		"@popperjs/core": "^2.11.6"
+		"@popperjs/core": "^2.11.6",
+		"commit-and-tag-version": "^11.0.0"
 	}
 }

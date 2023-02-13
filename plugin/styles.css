@@ -2,6 +2,6 @@
     display: none;
 }
 
-.note-in-folder-setting > .search-input-container input {
+.note-in-folder-setting .search-input-container {
     width: 100%;
 }
