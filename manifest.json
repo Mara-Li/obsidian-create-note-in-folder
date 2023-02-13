@@ -1,11 +1,11 @@
 {
-	"id": "obsidian-sample-plugin",
-	"name": "Sample Plugin",
-	"version": "1.0.0",
+	"id": "create-note-in-folder",
+	"name": "Create Note in Folder",
+	"version": "0.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "This is a sample plugin for Obsidian. This plugin demonstrates some of the capabilities of the Obsidian API.",
-	"author": "Obsidian",
-	"authorUrl": "https://obsidian.md",
+	"description": "Add commands to create a note in a specific folder.",
+	"author": "Mara-Li",
+	"authorUrl": "https://www.github.com/mara-li",
 	"fundingUrl": "https://obsidian.md/pricing",
 	"isDesktopOnly": false
 }
