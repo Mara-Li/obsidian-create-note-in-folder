@@ -26,7 +26,6 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 				.onChange(async (value) => {
 					this.plugin.settings.defaultName = value;
 					await this.plugin.saveSettings();
-					this.display();
 				}));
 		
 		const opening = new Setting(containerEl)
@@ -35,12 +34,13 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 			.addDropdown(cb => cb
 				.addOption(DefaultOpening.newTab, t("opening.dropDown.newTab") as string)
 				.addOption(DefaultOpening.current, t("opening.dropDown.current") as string)
-				.addOption(DefaultOpening.split, t("opening.dropDown.split.title") as string)
 				.addOption(DefaultOpening.newWindow, t("opening.dropDown.newWindow") as string)
+				.addOption(DefaultOpening.split, t("opening.dropDown.split.title") as string)
 				.setValue(this.plugin.settings.opening)
 				.onChange(async (value) => {
 					this.plugin.settings.opening = value as DefaultOpening;
 					await this.plugin.saveSettings();
+					this.display();
 				}));
 		
 		if (this.plugin.settings.opening === DefaultOpening.split) {
