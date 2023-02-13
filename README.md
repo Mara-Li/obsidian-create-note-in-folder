@@ -17,7 +17,7 @@ After adding the folder, you can use the command "Create new note in folder {fol
 ## Installation
 
 - [ ] From Obsidian's community plugins
-- [x] Using [BRAT](https://github.com/TfTHacker/obsidian42-brat#adding-a-beta-plugin) using `https://github.com/Lisandra-dev/create-note-in-folder
+- [x] Using [BRAT](https://github.com/TfTHacker/obsidian42-brat#adding-a-beta-plugin) using `https://github.com/Lisandra-dev/create-note-in-folder`
 - [x] From release page:
   - Download the latest release
   - Unzip create-note-in-folder.zip in `.obsidian/plugins/` folder
