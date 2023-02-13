@@ -1,5 +1,7 @@
 export default {
 	title: "Folders",
+	error: "This folder is already in the list or not found",
+	folderNotFound: "Folder not found",
 	name : {
 		title: "Default Name",
 		desc: "Default name for new notes"

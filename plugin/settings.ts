@@ -1,4 +1,4 @@
-import {App, PluginSettingTab, Setting} from "obsidian";
+import {App, Notice, PluginSettingTab, Setting} from "obsidian";
 import NoteInFolder from "./main";
 import {FolderSuggest} from "./fileSuggest";
 import {DefaultOpening, SplitDirection} from "./interface";
@@ -76,6 +76,12 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 					cb.setPlaceholder(t("example") as string);
 					cb.setValue(this.plugin.settings.folder[index]);
 					cb.onChange(async (value) => {
+						if (this.plugin.settings.folder.includes(value)) {
+							new Notice(t("error") as string);
+							value = "";
+							cb.setValue("");
+						}
+						this.plugin.addNewCommands(this.plugin.settings.folder[index], value);
 						this.plugin.settings.folder[index] = value;
 						await this.plugin.saveSettings();
 					});
@@ -84,8 +90,11 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 					cb
 						.setIcon("cross")
 						.setTooltip(t("remove") as string)
-						.onClick(() => {
+						.onClick(async () => {
+							const folderDeleted = this.plugin.settings.folder[index];
 							this.plugin.settings.folder.splice(index, 1);
+							await this.plugin.saveSettings();
+							this.plugin.addNewCommands(folderDeleted, undefined);
 							this.display();
 						}));
 			

@@ -1,5 +1,7 @@
 export default {
 	title: "Dossiers",
+	error: "Ce dossier est déjà dans la liste ou n'existe pas.",
+	folderNotFound: "Dossier introuvable",
 	name : {
 		title: "Nom par défaut",
 		desc: "Nom par défaut pour les nouvelles notes"

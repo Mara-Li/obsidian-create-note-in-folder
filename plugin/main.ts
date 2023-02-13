@@ -1,24 +1,37 @@
-import {Plugin, WorkspaceLeaf} from "obsidian";
+import {Plugin, WorkspaceLeaf, Notice} from "obsidian";
 import {DEFAULT_SETTINGS, DefaultOpening, NoteInFolderSettings} from "./interface";
 import {NoteInFolderSettingsTab} from "./settings";
+import {t} from "./i18n";
 
 export default class NoteInFolder extends Plugin {
 	settings: NoteInFolderSettings;
 
-	async onload() {
-		console.log("Create Note in Folder plugin loaded");
-		await this.loadSettings();
-		
-		this.addSettingTab(new NoteInFolderSettingsTab(this.app, this));
-		const folders = this.settings.folder;
-		for (const folder of folders) {
+	addNewCommands(
+		oldFolder: string | undefined,
+		newFolder: string | undefined,
+	)
+	{
+
+		if (oldFolder !== undefined) {
+			//@ts-ignore
+			app.commands.removeCommand(`${this.manifest.id}:create-note-in-folder-${oldFolder}`);
+		}
+		if (newFolder !== undefined) {
 			this.addCommand({
-				id: `create-note-in-folder-${folder}`,
-				name: `${folder}`,
+				id: `create-note-in-folder-${newFolder}`,
+				name: `${newFolder}`,
 				callback: async () => {
 					const defaultName = this.settings.defaultName;
-					console.log("Creating note in folder: " + folder + " with name: " + defaultName + ".md");
-					const file = await this.app.vault.create(`${folder}/${defaultName}.md`, "");
+					console.log("Creating note in folder: " + newFolder + " with name: " + defaultName + ".md");
+					//check if folder exists
+					if (!this.app.vault.getAbstractFileByPath(newFolder)) {
+						new Notice(t("folderNotFound") as string);
+						this.settings.folder = this.settings.folder.filter((folder) => folder !== newFolder);
+						this.addNewCommands(newFolder, undefined);
+						this.saveSettings();
+						return;
+					}
+					const file = await this.app.vault.create(`${newFolder}/${defaultName}.md`, "");
 					let leaf: WorkspaceLeaf;
 					switch (this.settings.opening) {
 						case DefaultOpening.split:
@@ -37,6 +50,17 @@ export default class NoteInFolder extends Plugin {
 					await leaf.openFile(file, {active: this.settings.focused});
 				}
 			});
+		}
+	}
+	
+	async onload() {
+		console.log("Create Note in Folder plugin loaded");
+		await this.loadSettings();
+		
+		this.addSettingTab(new NoteInFolderSettingsTab(this.app, this));
+		const folders = this.settings.folder;
+		for (const folder of folders) {
+			this.addNewCommands(undefined, folder);
 		}
 	}
 
