@@ -1,7 +1,7 @@
 {
 	"id": "create-note-in-folder",
 	"name": "Create Note in Folder",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"minAppVersion": "0.15.0",
 	"description": "Add commands to create a note in a specific folder.",
 	"author": "Mara-Li",
