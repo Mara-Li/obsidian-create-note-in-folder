@@ -36,3 +36,9 @@ To add a translation:
 - Translate the content of the file
 - Create a pull request
 
+## Credit  
+Many thanks to @SilentVoid13 and @RafaelGB for their [Templater](https://github.com/SilentVoid13/Templater) and [dbFolder](https://github.com/RafaelGB/obsidian-db-folder), where some part of the code where taken.  
+
+---
+
+<a href='https://ko-fi.com/X8X54ZYAV' target='_blank'><img height='36' style='border:0px;height:36px;display:block;margin-left:50%;' src='https://cdn.ko-fi.com/cdn/kofi1.png?v=3' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>  
