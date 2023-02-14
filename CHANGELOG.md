@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.4](https://github.com/Lisandra-dev/create-note-in-folder/compare/0.0.3...0.0.4) (2023-02-14)
+
+
+### Features
+
+* more template settings for filename creation ([57ee152](https://github.com/Lisandra-dev/create-note-in-folder/commit/57ee15237ff5c201221b77ec60022504a36e2f21))
+
+
+### Bug Fixes
+
+* placeholder invisible ([8350184](https://github.com/Lisandra-dev/create-note-in-folder/commit/835018425fc3fc8e47beba43a81f6cc13844180e))
+* settings ([79f9024](https://github.com/Lisandra-dev/create-note-in-folder/commit/79f9024213dec01880f87d8459721bed3dbe43dd))
+
 ## [0.0.3](https://github.com/Lisandra-dev/create-note-in-folder/compare/0.0.2...0.0.3) (2023-02-14)
 
 
