@@ -5,3 +5,7 @@
 .note-in-folder-setting .search-input-container {
     width: 100%;
 }
+
+.is-error input {
+    border: 1px solid red;
+}

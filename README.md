@@ -1,18 +1,29 @@
-# Create new note in folder  
+# Create new note in path  
 
-This plugin add a new command to create a new note in a specific folder.  
+This plugin add a new command to create a new note in a specific path.  
 
-To add a folder, use the settings tab. It will ask you to select a folder. The plugin will then create a new note in this folder.  
+To add a path, use the settings tab. It will ask you to select a path. The plugin will then create a new note in this path.  
 
-You can choose how, by default :  
-- The note is named  
+You can choose how, per each folder :  
+- The note is named
 - The note is created (in the current tab, in a new tab, windows or in a split view)  
 - If the note must be focused after creation  
 
-After adding the folder, you can use the command "Create new note in folder {folder path}" to create a new note in this folder.  
+After adding the path, you can use the command "Create new note in folder {path}" to create a new note in this path.  
+
+### About file name
+
+You can choose three options for the file name:
+- A string name (ex: "Untitled")
+- The date (based on a format)
+- The folder name
+
+For the date, you need to choose the format. You can use the same format as the [date format](https://momentjs.com/docs/#/displaying/format/) of moment.js.
+
+The title will be incremented if a file with the same name already exists.
 
 > **Note**  
-> If you have set a template for the folder, the new note will be created with the template.  
+> If you have set a template for the path, the new note will be created with the template.  
 
 ## Installation  
 
@@ -20,7 +31,7 @@ After adding the folder, you can use the command "Create new note in folder {fol
 - [x] Using [BRAT](https://github.com/TfTHacker/obsidian42-brat#adding-a-beta-plugin) using `https://github.com/Lisandra-dev/create-note-in-folder`  
 - [x] From release page:  
   - Download the latest release  
-  - Unzip create-note-in-folder.zip in `.obsidian/plugins/` folder  
+  - Unzip create-note-in-path.zip in `.obsidian/plugins/` path  
   - In Obsidian settings, reload the plugin  
   - Enable the plugin  
 
