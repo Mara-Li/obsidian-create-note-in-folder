@@ -2,29 +2,32 @@ export default {
 	title: "Dossiers",
 	error: "Ce dossier est déjà dans la liste ou n'existe pas.",
 	folderNotFound: "Dossier introuvable",
-	name : {
-		template: {
-			title: "Choisissez la façon dont les notes seront nommées. Le nom sera incrémenté si le nom existe déjà. De plus, pas besoin d'ajouter l'extension.",
-			dropDown: {
-				date: {
-					title: "Date",
-					desc: "Les formats valides peuvent être trouvés ",
-					here: "ici",
-					url: "https://momentjs.com/docs/#/displaying/format/",
-					error: "Format de date invalide, veuillez utiliser un format valide."
-
-				},
-				string: {
-					title: "Chaîne de caractères",
-					desc: "Vous pouvez utiliser n'importe quelle chaîne de caractères ici."
-				},
-				folderName: "Nom du dossier",
-			}
-		},
-		title: "Nom par défaut",
+	header: {
+		template: "Modèle",
+		opening: "Ouverture",
 	},
+	template: {
+		title: "Choisissez un modèle si vous voulez ajouter quelque chose avant ou après le nom du fichier.",
+		dropDown: {
+			date: {
+				title: "Date",
+				desc: "Les formats valides peuvent être trouvés ",
+				here: "ici",
+				url: "https://momentjs.com/docs/#/displaying/format/",
+				error: "Format de date invalide, veuillez utiliser un format valide."
+			},
+			none: "Aucun",
+			folderName: "Nom du dossier",
+		},
+		position: {
+			title: "Choisissez où ajouter le modèle.",
+			prepend: "Ajouter avant",
+			append: "Ajouter après",
+		},
+		separator: "Séparateur",
+	},
+	fileName: "Choisissez la façon dont les notes seront nommées. Le nom sera incrémenté si le nom existe déjà. De plus, pas besoin d'ajouter l'extension.",
 	opening: {
-		
 		title: "Ouverture par défaut",
 		desc: "Comment la note sera ouverte après sa création",
 		dropDown: {

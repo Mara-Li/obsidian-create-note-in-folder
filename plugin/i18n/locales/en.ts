@@ -1,26 +1,33 @@
 export default {
 	title: "Folders",
 	error: "This path is already in the list or not found",
+	header: {
+		template: "Template",
+		opening: "Opening",
+	},
 	folderNotFound: "Folder not found",
-	name : {
-		template: {
-			title: "Choose the way to name the note. The name will be incremented if the name already exists. Also, no need to add the extension.",
-			dropDown: {
-				date: {
-					title: "Date",
-					desc: "Valid format can be found ",
-					here: "here",
-					url: "https://momentjs.com/docs/#/displaying/format/",
-					error: "Invalid date format, please use a valid format."
-				},
-				string: {
-					title: "String",
-					desc: "You can use any string name here."
-				},
-				folderName: "Folder Name",
-			}
+	template: {
+		title: "Choose a template if you want to add something before or after the filename.",
+		dropDown: {
+			date: {
+				title: "Date",
+				desc: "Valid format can be found ",
+				here: "here",
+				url: "https://momentjs.com/docs/#/displaying/format/",
+				error: "Invalid date format, please use a valid format."
+			},
+			none: "None",
+			folderName: "Folder Name",
 		},
-		title: "Default Name",
+		position: {
+			title: "Choose where to add the template.",
+			prepend: "Prepend",
+			append: "Append",
+		},
+		separator: "Separator",
+	},
+	fileName: {
+		title: "Choose how notes will be named. The name will be incremented if the name already exists. Also, no need to add the extension.",
 	},
 	opening: {
 		title: "Default Opening",

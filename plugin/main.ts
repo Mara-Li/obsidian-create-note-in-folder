@@ -1,11 +1,12 @@
 import {moment, Notice, Plugin, WorkspaceLeaf} from "obsidian";
 import {
+	DEFAULT_FOLDER_SETTINGS,
 	DEFAULT_SETTINGS,
 	DefaultOpening,
 	FolderSettings,
 	NoteInFolderSettings,
-	SplitDirection,
-	TypeName
+	Position,
+	TemplateType
 } from "./interface";
 import {NoteInFolderSettingsTab} from "./settings";
 import {t} from "./i18n";
@@ -14,11 +15,20 @@ export default class NoteInFolder extends Plugin {
 	settings: NoteInFolderSettings;
 
 	generateFileName(folder: FolderSettings): string {
-		let defaultName = folder.formatName;
+		let defaultName = folder.fileName;
 		defaultName.replace(".md", "");
-		const typeName = folder.typeName;
-		if (typeName === TypeName.date) {
-			defaultName = moment().format(defaultName);
+		const template = folder.template;
+		const typeName = template.type;
+		let generatedName = null;
+		if (typeName === TemplateType.date) {
+			generatedName = moment().format(template.format);
+		} else if (typeName === TemplateType.folderName) {
+			generatedName = folder.path.split("/").pop() as string;
+		}
+		if (template.position === Position.prepend && generatedName) {
+			defaultName = generatedName + template.separator + defaultName;
+		} else if (template.position === Position.append && generatedName) {
+			defaultName = defaultName + template.separator + generatedName;
 		}
 		while (this.app.vault.getAbstractFileByPath(`${folder.path}/${defaultName}.md`)) {
 			const increment = defaultName.match(/ \d+$/);
@@ -28,15 +38,28 @@ export default class NoteInFolder extends Plugin {
 		return defaultName + ".md";
 	}
 	
+	async removeCommands()
+	{
+		//@ts-ignore
+		const pluginCommands = Object.keys(this.app.commands.commands).filter((command) => command.startsWith("create-note-in-folder:create-note-in-folder"));
+		for (const command of pluginCommands) {
+			//remove commands if the folder is not in the settings
+			if (!this.settings.folder.some((folder) => folder.path === command.replace("create-note-in-folder:create-note-in-folder-", ""))) {
+				//@ts-ignore
+				app.commands.removeCommand(command);
+			}
+		}
+	}
+	
 	async addNewCommands(
 		oldFolder: string | undefined,
 		newFolder: FolderSettings | undefined,
 	)
 	{
-
+		console.log("Old folder: ", oldFolder);
 		if (oldFolder !== undefined) {
 			//@ts-ignore
-			app.commands.removeCommand(`${this.manifest.id}:create-note-in-folder-${oldFolder.path}`);
+			app.commands.removeCommand(`create-note-in-folder:create-note-in-folder-${oldFolder}`);
 		}
 		if (newFolder !== undefined) {
 			this.addCommand({
@@ -80,17 +103,38 @@ export default class NoteInFolder extends Plugin {
 		await this.loadSettings();
 		
 		//convert old settings (string[] to FolderSettings[])
+		console.log(typeof this.settings.folder[0]);
 		if (this.settings.folder.length > 0 && typeof this.settings.folder[0] === "string") {
 			const oldFolders = this.settings.folder as unknown as string[];
 			this.settings.folder = [];
 			for (const folder of oldFolders) {
-				this.settings.folder.push({
-					path: folder,
-					formatName: "Untitled",
-					typeName: TypeName.string,
-					opening: DefaultOpening.current,
-					focused: true,
-					splitDefault: SplitDirection.vertical});
+				//create a copy of the default settings
+				const defaultSettings = JSON.parse(JSON.stringify(DEFAULT_FOLDER_SETTINGS));
+				defaultSettings.path = folder;
+				this.settings.folder.push(defaultSettings);
+			}
+			await this.saveSettings();
+		}
+		
+		//check of old settings are still valid
+		for (const folder of this.settings.folder) {
+			//check if template is in folderSettings
+			if (!Object.values(folder).includes(folder.template)) {
+				//@ts-ignore
+				folder.fileName = folder.formatName;
+				folder.template = {
+					//@ts-ignore
+					type: folder.typeName as TemplateType,
+					//@ts-ignore
+					format: folder.formatName,
+					position: Position.append,
+					separator: " ",
+				};
+				//delete old settings
+				//@ts-ignore
+				delete folder.TypeName;
+				//@ts-ignore
+				delete folder.formatName;
 			}
 			await this.saveSettings();
 		}

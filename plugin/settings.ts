@@ -1,7 +1,14 @@
 import {App, Notice, PluginSettingTab, Setting} from "obsidian";
 import NoteInFolder from "./main";
 import {FolderSuggest} from "./fileSuggest";
-import {DefaultOpening, FolderSettings, SplitDirection, TypeName} from "./interface";
+import {
+	DEFAULT_FOLDER_SETTINGS,
+	DefaultOpening,
+	FolderSettings,
+	Position,
+	SplitDirection,
+	TemplateType
+} from "./interface";
 import {t} from "./i18n";
 import {AddFolderModal} from "./modal";
 
@@ -15,16 +22,9 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 	
 	display(): void {
 		const {containerEl} = this;
-		
 		containerEl.empty();
-		
 		containerEl.createEl("h1", {text: this.plugin.manifest.name});
-
-		
-		
 		containerEl.createEl("h3", {text: t("title") as string});
-
-		
 		this.plugin.settings.folder.forEach((folder, index) => {
 			new Setting(containerEl)
 				.setClass("note-in-folder-setting")
@@ -40,7 +40,9 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 						}
 						const newFolder = this.plugin.settings.folder[index];
 						newFolder.path = value;
-						await this.plugin.addNewCommands(this.plugin.settings.folder[index].path, newFolder);
+						const oldFolder = this.plugin.settings.folder[index].path;
+						await this.plugin.addNewCommands(oldFolder, newFolder);
+						this.plugin.removeCommands();
 						this.plugin.settings.folder[index].path = value;
 						await this.plugin.saveSettings();
 					});
@@ -71,17 +73,13 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 		new Setting(containerEl)
 			.addButton(cb => cb
 				.setButtonText(t("add") as string)
-				.onClick(() => {
-					const newFolder: FolderSettings = {
-						path: "",
-						typeName: TypeName.string,
-						formatName: "Untitled",
-						opening: DefaultOpening.newTab,
-						splitDefault: SplitDirection.horizontal,
-						focused: true
-					};
-					this.plugin.settings.folder.push(newFolder);
+				.onClick(async () => {
+					//create a copy of the default settings
+					const defaultSettings = JSON.parse(JSON.stringify(DEFAULT_FOLDER_SETTINGS));
+					this.plugin.settings.folder.push(defaultSettings);
+					await this.plugin.saveSettings();
 					this.display();
+					
 				}));
 		
 	}

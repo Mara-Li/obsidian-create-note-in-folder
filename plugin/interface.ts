@@ -10,20 +10,34 @@ export enum SplitDirection {
 	vertical = "vertical"
 }
 
-export enum TypeName {
-	string = "string",
+export enum TemplateType {
 	date = "date",
-	folderName = "folderName"
+	folderName = "folderName",
+	none = "none"
+}
+
+export enum Position {
+	prepend = "prepend",
+	append = "append",
+	none = "none"
 }
 
 export interface FolderSettings {
 	path: string;
-	typeName: TypeName;
-	formatName: string;
+	template: {
+		type: TemplateType;
+		format: string;
+		position: Position;
+		separator: string;
+	};
+	fileName: string;
 	opening: DefaultOpening;
 	focused: boolean;
 	splitDefault: SplitDirection;
+	
 }
+
+
 
 export interface NoteInFolderSettings {
 	folder: FolderSettings[];
@@ -33,4 +47,16 @@ export const DEFAULT_SETTINGS: NoteInFolderSettings = {
 	folder: [],
 };
 
-
+export const DEFAULT_FOLDER_SETTINGS: FolderSettings = {
+	path: "",
+	template: {
+		type: TemplateType.none,
+		format: "",
+		position: Position.none,
+		separator: " ",
+	},
+	fileName: "Untitled",
+	opening: DefaultOpening.newTab,
+	focused: true,
+	splitDefault: SplitDirection.horizontal,
+};

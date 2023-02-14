@@ -1,6 +1,7 @@
 import {App, Modal, Notice, Setting, moment} from "obsidian";
 import {t} from "./i18n";
-import {DefaultOpening, FolderSettings, SplitDirection, TypeName} from "./interface";
+import {DefaultOpening, FolderSettings, Position, SplitDirection, TemplateType} from "./interface";
+import {tooltips} from "@codemirror/view";
 
 
 /**
@@ -17,38 +18,59 @@ export class AddFolderModal extends Modal {
 		this.onSubmit = onSubmit;
 	}
 	
-	settingName(contentEl: HTMLElement, typeName: TypeName) {
-		let paramName: Setting | null;
-		if (typeName !== TypeName.folderName) {
-			const desc= document.createDocumentFragment();
-			const title = t("name.template.dropDown." + typeName + ".title") as string;
-			if (TypeName.date === this.result.typeName) {
-				desc.createEl("span", undefined, (span) => {
-					span.innerText = t("name.template.dropDown.date.desc") as string;
-					span.createEl("a", undefined, (a) => {
-						a.innerText = t("name.template.dropDown.date.here") as string;
-						a.href = t("name.template.date.url") as string;
+	dateSettings(contentEl: HTMLElement) {
+		const desc = document.createDocumentFragment();
+		const title = t("template.dropDown.date.title") as string;
+		desc.createEl("span", undefined, (span) => {
+			span.innerText = t("template.dropDown.date.desc") as string;
+			span.createEl("a", undefined, (a) => {
+				a.innerText = t("template.dropDown.date.here") as string;
+				a.href = t("template.date.url") as string;
+			});
+		});
+		const paramName = new Setting(contentEl)
+			.setName(title)
+			.setDesc(desc)
+			.addText(cb => {
+				cb
+					.setValue(this.result.template.format)
+					.onChange((value) => {
+						this.result.template.format = value as string;
+						paramName?.controlEl.classList.remove("is-error");
 					});
-				});
-			} else {
-				desc.createEl("span", undefined, (span) => {
-					span.innerText = t("name.template.dropDown.string.desc") as string;
-				});
+			});
+		return paramName;
+	}
+	
+	settingName(contentEl: HTMLElement, typeName: TemplateType) {
+		let paramName: Setting | null = null;
+		if (typeName !== TemplateType.none) {
+			contentEl.createEl("h3", {text: t("header.template") as string});
+			if (TemplateType.date === this.result.template.type) {
+				paramName = this.dateSettings(contentEl);
+			} else if (TemplateType.folderName === this.result.template.type) {
+				this.result.template.format = this.result.path.split("/").pop() as string;
 			}
-			paramName = new Setting(contentEl)
-				.setName(title)
-				.setDesc(desc)
-				.addText(cb => {
+			new Setting(contentEl)
+				.setName(t("template.position.title") as string)
+				.addDropdown(cb => {
 					cb
-						.setValue(this.result.formatName)
+						.addOption(Position.prepend, t("template.position.prepend") as string)
+						.addOption(Position.append, t("template.position.append") as string)
+						.setValue(this.result.template.position)
 						.onChange((value) => {
-							this.result.formatName = value as string;
-							paramName?.controlEl.classList.remove("is-error");
+							this.result.template.position = value as Position;
+						});
+				})
+				.addText(cb => {
+					cb.inputEl.classList.add("input-small");
+					cb
+						.setPlaceholder(t("template.separator") as string)
+						.setValue(this.result.template.separator)
+						.onChange((value) => {
+							this.result.template.separator = value as string;
 						});
 				});
-		} else {
-			this.result.formatName = this.result.path.split("/").pop() as string;
-			paramName = null;
 		}
 		return paramName;
 	}
@@ -73,19 +95,31 @@ export class AddFolderModal extends Modal {
 		contentEl.createEl("h2", {text: t("modal") as string});
 		
 		new Setting(contentEl)
-			.setName(t("name.template.title") as string)
+			.setName(t("fileName") as string)
+			.addText(cb => {
+				cb
+					.setValue(this.result.fileName)
+					.onChange((value) => {
+						this.result.fileName = value as string;
+					});
+			});
+		
+		new Setting(contentEl)
+			.setName(t("template.title") as string)
 			.addDropdown(cb => {
 				cb
-					.addOption(TypeName.string, t("name.template.dropDown.string.title") as string)
-					.addOption(TypeName.date, t("name.template.dropDown.date.title") as string)
-					.addOption(TypeName.folderName, t("name.template.dropDown.folderName") as string)
-					.setValue(this.result.typeName)
+					.addOption(TemplateType.none, t("template.dropDown.none") as string)
+					.addOption(TemplateType.date, t("template.dropDown.date.title") as string)
+					.addOption(TemplateType.folderName, t("template.dropDown.folderName") as string)
+					.setValue(this.result.template.type)
 					.onChange((value) => {
-						this.result.typeName = value as TypeName;
+						this.result.template.type = value as TemplateType;
 						this.onOpen();
 					});
 			});
-		const paramName = this.settingName(contentEl, this.result.typeName);
+		const paramName = this.settingName(contentEl, this.result.template.type as TemplateType);
+		
+		contentEl.createEl("h2", {text: t("header.opening") as string});
 		
 		const opening = new Setting(contentEl)
 			.setName(t("opening.title") as string)
@@ -118,10 +152,10 @@ export class AddFolderModal extends Modal {
 				cb
 					.setButtonText(t("submit") as string)
 					.onClick(() => {
-						if (this.result.typeName === TypeName.date) {
-							const date = moment(moment().format(this.result.formatName), this.result.formatName, true).isValid();
+						if (this.result.template.type === TemplateType.date) {
+							const date = moment(moment().format(this.result.template.format), this.result.template.format, true).isValid();
 							if (!date) {
-								new Notice(t("name.template.dropDown.date.error") as string);
+								new Notice(t("template.dropDown.date.error") as string);
 								paramName?.controlEl.classList.add("is-error");
 							} else {
 								this.onSubmit(this.result);
