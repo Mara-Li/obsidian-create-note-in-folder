@@ -52,7 +52,7 @@ export const DEFAULT_FOLDER_SETTINGS: FolderSettings = {
 	template: {
 		type: TemplateType.none,
 		format: "",
-		position: Position.none,
+		position: Position.append,
 		separator: " ",
 	},
 	fileName: "Untitled",
