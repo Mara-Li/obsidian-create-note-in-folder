@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.5](https://github.com/Lisandra-dev/create-note-in-folder/compare/0.0.4...0.0.5) (2023-02-14)
+
+
+### Bug Fixes
+
+* **i18n:** Types of property 'fileName' are incompatible. ([d591eb8](https://github.com/Lisandra-dev/create-note-in-folder/commit/d591eb8cd4a1f3418b3f34ae76b94bb167dadf7f))
+
 ## [0.0.4](https://github.com/Lisandra-dev/create-note-in-folder/compare/0.0.3...0.0.4) (2023-02-14)
 
 
