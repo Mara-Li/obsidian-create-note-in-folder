@@ -33,6 +33,7 @@ export class AddFolderModal extends Modal {
 			.setDesc(desc)
 			.addText(cb => {
 				cb
+					.setPlaceholder("YYYY-MM-DD")
 					.setValue(this.result.template.format)
 					.onChange((value) => {
 						this.result.template.format = value as string;
@@ -51,6 +52,7 @@ export class AddFolderModal extends Modal {
 			} else if (TemplateType.folderName === this.result.template.type) {
 				this.result.template.format = this.result.path.split("/").pop() as string;
 			}
+			
 			new Setting(contentEl)
 				.setName(t("template.position.title") as string)
 				.addDropdown(cb => {
@@ -62,14 +64,14 @@ export class AddFolderModal extends Modal {
 							this.result.template.position = value as Position;
 						});
 				})
+			
 				.addText(cb => {
-					cb.inputEl.classList.add("input-small");
-					cb
-						.setPlaceholder(t("template.separator") as string)
-						.setValue(this.result.template.separator)
-						.onChange((value) => {
-							this.result.template.separator = value as string;
-						});
+					cb.inputEl.style.width = "30%";
+					cb.setPlaceholder(t("template.separator") as string);
+					cb.setValue(this.result.template.separator);
+					cb.onChange((value) => {
+						this.result.template.separator = value as string;
+					});
 				});
 		}
 		return paramName;

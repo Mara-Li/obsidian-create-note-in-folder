@@ -53,7 +53,7 @@ export const DEFAULT_FOLDER_SETTINGS: FolderSettings = {
 		type: TemplateType.none,
 		format: "",
 		position: Position.append,
-		separator: " ",
+		separator: "",
 	},
 	fileName: "Untitled",
 	opening: DefaultOpening.newTab,
