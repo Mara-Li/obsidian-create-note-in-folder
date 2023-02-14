@@ -26,9 +26,7 @@ export default {
 		},
 		separator: "Separator",
 	},
-	fileName: {
-		title: "Choose how notes will be named. The name will be incremented if the name already exists. Also, no need to add the extension.",
-	},
+	fileName: "Choose how notes will be named. The name will be incremented if the name already exists. Also, no need to add the extension.",
 	opening: {
 		title: "Default Opening",
 		desc: "How note will be opened after creation",
