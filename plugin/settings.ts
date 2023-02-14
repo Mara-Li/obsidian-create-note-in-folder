@@ -2,12 +2,7 @@ import {App, Notice, PluginSettingTab, Setting} from "obsidian";
 import NoteInFolder from "./main";
 import {FolderSuggest} from "./fileSuggest";
 import {
-	DEFAULT_FOLDER_SETTINGS,
-	DefaultOpening,
-	FolderSettings,
-	Position,
-	SplitDirection,
-	TemplateType
+	DEFAULT_FOLDER_SETTINGS
 } from "./interface";
 import {t} from "./i18n";
 import {AddFolderModal} from "./modal";
@@ -42,7 +37,7 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 						newFolder.path = value;
 						const oldFolder = this.plugin.settings.folder[index].path;
 						await this.plugin.addNewCommands(oldFolder, newFolder);
-						this.plugin.removeCommands();
+						await this.plugin.removeCommands();
 						this.plugin.settings.folder[index].path = value;
 						await this.plugin.saveSettings();
 					});
