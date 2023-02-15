@@ -5,20 +5,22 @@ This plugin add a new command to create a new note in a specific path.
 To add a path, use the settings tab. It will ask you to select a path. The plugin will then create a new note in this path.  
 
 You can choose how, per each folder :  
-- The note is named
+- The note is named, with a filename and a possible template.
 - The note is created (in the current tab, in a new tab, windows or in a split view)  
 - If the note must be focused after creation  
 
 After adding the path, you can use the command "Create new note in folder {path}" to create a new note in this path.  
 
-### About file name
+### About file name & template
 
-You can choose three options for the file name:
-- A string name (ex: "Untitled")
-- The date (based on a format)
+You can choose to set a filename, and a template. The template can be :
 - The folder name
+- A date, with the format based on [moment.js](https://momentjs.com/docs/#/displaying/).
 
-For the date, you need to choose the format. You can use the same format as the [date format](https://momentjs.com/docs/#/displaying/format/) of moment.js.
+In the case you choose to use a template, you don't need to set a filename. Moreover, you can choose how the template will be added :
+- Before the filename (if any)
+- After it.
+And you can set a separator. 
 
 The title will be incremented if a file with the same name already exists.
 
