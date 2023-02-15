@@ -1,8 +1,6 @@
 import {App, Modal, Notice, Setting, moment} from "obsidian";
 import {t} from "./i18n";
 import {DefaultOpening, FolderSettings, Position, SplitDirection, TemplateType} from "./interface";
-import {tooltips} from "@codemirror/view";
-
 
 /**
  * Modal to add settings to a new folder
