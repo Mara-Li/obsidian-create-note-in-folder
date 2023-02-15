@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.6](https://github.com/Lisandra-dev/create-note-in-folder/compare/0.0.5...0.0.6) (2023-02-15)
+
+
+### Bug Fixes
+
+* some errors around name ([f279676](https://github.com/Lisandra-dev/create-note-in-folder/commit/f279676bfee16dd92dc826c4dcdd843bf19600d3))
+
 ## [0.0.5](https://github.com/Lisandra-dev/create-note-in-folder/compare/0.0.4...0.0.5) (2023-02-14)
 
 
