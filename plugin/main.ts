@@ -13,7 +13,12 @@ import {t} from "./i18n";
 
 export default class NoteInFolder extends Plugin {
 	settings: NoteInFolderSettings;
-
+	
+	/**
+	 * A function to generate the filename using the template settings & filename settings
+	 * @param folder {FolderSettings} - The folder settings
+	 * @returns {string} - The generated filename
+	 */
 	generateFileName(folder: FolderSettings): string {
 		let defaultName = folder.fileName;
 		defaultName.replace(".md", "");
@@ -41,6 +46,11 @@ export default class NoteInFolder extends Plugin {
 		return defaultName + ".md";
 	}
 	
+	/**
+	 * For an unknow reason, the remove commands for a specific folderpath is not working
+	 * This function check all the commands of the plugin and remove the ones that are not in the settings
+	 * @returns {Promise<void>}
+	 */
 	async removeCommands()
 	{
 		//@ts-ignore
@@ -54,6 +64,11 @@ export default class NoteInFolder extends Plugin {
 		}
 	}
 	
+	/**
+	 * Adds or removes commands if the settings changed
+	 * @param oldFolder {string | undefined} - the old folder path to remove the command
+	 * @param newFolder {FolderSettings | undefined} - the new folder to add the command
+	 */
 	async addNewCommands(
 		oldFolder: string | undefined,
 		newFolder: FolderSettings | undefined,
@@ -61,7 +76,7 @@ export default class NoteInFolder extends Plugin {
 	{
 		if (oldFolder !== undefined) {
 			//@ts-ignore
-			app.commands.removeCommand(`create-note-in-folder:create-note-in-folder-${oldFolder}`);
+			app.commands.removeCommand(`create-note-in-folder:create-note-in-folder-${oldFolder}`); //doesn't work in some condition
 		}
 		if (newFolder !== undefined) {
 			this.addCommand({
@@ -107,7 +122,7 @@ export default class NoteInFolder extends Plugin {
 			const oldFolders = this.settings.folder as unknown as string[];
 			this.settings.folder = [];
 			for (const folder of oldFolders) {
-				const defaultSettings = JSON.parse(JSON.stringify(DEFAULT_FOLDER_SETTINGS));
+				const defaultSettings = JSON.parse(JSON.stringify(DEFAULT_FOLDER_SETTINGS)); //for some reason, i need to make a deep copy of the default settings
 				defaultSettings.path = folder;
 				this.settings.folder.push(defaultSettings);
 			}

@@ -37,8 +37,6 @@ export interface FolderSettings {
 	
 }
 
-
-
 export interface NoteInFolderSettings {
 	folder: FolderSettings[];
 }

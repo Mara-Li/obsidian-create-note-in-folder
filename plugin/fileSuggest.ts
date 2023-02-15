@@ -3,6 +3,7 @@
 import { TAbstractFile, TFolder } from "obsidian";
 import { ISuggestOwner, Scope } from "obsidian";
 import { createPopper, Instance as PopperInstance } from "@popperjs/core";
+
 export enum FileSuggestMode {
     TemplateFiles,
     ScriptFiles,
@@ -115,13 +116,6 @@ class Suggest<T> {
 }
 
 
-export function filePathsRecordSuggester(): Record<string, string> {
-	const filePaths: Record<string, string> = {};
-	app.vault.getMarkdownFiles().forEach(file => { filePaths[file.path] = file.basename; });
-	return filePaths;
-}
-
-
 export abstract class TextInputSuggest<T> implements ISuggestOwner<T> {
 	protected inputEl: HTMLInputElement;
 
@@ -209,9 +203,9 @@ export abstract class TextInputSuggest<T> implements ISuggestOwner<T> {
 		this.suggestEl.detach();
 	}
 
-    abstract getSuggestions(inputStr: string): T[];
-    abstract renderSuggestion(item: T, el: HTMLElement): void;
-    abstract selectSuggestion(item: T): void;
+		abstract getSuggestions(inputStr: string): T[];
+		abstract renderSuggestion(item: T, el: HTMLElement): void;
+		abstract selectSuggestion(item: T): void;
 }
 
 export class FolderSuggest extends TextInputSuggest<TFolder> {

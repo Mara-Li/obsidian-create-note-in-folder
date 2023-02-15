@@ -16,7 +16,12 @@ export class AddFolderModal extends Modal {
 		this.onSubmit = onSubmit;
 	}
 	
-	dateSettings(contentEl: HTMLElement) {
+	/**
+	 * Parameters for the date template
+	 * @param contentEl {HTMLElement} - The content of the modal
+	 * @returns {Setting} - The setting for the date template
+	 */
+	settingsTemplateDate(contentEl: HTMLElement) {
 		const desc = document.createDocumentFragment();
 		const title = t("template.dropDown.date.title") as string;
 		desc.createEl("span", undefined, (span) => {
@@ -41,7 +46,15 @@ export class AddFolderModal extends Modal {
 		return paramName;
 	}
 	
-	settingName(contentEl: HTMLElement, typeName: TemplateType, fileNameSetting: Setting) {
+	/**
+	 * Settings for the template if TemplateType is not none
+	 * Call settingsTemplateDate if TemplateType is date to create the setting for the date template
+	 * @param contentEl {HTMLElement} - The content of the modal
+	 * @param typeName {TemplateType} - The type of the template
+	 * @param fileNameSetting {Setting} - The setting for the file name, allowing to add class to it if needed
+	 * @returns {Setting | null} - The setting for the date template if TemplateType is date, null otherwise
+	 */
+	settingTemplate(contentEl: HTMLElement, typeName: TemplateType, fileNameSetting: Setting) {
 		let paramName: Setting | null = null;
 		if (typeName !== TemplateType.none) {
 			fileNameSetting.setClass("create-note-in-folder");
@@ -52,7 +65,7 @@ export class AddFolderModal extends Modal {
 			contentEl.createEl("p", {text: t("template.desc") as string});
 
 			if (TemplateType.date === this.result.template.type) {
-				paramName = this.dateSettings(contentEl);
+				paramName = this.settingsTemplateDate(contentEl);
 			} else if (TemplateType.folderName === this.result.template.type) {
 				this.result.template.format = this.result.path.split("/").pop() as string;
 			}
@@ -81,6 +94,12 @@ export class AddFolderModal extends Modal {
 		return paramName;
 	}
 	
+	/**
+	 * Settings for the split if DefaultOpening is split
+	 * @param opening {Setting} - The setting for the default opening
+	 * @param split {DefaultOpening} - The default opening
+	 * @returns {void}
+	 */
 	settingSplit(opening: Setting, split: DefaultOpening) {
 		if (split === DefaultOpening.split) {
 			opening
@@ -124,7 +143,7 @@ export class AddFolderModal extends Modal {
 						this.onOpen();
 					});
 			});
-		const paramName = this.settingName(contentEl, this.result.template.type as TemplateType, fileNameSettings);
+		const paramName = this.settingTemplate(contentEl, this.result.template.type as TemplateType, fileNameSettings);
 		
 		contentEl.createEl("h2", {text: t("header.opening") as string});
 		

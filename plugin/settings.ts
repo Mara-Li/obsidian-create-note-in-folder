@@ -75,7 +75,6 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 					this.plugin.settings.folder.push(defaultSettings);
 					await this.plugin.saveSettings();
 					this.display();
-					
 				}));
 		
 	}
