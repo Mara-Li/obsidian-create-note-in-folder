@@ -21,6 +21,9 @@ export default class NoteInFolder extends Plugin {
 		const typeName = template.type;
 		let generatedName = null;
 		if (typeName === TemplateType.date) {
+			if (template.format.trim().length === 0) {
+				template.format = "YYYY-MM-DD";
+			}
 			generatedName = moment().format(template.format);
 		} else if (typeName === TemplateType.folderName) {
 			generatedName = folder.path.split("/").pop() as string;

@@ -47,6 +47,8 @@ export class AddFolderModal extends Modal {
 		let paramName: Setting | null = null;
 		if (typeName !== TemplateType.none) {
 			contentEl.createEl("h3", {text: t("header.template") as string});
+			contentEl.createEl("p", {text: t("template.desc") as string});
+
 			if (TemplateType.date === this.result.template.type) {
 				paramName = this.dateSettings(contentEl);
 			} else if (TemplateType.folderName === this.result.template.type) {
@@ -96,13 +98,14 @@ export class AddFolderModal extends Modal {
 		contentEl.empty();
 		contentEl.createEl("h2", {text: t("modal") as string});
 		
-		new Setting(contentEl)
-			.setName(t("fileName") as string)
+		const fileNameSettings = new Setting(contentEl)
+			.setName(t("fileName.title") as string)
+			.setDesc(t("fileName.desc") as string)
 			.addText(cb => {
 				cb
 					.setValue(this.result.fileName)
 					.onChange((value) => {
-						this.result.fileName = value as string;
+						this.result.fileName = value.replace(".md", "") as string;
 					});
 			});
 		
@@ -154,15 +157,12 @@ export class AddFolderModal extends Modal {
 				cb
 					.setButtonText(t("submit") as string)
 					.onClick(() => {
-						if (this.result.template.type === TemplateType.date) {
-							const date = moment(moment().format(this.result.template.format), this.result.template.format, true).isValid();
-							if (!date) {
-								new Notice(t("template.dropDown.date.error") as string);
-								paramName?.controlEl.classList.add("is-error");
-							} else {
-								this.onSubmit(this.result);
-								this.close();
-							}
+						if (this.result.template.type === TemplateType.none && this.result.fileName.trim().length === 0) {
+							new Notice(t("fileName.error") as string);
+							fileNameSettings.controlEl.classList.add("is-error");
+						} else if (this.result.template.type === TemplateType.date && !moment(moment().format(this.result.template.format), this.result.template.format, true).isValid()) {
+							new Notice(t("template.dropDown.date.error") as string);
+							paramName?.controlEl.classList.add("is-error");
 						} else {
 							this.onSubmit(this.result);
 							this.close();

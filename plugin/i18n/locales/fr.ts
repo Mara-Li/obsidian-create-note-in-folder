@@ -8,6 +8,7 @@ export default {
 	},
 	template: {
 		title: "Choisissez un modèle si vous voulez ajouter quelque chose avant ou après le nom du fichier.",
+		desc: "Le nom du fichier peut être vide si vous utilisez un modèle.",
 		dropDown: {
 			date: {
 				title: "Date",
@@ -26,7 +27,11 @@ export default {
 		},
 		separator: "Séparateur",
 	},
-	fileName: "Choisissez la façon dont les notes seront nommées. Le nom sera incrémenté si le nom existe déjà. De plus, pas besoin d'ajouter l'extension.",
+	fileName: {
+		title: "Choisissez la façon dont les notes seront nommées.",
+		desc: "Le nom sera incrémenté si le nom existe déjà.",
+		error: "Nom de fichier invalide, veuillez utiliser un nom de fichier si vous n'utilisez pas de modèle.",
+	},
 	opening: {
 		title: "Ouverture par défaut",
 		desc: "Comment la note sera ouverte après sa création",

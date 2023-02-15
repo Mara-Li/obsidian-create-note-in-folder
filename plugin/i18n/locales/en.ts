@@ -8,6 +8,7 @@ export default {
 	folderNotFound: "Folder not found",
 	template: {
 		title: "Choose a template if you want to add something before or after the filename.",
+		desc: "The filename can be empty if you use a template.",
 		dropDown: {
 			date: {
 				title: "Date",
@@ -26,7 +27,11 @@ export default {
 		},
 		separator: "Separator",
 	},
-	fileName: "Choose how notes will be named. The name will be incremented if the name already exists. Also, no need to add the extension.",
+	fileName: {
+		title: "Choose how notes will be named.",
+		desc: "The name will be incremented if the name already exists.",
+		error: "Invalid file name, please use a filename if you don't use a template.",
+	},
 	opening: {
 		title: "Default Opening",
 		desc: "How note will be opened after creation",
