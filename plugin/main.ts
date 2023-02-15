@@ -59,7 +59,6 @@ export default class NoteInFolder extends Plugin {
 		newFolder: FolderSettings | undefined,
 	)
 	{
-		console.log("Old folder: ", oldFolder);
 		if (oldFolder !== undefined) {
 			//@ts-ignore
 			app.commands.removeCommand(`create-note-in-folder:create-note-in-folder-${oldFolder}`);
@@ -104,14 +103,10 @@ export default class NoteInFolder extends Plugin {
 	async onload() {
 		console.log("Create Note in Folder plugin loaded");
 		await this.loadSettings();
-		
-		//convert old settings (string[] to FolderSettings[])
-		console.log(typeof this.settings.folder[0]);
 		if (this.settings.folder.length > 0 && typeof this.settings.folder[0] === "string") {
 			const oldFolders = this.settings.folder as unknown as string[];
 			this.settings.folder = [];
 			for (const folder of oldFolders) {
-				//create a copy of the default settings
 				const defaultSettings = JSON.parse(JSON.stringify(DEFAULT_FOLDER_SETTINGS));
 				defaultSettings.path = folder;
 				this.settings.folder.push(defaultSettings);
@@ -127,13 +122,12 @@ export default class NoteInFolder extends Plugin {
 				folder.fileName = folder.formatName;
 				folder.template = {
 					//@ts-ignore
-					type: folder.typeName as TemplateType,
+					type:  folder.typeName === "string" ? TemplateType.none : folder.typeName,
 					//@ts-ignore
 					format: folder.formatName,
 					position: Position.append,
-					separator: " ",
+					separator: "",
 				};
-				//delete old settings
 				//@ts-ignore
 				delete folder.TypeName;
 				//@ts-ignore
