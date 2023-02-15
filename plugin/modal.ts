@@ -43,9 +43,13 @@ export class AddFolderModal extends Modal {
 		return paramName;
 	}
 	
-	settingName(contentEl: HTMLElement, typeName: TemplateType) {
+	settingName(contentEl: HTMLElement, typeName: TemplateType, fileNameSetting: Setting) {
 		let paramName: Setting | null = null;
 		if (typeName !== TemplateType.none) {
+			fileNameSetting.setClass("create-note-in-folder");
+			fileNameSetting.setClass("edit");
+			fileNameSetting.setClass("is-facultative");
+			fileNameSetting.setDesc(t("template.desc") as string);
 			contentEl.createEl("h3", {text: t("header.template") as string});
 			contentEl.createEl("p", {text: t("template.desc") as string});
 
@@ -122,7 +126,7 @@ export class AddFolderModal extends Modal {
 						this.onOpen();
 					});
 			});
-		const paramName = this.settingName(contentEl, this.result.template.type as TemplateType);
+		const paramName = this.settingName(contentEl, this.result.template.type as TemplateType, fileNameSettings);
 		
 		contentEl.createEl("h2", {text: t("header.opening") as string});
 		
@@ -160,9 +164,13 @@ export class AddFolderModal extends Modal {
 						if (this.result.template.type === TemplateType.none && this.result.fileName.trim().length === 0) {
 							new Notice(t("fileName.error") as string);
 							fileNameSettings.controlEl.classList.add("is-error");
+							fileNameSettings.controlEl.classList.add("edit");
+							fileNameSettings.controlEl.classList.add("create-note-in-folder");
 						} else if (this.result.template.type === TemplateType.date && !moment(moment().format(this.result.template.format), this.result.template.format, true).isValid()) {
 							new Notice(t("template.dropDown.date.error") as string);
 							paramName?.controlEl.classList.add("is-error");
+							paramName?.controlEl.classList.add("edit");
+							paramName?.controlEl.classList.add("create-note-in-folder");
 						} else {
 							this.onSubmit(this.result);
 							this.close();

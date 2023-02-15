@@ -22,7 +22,8 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 		containerEl.createEl("h3", {text: t("title") as string});
 		this.plugin.settings.folder.forEach((folder, index) => {
 			new Setting(containerEl)
-				.setClass("note-in-folder-setting")
+				.setClass("create-note-in-folder")
+				.setClass("settingsTab")
 				.addSearch((cb) => {
 					new FolderSuggest(cb.inputEl);
 					cb.setPlaceholder(t("example") as string);

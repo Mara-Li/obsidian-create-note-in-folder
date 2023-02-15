@@ -1,13 +1,22 @@
-.note-in-folder-setting > .setting-item-info{
+.create-note-in-folder.settingsTab .setting-item-info{
     display: none;
 }
 
-.note-in-folder-setting .search-input-container {
+.create-note-in-folder.settingsTab .search-input-container {
     width: 100%;
 }
 
-.is-error input {
+.is-error.edit.create-note-in-folder input {
     border: 1px solid red;
 }
 
 
+.create-note-in-folder.edit.is-facultative .setting-item-description {
+    font-style: italic;
+}
+
+.create-note-in-folder.edit.is-facultative input[type="text"],
+.create-note-in-folder.edit.is-facultative .setting-item-name {
+    font-style: italic;
+    opacity: 0.7;
+}
