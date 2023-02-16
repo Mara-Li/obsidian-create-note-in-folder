@@ -1,4 +1,4 @@
-# Create new note in path  
+# Commands : Create note in folder
 
 This plugin add a new command to create a new note in a specific path.  
 
