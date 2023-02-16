@@ -6,7 +6,7 @@ on:
     tags:
       - "*"
 env:
-  PLUGIN_NAME: create-note-in-path # Change this to match the id of your plugin.
+  PLUGIN_NAME: create-note-in-folder # Change this to match the id of your plugin.
 
 permissions:
   contents: write
