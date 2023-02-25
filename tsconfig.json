@@ -10,7 +10,8 @@
     "moduleResolution": "node",
     "importHelpers": true,
     "isolatedModules": true,
-	"strictNullChecks": true,
+	  "strictNullChecks": true,
+    "resolveJsonModule": true,
     "lib": [
       "DOM",
       "ES5",

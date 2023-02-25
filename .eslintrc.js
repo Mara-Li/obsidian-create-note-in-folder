@@ -6,9 +6,18 @@ module.exports = {
 	},
 	"extends": [
 		"eslint:recommended",
-		"plugin:@typescript-eslint/recommended"
+		"plugin:@typescript-eslint/recommended",
+		"plugin:jsonc/recommended-with-jsonc",
+		"plugin:jsonc/recommended-with-json",
+
 	],
 	"parser": "@typescript-eslint/parser",
+	overrides: [
+		{
+			files: ["*.json"],
+			parser: "jsonc-eslint-parser"
+		},
+	],
 	"parserOptions": {
 		"ecmaVersion": "latest",
 		"sourceType": "module"
@@ -19,9 +28,11 @@ module.exports = {
 	"rules": {
 		"indent": [
 			"error",
-			"tab", {
-				"SwitchCase": 1
-			}
+			"tab"
+		],
+		"linebreak-style": [
+			"error",
+			"windows"
 		],
 		"quotes": [
 			"error",
@@ -31,6 +42,13 @@ module.exports = {
 			"error",
 			"always"
 		],
+		"jsonc/sort-keys": [
+			"error",
+			"asc", {
+				"caseSensitive": false,
+				"natural": false
+			}
+		],
 		"@typescript-eslint/ban-ts-comment": "off"
 	}
-};
+}

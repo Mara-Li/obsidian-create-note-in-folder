@@ -1,5 +1,5 @@
 import {App, Modal, Notice, Setting, moment} from "obsidian";
-import {t} from "./i18n";
+import i18next from "i18next";
 import {DefaultOpening, FolderSettings, Position, SplitDirection, TemplateType} from "./interface";
 
 /**
@@ -23,12 +23,12 @@ export class AddFolderModal extends Modal {
 	 */
 	settingsTemplateDate(contentEl: HTMLElement) {
 		const desc = document.createDocumentFragment();
-		const title = t("template.dropDown.date.title") as string;
+		const title = i18next.t("template.dropDown.date.title");
 		desc.createEl("span", undefined, (span) => {
-			span.innerText = t("template.dropDown.date.desc") as string;
+			span.innerText = i18next.t("template.dropDown.date.desc");
 			span.createEl("a", undefined, (a) => {
-				a.innerText = t("template.dropDown.date.here") as string;
-				a.href = t("template.date.url") as string;
+				a.innerText = i18next.t("template.dropDown.date.here") ;
+				a.href = i18next.t("template.date.url") ;
 			});
 		});
 		const paramName = new Setting(contentEl)
@@ -39,7 +39,7 @@ export class AddFolderModal extends Modal {
 					.setPlaceholder("YYYY-MM-DD")
 					.setValue(this.result.template.format)
 					.onChange((value) => {
-						this.result.template.format = value as string;
+						this.result.template.format = value ;
 						paramName?.controlEl.classList.remove("is-error");
 					});
 			});
@@ -60,9 +60,9 @@ export class AddFolderModal extends Modal {
 			fileNameSetting.setClass("create-note-in-folder");
 			fileNameSetting.setClass("edit");
 			fileNameSetting.setClass("is-facultative");
-			fileNameSetting.setDesc(t("template.desc") as string);
-			contentEl.createEl("h3", {text: t("header.template") as string});
-			contentEl.createEl("p", {text: t("template.desc") as string});
+			fileNameSetting.setDesc(i18next.t("template.desc") );
+			contentEl.createEl("h3", {text: i18next.t("header.template") as string});
+			contentEl.createEl("p", {text: i18next.t("template.desc") as string});
 
 			if (TemplateType.date === this.result.template.type) {
 				paramName = this.settingsTemplateDate(contentEl);
@@ -71,11 +71,11 @@ export class AddFolderModal extends Modal {
 			}
 			
 			new Setting(contentEl)
-				.setName(t("template.position.title") as string)
+				.setName(i18next.t("template.position.title") as string)
 				.addDropdown(cb => {
 					cb
-						.addOption(Position.prepend, t("template.position.prepend") as string)
-						.addOption(Position.append, t("template.position.append") as string)
+						.addOption(Position.prepend, i18next.t("template.position.prepend") as string)
+						.addOption(Position.append, i18next.t("template.position.append") as string)
 						.setValue(this.result.template.position)
 						.onChange((value) => {
 							this.result.template.position = value as Position;
@@ -84,10 +84,10 @@ export class AddFolderModal extends Modal {
 			
 				.addText(cb => {
 					cb.inputEl.style.width = "30%";
-					cb.setPlaceholder(t("template.separator") as string);
+					cb.setPlaceholder(i18next.t("template.separator") );
 					cb.setValue(this.result.template.separator);
 					cb.onChange((value) => {
-						this.result.template.separator = value as string;
+						this.result.template.separator = value ;
 					});
 				});
 		}
@@ -104,8 +104,8 @@ export class AddFolderModal extends Modal {
 		if (split === DefaultOpening.split) {
 			opening
 				.addDropdown(cb => cb
-					.addOption(SplitDirection.horizontal, t("opening.dropDown.split.dropDown.horizontal") as string)
-					.addOption(SplitDirection.vertical, t("opening.dropDown.split.dropDown.vertical") as string)
+					.addOption(SplitDirection.horizontal, i18next.t("opening.dropDown.split.dropDown.horizontal") as string)
+					.addOption(SplitDirection.vertical, i18next.t("opening.dropDown.split.dropDown.vertical") as string)
 					.setValue(this.result.splitDefault)
 					.onChange(async (value) => {
 						this.result.splitDefault = value as SplitDirection;
@@ -117,26 +117,26 @@ export class AddFolderModal extends Modal {
 	onOpen() {
 		const {contentEl} = this;
 		contentEl.empty();
-		contentEl.createEl("h2", {text: t("modal") as string});
+		contentEl.createEl("h2", {text: i18next.t("modal") as string});
 		
 		const fileNameSettings = new Setting(contentEl)
-			.setName(t("fileName.title") as string)
-			.setDesc(t("fileName.desc") as string)
+			.setName(i18next.t("fileName.title") as string)
+			.setDesc(i18next.t("fileName.desc") as string)
 			.addText(cb => {
 				cb
 					.setValue(this.result.fileName)
 					.onChange((value) => {
-						this.result.fileName = value.replace(".md", "") as string;
+						this.result.fileName = value.replace(".md", "") ;
 					});
 			});
 		
 		new Setting(contentEl)
-			.setName(t("template.title") as string)
+			.setName(i18next.t("template.title") as string)
 			.addDropdown(cb => {
 				cb
-					.addOption(TemplateType.none, t("template.dropDown.none") as string)
-					.addOption(TemplateType.date, t("template.dropDown.date.title") as string)
-					.addOption(TemplateType.folderName, t("template.dropDown.folderName") as string)
+					.addOption(TemplateType.none, i18next.t("template.dropDown.none") as string)
+					.addOption(TemplateType.date, i18next.t("template.dropDown.date.title") as string)
+					.addOption(TemplateType.folderName, i18next.t("template.dropDown.folderName") as string)
 					.setValue(this.result.template.type)
 					.onChange((value) => {
 						this.result.template.type = value as TemplateType;
@@ -145,17 +145,17 @@ export class AddFolderModal extends Modal {
 			});
 		const paramName = this.settingTemplate(contentEl, this.result.template.type as TemplateType, fileNameSettings);
 		
-		contentEl.createEl("h2", {text: t("header.opening") as string});
+		contentEl.createEl("h2", {text: i18next.t("header.opening") as string});
 		
 		const opening = new Setting(contentEl)
-			.setName(t("opening.title") as string)
-			.setDesc(t("opening.desc") as string)
+			.setName(i18next.t("opening.title") as string)
+			.setDesc(i18next.t("opening.desc") as string)
 			.addDropdown(cb => {
 				cb
-					.addOption(DefaultOpening.newTab, t("opening.dropDown.newTab") as string)
-					.addOption(DefaultOpening.current, t("opening.dropDown.current") as string)
-					.addOption(DefaultOpening.newWindow, t("opening.dropDown.newWindow") as string)
-					.addOption(DefaultOpening.split, t("opening.dropDown.split.title") as string)
+					.addOption(DefaultOpening.newTab, i18next.t("opening.dropDown.newTab") as string)
+					.addOption(DefaultOpening.current, i18next.t("opening.dropDown.current") as string)
+					.addOption(DefaultOpening.newWindow, i18next.t("opening.dropDown.newWindow") as string)
+					.addOption(DefaultOpening.split, i18next.t("opening.dropDown.split.title") as string)
 					.setValue(this.result.opening)
 					.onChange((value) => {
 						this.result.opening = value as DefaultOpening;
@@ -165,8 +165,8 @@ export class AddFolderModal extends Modal {
 		this.settingSplit(opening, this.result.opening);
 
 		new Setting(contentEl)
-			.setName(t("focus.title") as string)
-			.setDesc(t("focus.desc") as string)
+			.setName(i18next.t("focus.title") as string)
+			.setDesc(i18next.t("focus.desc") as string)
 			.addToggle(cb => cb
 				.setValue(this.result.focused)
 				.onChange(async (value) => {
@@ -176,15 +176,15 @@ export class AddFolderModal extends Modal {
 		new Setting(contentEl)
 			.addButton(cb =>
 				cb
-					.setButtonText(t("submit") as string)
+					.setButtonText(i18next.t("submit"))
 					.onClick(() => {
 						if (this.result.template.type === TemplateType.none && this.result.fileName.trim().length === 0) {
-							new Notice(t("fileName.error") as string);
+							new Notice(i18next.t("fileName.error"));
 							fileNameSettings.controlEl.classList.add("is-error");
 							fileNameSettings.controlEl.classList.add("edit");
 							fileNameSettings.controlEl.classList.add("create-note-in-folder");
 						} else if (this.result.template.type === TemplateType.date && !moment(moment().format(this.result.template.format), this.result.template.format, true).isValid()) {
-							new Notice(t("template.dropDown.date.error") as string);
+							new Notice(i18next.t("template.dropDown.date.error"));
 							paramName?.controlEl.classList.add("is-error");
 							paramName?.controlEl.classList.add("edit");
 							paramName?.controlEl.classList.add("create-note-in-folder");

@@ -16,17 +16,20 @@
 	"author": "Mara-Li",
 	"license": "GNU General Public License v3.0",
 	"devDependencies": {
-		"@types/node": "^16.11.6",
-		"@typescript-eslint/eslint-plugin": "5.29.0",
-		"@typescript-eslint/parser": "5.29.0",
+		"@types/node": "^18.14.1",
+		"@typescript-eslint/eslint-plugin": "^5.53.0",
+		"@typescript-eslint/parser": "^5.53.0",
 		"builtin-modules": "3.3.0",
 		"esbuild": "0.17.3",
+		"eslint": "^8.34.0",
+		"eslint-plugin-jsonc": "^2.6.0",
 		"obsidian": "latest",
-		"tslib": "2.4.0",
-		"typescript": "4.7.4"
+		"tslib": "^2.5.0",
+		"typescript": "^4.9.5"
 	},
 	"dependencies": {
 		"@popperjs/core": "^2.11.6",
-		"commit-and-tag-version": "^11.0.0"
+		"commit-and-tag-version": "^11.0.0",
+		"i18next": "^22.4.10"
 	}
 }

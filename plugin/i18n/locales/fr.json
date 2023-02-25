@@ -1,0 +1,60 @@
+{
+	"add": "Ajouter un dossier",
+	"error": "Ce dossier est déjà dans la liste ou n'existe pas.",
+	"example": "Exemple: chemin/vers/dossier",
+	"fileName": {
+		"desc": "Le nom sera incrémenté si le nom existe déjà.",
+		"error": "Nom de fichier invalide, veuillez utiliser un nom de fichier si vous n'utilisez pas de modèle.",
+		"title": "Choisissez la façon dont les notes seront nommées."
+    },
+	"focus": {
+		"desc": "Focus sur la nouvelle note après sa création",
+		"title": "Focus"
+    },
+	"folderNotFound": "Dossier introuvable",
+	"header": {
+		"opening": "Ouverture",
+		"template": "Modèle"
+    },
+	"modal": "Modifier les paramètres spécifiques au dossier",
+	"opening": {
+		"desc": "Comment la note sera ouverte après sa création",
+		"dropDown": {
+			"current": "Onglet courant",
+			"newTab": "Nouvel onglet",
+			"newWindow": "Nouvelle fenêtre",
+			"split": {
+				"dropDown": {
+					"horizontal": "Horizontale",
+					"vertical": "Verticale"
+                },
+				"title": "Fenêtre divisée"
+            }
+        },
+		"title": "Ouverture par défaut"
+    },
+	"remove": "Supprimer le dossier",
+	"submit": "Valider",
+	"template": {
+		"desc": "Le nom du fichier peut être vide si vous utilisez un modèle.",
+		"dropDown": {
+			"date": {
+				"desc": "Les formats valides peuvent être trouvés ",
+				"error": "Format de date invalide, veuillez utiliser un format valide.",
+				"here": "ici",
+				"title": "Date",
+				"url": "https://momentjs.com/docs/#/displaying/format/"
+            },
+			"folderName": "Nom du dossier",
+			"none": "Aucun"
+        },
+		"position": {
+			"append": "Ajouter après",
+			"prepend": "Ajouter avant",
+			"title": "Choisissez où ajouter le modèle."
+        },
+		"separator": "Séparateur",
+		"title": "Choisissez un modèle si vous voulez ajouter quelque chose avant ou après le nom du fichier."
+    },
+	"title": "Dossiers"
+}
