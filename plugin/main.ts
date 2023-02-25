@@ -9,7 +9,8 @@ import {
 	TemplateType
 } from "./interface";
 import {NoteInFolderSettingsTab} from "./settings";
-import {t} from "./i18n";
+import i18next from "i18next";
+import { ressources, translationLanguage } from "./i18n/i18next";
 
 export default class NoteInFolder extends Plugin {
 	settings: NoteInFolderSettings;
@@ -31,7 +32,7 @@ export default class NoteInFolder extends Plugin {
 			}
 			generatedName = moment().format(template.format);
 		} else if (typeName === TemplateType.folderName) {
-			generatedName = folder.path.split("/").pop() as string;
+			generatedName = folder.path.split("/").pop() ;
 		}
 		if (template.position === Position.prepend && generatedName) {
 			defaultName = generatedName + template.separator + defaultName;
@@ -54,10 +55,10 @@ export default class NoteInFolder extends Plugin {
 	async removeCommands()
 	{
 		//@ts-ignore
-		const pluginCommands = Object.keys(this.app.commands.commands).filter((command) => command.startsWith("create-note-in-folder:create-note-in-folder"));
+		const pluginCommands = Object.keys(this.app.commands.commands).filter((command) => command.startsWith("create-note-in-folder"));
 		for (const command of pluginCommands) {
 			//remove commands if the folder is not in the settings
-			if (!this.settings.folder.some((folder) => folder.path === command.replace("create-note-in-folder:create-note-in-folder-", ""))) {
+			if (!this.settings.folder.some((folder) => folder.path === command.replace("create-note-in-folder:", ""))) {
 				//@ts-ignore
 				app.commands.removeCommand(command);
 			}
@@ -76,23 +77,23 @@ export default class NoteInFolder extends Plugin {
 	{
 		if (oldFolder !== undefined) {
 			//@ts-ignore
-			app.commands.removeCommand(`create-note-in-folder:create-note-in-folder-${oldFolder}`); //doesn't work in some condition
+			app.commands.removeCommand(`create-note-in-folder:${oldFolder}`); //doesn't work in some condition
 		}
 		if (newFolder !== undefined) {
 			this.addCommand({
-				id: `create-note-in-folder-${newFolder.path}`,
+				id: `${newFolder.path}`,
 				name: `${newFolder.path}`,
 				callback: async () => {
 					const defaultName = this.generateFileName(newFolder);
 					//check if path exists
 					if (!this.app.vault.getAbstractFileByPath(newFolder.path)) {
-						new Notice(t("folderNotFound") as string);
+						new Notice(i18next.t("folderNotFound"));
 						this.settings.folder = this.settings.folder.filter((folder) => folder !== newFolder);
 						await this.addNewCommands(newFolder.path, undefined);
 						await this.saveSettings();
 						return;
 					}
-					console.log("Creating note in path: " + newFolder.path + " with name: " + defaultName);
+					console.log(i18next.t("log", {path: newFolder.path, name: defaultName}));
 					const file = await this.app.vault.create(`${newFolder.path}/${defaultName}`, "");
 					let leaf: WorkspaceLeaf;
 					switch (newFolder.opening) {
@@ -117,6 +118,11 @@ export default class NoteInFolder extends Plugin {
 	
 	async onload() {
 		console.log("Create Note in Folder plugin loaded");
+		i18next.init({
+			lng: translationLanguage,
+			fallbackLng: "en",
+			resources: ressources,
+		});
 		await this.loadSettings();
 		if (this.settings.folder.length > 0 && typeof this.settings.folder[0] === "string") {
 			const oldFolders = this.settings.folder as unknown as string[];
