@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.9](https://github.com/Lisandra-dev/obsidian-create-note-in-folder/compare/0.0.8...0.0.9) (2023-02-25)
+
+
+### Features
+
+* introduce i18next ([ab36581](https://github.com/Lisandra-dev/obsidian-create-note-in-folder/commit/ab365812fa1cebe95c18c48ef7cf376a8ea6f68a))
+* introduce i18next ([d927af0](https://github.com/Lisandra-dev/obsidian-create-note-in-folder/commit/d927af01097de55c0af5979ec45c858315cc278f))
+
+
+### Bug Fixes
+
+* remove plugin id from id commands ([223f942](https://github.com/Lisandra-dev/obsidian-create-note-in-folder/commit/223f94299c9e1c20915fd5281ffc047684d919fd))
+
 ## [0.0.8](https://github.com/Lisandra-dev/create-note-in-folder/compare/0.0.7...0.0.8) (2023-02-15)
 
 ## [0.0.7](https://github.com/Lisandra-dev/create-note-in-folder/compare/0.0.6...0.0.7) (2023-02-15)
