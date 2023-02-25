@@ -6,16 +6,17 @@
 		"desc": "Le nom sera incrémenté si le nom existe déjà.",
 		"error": "Nom de fichier invalide, veuillez utiliser un nom de fichier si vous n'utilisez pas de modèle.",
 		"title": "Choisissez la façon dont les notes seront nommées."
-    },
+	},
 	"focus": {
 		"desc": "Focus sur la nouvelle note après sa création",
 		"title": "Focus"
-    },
+	},
 	"folderNotFound": "Dossier introuvable",
 	"header": {
 		"opening": "Ouverture",
 		"template": "Modèle"
-    },
+	},
+	"log": "Création de la note dans le dossier {{- path}}, avec le nom {{- name}}.",
 	"modal": "Modifier les paramètres spécifiques au dossier",
 	"opening": {
 		"desc": "Comment la note sera ouverte après sa création",
@@ -27,12 +28,12 @@
 				"dropDown": {
 					"horizontal": "Horizontale",
 					"vertical": "Verticale"
-                },
+				},
 				"title": "Fenêtre divisée"
-            }
-        },
+			}
+		},
 		"title": "Ouverture par défaut"
-    },
+	},
 	"remove": "Supprimer le dossier",
 	"submit": "Valider",
 	"template": {
@@ -44,17 +45,17 @@
 				"here": "ici",
 				"title": "Date",
 				"url": "https://momentjs.com/docs/#/displaying/format/"
-            },
+			},
 			"folderName": "Nom du dossier",
 			"none": "Aucun"
-        },
+		},
 		"position": {
 			"append": "Ajouter après",
 			"prepend": "Ajouter avant",
 			"title": "Choisissez où ajouter le modèle."
-        },
+		},
 		"separator": "Séparateur",
 		"title": "Choisissez un modèle si vous voulez ajouter quelque chose avant ou après le nom du fichier."
-    },
+	},
 	"title": "Dossiers"
 }

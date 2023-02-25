@@ -97,18 +97,18 @@ export default class NoteInFolder extends Plugin {
 					const file = await this.app.vault.create(`${newFolder.path}/${defaultName}`, "");
 					let leaf: WorkspaceLeaf;
 					switch (newFolder.opening) {
-						case DefaultOpening.split:
-							leaf = this.app.workspace.getLeaf("split", newFolder.splitDefault);
-							break;
-						case DefaultOpening.newWindow:
-							leaf = this.app.workspace.getLeaf("window");
-							break;
-						case DefaultOpening.newTab:
-							leaf = this.app.workspace.getLeaf(true);
-							break;
-						default:
-							leaf = this.app.workspace.getLeaf(false);
-							break;
+					case DefaultOpening.split:
+						leaf = this.app.workspace.getLeaf("split", newFolder.splitDefault);
+						break;
+					case DefaultOpening.newWindow:
+						leaf = this.app.workspace.getLeaf("window");
+						break;
+					case DefaultOpening.newTab:
+						leaf = this.app.workspace.getLeaf(true);
+						break;
+					default:
+						leaf = this.app.workspace.getLeaf(false);
+						break;
 					}
 					await leaf.openFile(file, {active: newFolder.focused});
 				}
@@ -122,6 +122,7 @@ export default class NoteInFolder extends Plugin {
 			lng: translationLanguage,
 			fallbackLng: "en",
 			resources: ressources,
+			returnNull: false,
 		});
 		await this.loadSettings();
 		if (this.settings.folder.length > 0 && typeof this.settings.folder[0] === "string") {

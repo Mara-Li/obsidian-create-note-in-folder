@@ -19,7 +19,7 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 		const {containerEl} = this;
 		containerEl.empty();
 		containerEl.createEl("h1", {text: this.plugin.manifest.name});
-		containerEl.createEl("h3", {text: i18next.t("title")});
+		containerEl.createEl("h3", {text: i18next.t("title")} as const);
 		this.plugin.settings.folder.forEach((folder, index) => {
 			new Setting(containerEl)
 				.setClass("create-note-in-folder")
@@ -46,7 +46,7 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 				.addButton(cb =>
 					cb
 						.setIcon("cross")
-						.setTooltip(i18next.t("remove") as string)
+						.setTooltip(i18next.t("remove"))
 						.onClick(async () => {
 							const folderDeleted = this.plugin.settings.folder[index];
 							this.plugin.settings.folder.splice(index, 1);
@@ -57,7 +57,7 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 				.addButton(cb =>
 					cb
 						.setIcon("pencil")
-						.setTooltip(i18next.t("modal") as string)
+						.setTooltip(i18next.t("modal"))
 						.onClick(async () => {
 							new AddFolderModal(this.app, this.plugin.settings.folder[index], (result)  => {
 								this.plugin.settings.folder[index] = result;

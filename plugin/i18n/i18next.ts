@@ -7,4 +7,5 @@ export const ressources = {
 	fr: { translation: fr },
 } as const;
 
-export const translationLanguage = Object.keys(ressources).find(i => i == moment.locale()) ? moment.locale() : "en";
+export const translationLanguage = Object.keys(ressources).find(
+	i => i == moment.locale()) ? moment.locale() : "en";
