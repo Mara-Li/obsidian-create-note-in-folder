@@ -1,4 +1,4 @@
-import {moment, Notice, Plugin, WorkspaceLeaf} from "obsidian";
+import {moment, Notice, Plugin, TFile, WorkspaceLeaf} from "obsidian";
 import {
 	DEFAULT_FOLDER_SETTINGS,
 	DEFAULT_SETTINGS,
@@ -26,7 +26,7 @@ export default class NoteInFolder extends Plugin {
 		const template = folder.template;
 		const typeName = template.type;
 		let generatedName = null;
-		if (typeName === TemplateType.date) {
+		if (typeName === TemplateType.date || typeName === TemplateType.daily) {
 			if (template.format.trim().length === 0) {
 				template.format = "YYYY-MM-DD";
 			}
@@ -39,7 +39,7 @@ export default class NoteInFolder extends Plugin {
 		} else if (template.position === Position.append && generatedName) {
 			defaultName = defaultName + template.separator + generatedName;
 		}
-		while (this.app.vault.getAbstractFileByPath(`${folder.path}/${defaultName}.md`)) {
+		while (this.app.vault.getAbstractFileByPath(`${folder.path}/${defaultName}.md`) && typeName !== TemplateType.daily) {
 			const increment = defaultName.match(/ \d+$/);
 			const newIncrement = increment ? parseInt(increment[0]) + 1 : 1;
 			defaultName = defaultName.replace(/ \d+$/, "") + " " + newIncrement;
@@ -94,7 +94,6 @@ export default class NoteInFolder extends Plugin {
 						return;
 					}
 					console.log(i18next.t("log", {path: newFolder.path, name: defaultName}));
-					const file = await this.app.vault.create(`${newFolder.path}/${defaultName}`, "");
 					let leaf: WorkspaceLeaf;
 					switch (newFolder.opening) {
 					case DefaultOpening.split:
@@ -110,7 +109,14 @@ export default class NoteInFolder extends Plugin {
 						leaf = this.app.workspace.getLeaf(false);
 						break;
 					}
-					await leaf.openFile(file, {active: newFolder.focused});
+					const file = this.app.vault.getAbstractFileByPath(`${newFolder.path}/${defaultName}`);
+					if (file instanceof TFile) {
+						await leaf.openFile(file, {active: newFolder.focused});
+					}
+					if (!file) {
+						const newFile = await this.app.vault.create(`${newFolder.path}/${defaultName}`, "");
+						await leaf.openFile(newFile, {active: newFolder.focused});
+					}
 				}
 			});
 		}
