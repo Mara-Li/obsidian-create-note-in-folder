@@ -40,7 +40,8 @@ export default class NoteInFolder extends Plugin {
 		} else if (template.position === Position.append && generatedName) {
 			defaultName = defaultName + template.separator + generatedName;
 		}
-		while (this.app.vault.getAbstractFileByPath(`${folder.path}/${defaultName}.md`)) {
+		const folderPath = folder.path !== "/" ? folder.path + "/" : "";
+		while (this.app.vault.getAbstractFileByPath(`${folderPath}${defaultName}.md`)) {
 			const increment = defaultName.match(/ \d+$/);
 			const newIncrement = increment ? parseInt(increment[0]) + 1 : 1;
 			defaultName = defaultName.replace(/ \d+$/, "") + " " + newIncrement;
@@ -78,7 +79,7 @@ export default class NoteInFolder extends Plugin {
 	{
 		if (oldFolder !== undefined) {
 			//@ts-ignore
-			app.commands.removeCommand(`create-note-in-folder:${oldFolder}`); //doesn't work in some condition
+			this.app.commands.removeCommand(`create-note-in-folder:${oldFolder}`); //doesn't work in some condition
 		}
 		if (newFolder !== undefined) {
 			this.addCommand({
