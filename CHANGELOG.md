@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.0](https://github.com/Lisandra-dev/create-note-in-folder/compare/0.0.10...0.1.0) (2023-08-15)
+
+
+### ⚠ BREAKING CHANGES
+
+* **daily:** the settings "daily" template is deprecated in favor of a more general settings around disabling the incrementation
+  File with this settings need to be updated in the plugin settings
+
+### Features
+
+* not create a file only if it's a Daily Note ([a4c71a7](https://github.com/Lisandra-dev/create-note-in-folder/commit/a4c71a7ca91f6df75ddfa5c31258f351f88bb614))
+* not create a file only if the template is set to "daily" ([b3d8743](https://github.com/Lisandra-dev/create-note-in-folder/commit/b3d8743f9620b5b041416dc75b55d1bdf0e111db))
+
+
+### Bug Fixes
+
+* **daily:** rework daily template ([8fb94cc](https://github.com/Lisandra-dev/create-note-in-folder/commit/8fb94cc286ffe156b5be657dc8082b67defa07ab))
+* **merge:** merge ([54ea63b](https://github.com/Lisandra-dev/create-note-in-folder/commit/54ea63b95731b941338bde7c2b30ed9c0baad7bc))
+
 ## [0.0.10](https://github.com/Lisandra-dev/create-note-in-folder/compare/0.0.9...0.0.10) (2023-08-15)
 
 
