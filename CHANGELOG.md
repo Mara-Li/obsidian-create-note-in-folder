@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.10](https://github.com/Lisandra-dev/create-note-in-folder/compare/0.0.9...0.0.10) (2023-08-15)
+
+
+### Bug Fixes
+
+* file not increment if in root ([72f20de](https://github.com/Lisandra-dev/create-note-in-folder/commit/72f20de46ac486591bea43f1b33f47bc1c97193d)), closes [#3](https://github.com/Lisandra-dev/create-note-in-folder/issues/3)
+
 ## [0.0.9](https://github.com/Lisandra-dev/obsidian-create-note-in-folder/compare/0.0.8...0.0.9) (2023-02-25)
 
 
