@@ -46,13 +46,7 @@
 				"title": "Date",
 				"url": "https://momentjs.com/docs/#/displaying/format/"
 			},
-			"daily": {
-				"desc": "Les formats valides peuvent être trouvés ",
-				"error": "Format de date invalide, veuillez utiliser un format valide.",
-				"here": "ici",
-				"title": "Daily",
-				"url": "https://momentjs.com/docs/#/displaying/format/"
-			},
+
 			"folderName": "Nom du dossier",
 			"none": "Aucun"
 		},
@@ -64,5 +58,9 @@
 		"separator": "Séparateur",
 		"title": "Choisissez un modèle si vous voulez ajouter quelque chose avant ou après le nom du fichier."
 	},
-	"title": "Dossiers"
+	"title": "Dossiers",
+	"increments": {
+		"title" : "Incrémentation",
+		"desc" : "Désactivé, n'incrémente pas le nom si le fichier existe déjà et ouvre la note existante à la place."
+	}
 }

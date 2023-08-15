@@ -27,6 +27,7 @@ The title will be incremented if a file with the same name already exists.
 > **Note**  
 > If you have set a template for the path, the new note will be created with the template.  
 
+
 ## Installation  
 
 - [ ] From Obsidian's community plugins  

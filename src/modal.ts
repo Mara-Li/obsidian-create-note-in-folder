@@ -64,8 +64,9 @@ export class AddFolderModal extends Modal {
 			fileNameSetting.setDesc(i18next.t("template.desc"));
 			contentEl.createEl("h3", {text: i18next.t("header.template")});
 
-			if (TemplateType.date === this.result.template.type || TemplateType.daily === this.result.template.type) {
+			if (TemplateType.date === this.result.template.type) {
 				paramName = this.settingsTemplateDate(contentEl);
+				
 			} else if (TemplateType.folderName === this.result.template.type) {
 				this.result.template.format = this.result.path.split("/").pop() as string;
 			}
@@ -129,14 +130,20 @@ export class AddFolderModal extends Modal {
 						this.result.fileName = value.replace(".md", "") ;
 					});
 			});
-		
+		new Setting(contentEl)
+			.setName(i18next.t("increments.title"))
+			.setDesc(i18next.t("increments.desc"))
+			.addToggle(cb => cb
+				.setValue(this.result.template.increment ?? true)
+				.onChange(async (value) => {
+					this.result.template.increment = value;
+				}));
 		new Setting(contentEl)
 			.setName(i18next.t("template.title"))
 			.addDropdown(cb => {
 				cb
 					.addOption(TemplateType.none, i18next.t("template.dropDown.none"))
 					.addOption(TemplateType.date, i18next.t("template.dropDown.date.title"))
-					.addOption(TemplateType.daily, i18next.t("template.dropDown.daily.title"))
 					.addOption(TemplateType.folderName, i18next.t("template.dropDown.folderName"))
 					.setValue(this.result.template.type)
 					.onChange((value) => {
@@ -184,7 +191,7 @@ export class AddFolderModal extends Modal {
 							fileNameSettings.controlEl.classList.add("is-error");
 							fileNameSettings.controlEl.classList.add("edit");
 							fileNameSettings.controlEl.classList.add("create-note-in-folder");
-						} else if ((this.result.template.type === TemplateType.date || this.result.template.type === TemplateType.daily) && !moment(moment().format(this.result.template.format), this.result.template.format, true).isValid()) {
+						} else if ((this.result.template.type === TemplateType.date) && !moment(moment().format(this.result.template.format), this.result.template.format, true).isValid()) {
 							new Notice(i18next.t("template.dropDown.date.error"));
 							paramName?.controlEl.classList.add("is-error");
 							paramName?.controlEl.classList.add("edit");

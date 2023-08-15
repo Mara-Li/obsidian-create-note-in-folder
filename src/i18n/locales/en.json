@@ -45,14 +45,7 @@
 				"here": "here",
 				"title": "Date",
 				"url": "https://momentjs.com/docs/#/displaying/format/"
-            },
-			"daily": {
-				"desc": "Valid format can be found ",
-				"error": "Invalid date format, please use a valid format.",
-				"here": "here",
-				"title": "Daily",
-				"url": "https://momentjs.com/docs/#/displaying/format/"
-            },
+			},
 			"folderName": "Folder Name",
 			"none": "None"
         },
@@ -64,5 +57,9 @@
 		"separator": "Separator",
 		"title": "Choose a template if you want to add something before or after the filename."
     },
-	"title": "Folders"
+	"title": "Folders",
+	"increments": {
+		"title" : "Increments the name if the file already exists",
+		"desc": "Disabled, will not increment the name if the file already exists and open the already existing note instead."
+	}
 }

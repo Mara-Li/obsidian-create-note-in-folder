@@ -27,7 +27,7 @@ export default class NoteInFolder extends Plugin {
 		const template = folder.template;
 		const typeName = template.type;
 		let generatedName = null;
-		if (typeName === TemplateType.date || typeName === TemplateType.daily) {
+		if (typeName === TemplateType.date) {
 			if (template.format.trim().length === 0) {
 				template.format = "YYYY-MM-DD";
 			}
@@ -41,7 +41,7 @@ export default class NoteInFolder extends Plugin {
 			defaultName = defaultName + template.separator + generatedName;
 		}
 		const folderPath = folder.path !== "/" ? folder.path + "/" : "";
-		while (this.app.vault.getAbstractFileByPath(`${folderPath}${defaultName}.md`)) {
+		while (this.app.vault.getAbstractFileByPath(`${folderPath}${defaultName}.md`) && template.increment) {
 			const increment = defaultName.match(/ \d+$/);
 			const newIncrement = increment ? parseInt(increment[0]) + 1 : 1;
 			defaultName = defaultName.replace(/ \d+$/, "") + " " + newIncrement;
@@ -111,12 +111,13 @@ export default class NoteInFolder extends Plugin {
 						leaf = this.app.workspace.getLeaf(false);
 						break;
 					}
-					const file = this.app.vault.getAbstractFileByPath(`${newFolder.path}/${defaultName}`);
+					const newFolderPath = newFolder.path === "/" ? "" : newFolder.path + "/";
+					const file = this.app.vault.getAbstractFileByPath(`${newFolderPath}${defaultName}`);
 					if (file instanceof TFile) {
 						await leaf.openFile(file, {active: newFolder.focused});
 					}
 					if (!file) {
-						const newFile = await this.app.vault.create(`${newFolder.path}/${defaultName}`, "");
+						const newFile = await this.app.vault.create(`${newFolderPath}${defaultName}`, "");
 						await leaf.openFile(newFile, {active: newFolder.focused});
 					}
 				}

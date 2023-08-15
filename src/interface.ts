@@ -12,7 +12,6 @@ export enum SplitDirection {
 
 export enum TemplateType {
 	date = "date",
-	daily = "daily",
 	folderName = "folderName",
 	none = "none"
 }
@@ -30,6 +29,7 @@ export interface FolderSettings {
 		format: string;
 		position: Position;
 		separator: string;
+		increment?: boolean;
 	};
 	fileName: string;
 	opening: DefaultOpening;
@@ -53,6 +53,7 @@ export const DEFAULT_FOLDER_SETTINGS: FolderSettings = {
 		format: "",
 		position: Position.append,
 		separator: "",
+		increment: true,
 	},
 	fileName: "Untitled",
 	opening: DefaultOpening.newTab,
