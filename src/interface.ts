@@ -12,6 +12,7 @@ export enum SplitDirection {
 
 export enum TemplateType {
 	date = "date",
+	daily = "daily",
 	folderName = "folderName",
 	none = "none"
 }

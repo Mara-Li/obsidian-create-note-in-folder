@@ -46,6 +46,13 @@
 				"title": "Date",
 				"url": "https://momentjs.com/docs/#/displaying/format/"
             },
+			"daily": {
+				"desc": "Valid format can be found ",
+				"error": "Invalid date format, please use a valid format.",
+				"here": "here",
+				"title": "Daily",
+				"url": "https://momentjs.com/docs/#/displaying/format/"
+            },
 			"folderName": "Folder Name",
 			"none": "None"
         },
