@@ -12,6 +12,7 @@ specifiers:
   commit-and-tag-version: ^11.0.0
   cross-env: ^7.0.3
   dedent: ^1.5.1
+  dotenv: ^16.3.1
   esbuild: 0.17.3
   eslint: ^8.34.0
   eslint-plugin-jsonc: ^2.6.0
@@ -37,6 +38,7 @@ devDependencies:
   commander: 11.0.0
   cross-env: 7.0.3
   dedent: 1.5.1
+  dotenv: 16.3.1
   esbuild: 0.17.3
   eslint: 8.47.0
   eslint-plugin-jsonc: 2.9.0_eslint@8.47.0
@@ -1613,6 +1615,11 @@ packages:
     dependencies:
       is-obj: 2.0.0
     dev: false
+
+  /dotenv/16.3.1:
+    resolution: {integrity: sha512-IPzF4w4/Rd94bA9imS68tZBaYyBWSCE47V1RGuMrB94iyTOIEwRmVL2x/4An+6mETpLrKJ5hQkB8W4kFAadeIQ==}
+    engines: {node: '>=12'}
+    dev: true
 
   /dotgitignore/2.1.0:
     resolution: {integrity: sha512-sCm11ak2oY6DglEPpCB8TixLjWAxd3kJTs6UIcSasNYxXdFPV+YKlye92c8H4kKFqV5qYMIh7d+cYecEg0dIkA==}
