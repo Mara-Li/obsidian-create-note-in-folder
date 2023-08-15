@@ -1,0 +1,61 @@
+{
+	"add": "Add Folder",
+	"error": "This path is already in the list or not found",
+	"example": "Example: path/to/path",
+	"fileName": {
+		"desc": "The name will be incremented if the name already exists.",
+		"error": "Invalid file name, please use a filename if you don't use a template.",
+		"title": "Choose how notes will be named."
+    },
+	"focus": {
+		"desc": "Focus on the new note after creation",
+		"title": "Focus"
+    },
+	"folderNotFound": "Folder not found",
+	"header": {
+		"opening": "Opening",
+		"template": "Template"
+    },
+	"log": "Creating note in path {{- path}}, with name {{- name}}",
+	"modal": "Edit Folder specific settings",
+	"opening": {
+		"desc": "How note will be opened after creation",
+		"dropDown": {
+			"current": "Current Tab",
+			"newTab": "New Tab",
+			"newWindow": "New Window",
+			"split": {
+				"dropDown": {
+					"horizontal": "Horizontal",
+					"vertical": "Vertical"
+                },
+				"title": "Split Pane"
+            }
+        },
+		"title": "Default Opening"
+    },
+	"remove": "Remove Folder",
+	"submit": "Submit",
+	"template": {
+		"desc": "The filename can be empty if you use a template.",
+		"dropDown": {
+			"date": {
+				"desc": "Valid format can be found ",
+				"error": "Invalid date format, please use a valid format.",
+				"here": "here",
+				"title": "Date",
+				"url": "https://momentjs.com/docs/#/displaying/format/"
+            },
+			"folderName": "Folder Name",
+			"none": "None"
+        },
+		"position": {
+			"append": "Append",
+			"prepend": "Prepend",
+			"title": "Choose where to add the template."
+        },
+		"separator": "Separator",
+		"title": "Choose a template if you want to add something before or after the filename."
+    },
+	"title": "Folders"
+}
