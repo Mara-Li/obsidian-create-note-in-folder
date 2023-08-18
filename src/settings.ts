@@ -19,6 +19,7 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 	display(): void {
 		const {containerEl} = this;
 		containerEl.empty();
+		containerEl.addClass("create-note-in-folder");
 		containerEl.createEl("h1", {text: this.plugin.manifest.name});
 		
 		new Setting(containerEl)

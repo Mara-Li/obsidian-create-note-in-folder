@@ -60,3 +60,7 @@ p.create-note-in-folder.is-warning p>*:not(.code) {
 .create-note-in-folder.is-warning p.title {
     font-weight: bold;
 }
+
+.create-note-in-folder h3 {
+    margin-top: 0;
+}
