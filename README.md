@@ -19,15 +19,15 @@ You can choose to set a filename and a template. The template can be :
 
 In the case you choose to use a template, you don't need to set a filename. Moreover, you can choose how the template will be added :
 - Before the filename (if any)
-- After it.
+- After it.  
 And you can set a separator. 
 
 The title will be incremented if a file with the same name already exists.
 
-> **Note**  
+> [!NOTE]  
 > If you have set a template for the path, the new note will be created with the template.  
 
-### Incrementing title
+#### Incrementing title
 
 You can choose to increment the title if a file with the same name already exists. If this option is disabled, the plugin will open the existing file instead of creating a new one.
 
