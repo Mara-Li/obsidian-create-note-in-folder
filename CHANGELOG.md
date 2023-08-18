@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.2](https://github.com/Lisandra-dev/create-note-in-folder/compare/0.1.1...0.1.2) (2023-08-18)
+
+
+### Features
+
+* **customVariable:** allow to set custom variable ([0bcee17](https://github.com/Lisandra-dev/create-note-in-folder/commit/0bcee17d14896209bd8ce8a407bac98bead9f1a2)), closes [#4](https://github.com/Lisandra-dev/create-note-in-folder/issues/4)
+* **duplicate:** allow duplicating command ([874260f](https://github.com/Lisandra-dev/create-note-in-folder/commit/874260f915c13e09f8d01184c606f7fe7cd59d9d))
+
 ## [0.1.1](https://github.com/Lisandra-dev/create-note-in-folder/compare/0.1.0...0.1.1) (2023-08-15)
 
 ## [0.1.0](https://github.com/Lisandra-dev/create-note-in-folder/compare/0.0.10...0.1.0) (2023-08-15)
