@@ -23,6 +23,7 @@ export enum Position {
 }
 
 export interface FolderSettings {
+	commandName: string;
 	path: string;
 	template: {
 		type: TemplateType;
@@ -38,16 +39,26 @@ export interface FolderSettings {
 	
 }
 
+
+export interface CustomVariables {
+	name: string,
+	type: "string" | "date"
+	value: string
+}
+
 export interface NoteInFolderSettings {
 	folder: FolderSettings[];
+	customVariables: CustomVariables[];
 }
 
 export const DEFAULT_SETTINGS: NoteInFolderSettings = {
 	folder: [],
+	customVariables: [],
 };
 
 export const DEFAULT_FOLDER_SETTINGS: FolderSettings = {
 	path: "",
+	commandName: "",
 	template: {
 		type: TemplateType.none,
 		format: "",

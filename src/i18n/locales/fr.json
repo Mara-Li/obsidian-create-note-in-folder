@@ -1,66 +1,97 @@
 {
-	"add": "Ajouter un dossier",
-	"error": "Ce dossier est déjà dans la liste ou n'existe pas.",
-	"example": "Exemple: chemin/vers/dossier",
-	"fileName": {
-		"desc": "Le nom sera incrémenté si le nom existe déjà.",
-		"error": "Nom de fichier invalide, veuillez utiliser un nom de fichier si vous n'utilisez pas de modèle.",
-		"title": "Choisissez la façon dont les notes seront nommées."
-	},
-	"focus": {
-		"desc": "Focus sur la nouvelle note après sa création",
-		"title": "Focus"
-	},
-	"folderNotFound": "Dossier introuvable",
-	"header": {
-		"opening": "Ouverture",
-		"template": "Modèle"
-	},
-	"log": "Création de la note dans le dossier {{- path}}, avec le nom {{- name}}.",
-	"modal": "Modifier les paramètres spécifiques au dossier",
-	"opening": {
-		"desc": "Comment la note sera ouverte après sa création",
-		"dropDown": {
-			"current": "Onglet courant",
-			"newTab": "Nouvel onglet",
-			"newWindow": "Nouvelle fenêtre",
-			"split": {
-				"dropDown": {
-					"horizontal": "Horizontale",
-					"vertical": "Verticale"
-				},
-				"title": "Fenêtre divisée"
-			}
-		},
-		"title": "Ouverture par défaut"
-	},
-	"remove": "Supprimer le dossier",
-	"submit": "Valider",
-	"template": {
-		"desc": "Le nom du fichier peut être vide si vous utilisez un modèle.",
-		"dropDown": {
-			"date": {
-				"desc": "Les formats valides peuvent être trouvés ",
-				"error": "Format de date invalide, veuillez utiliser un format valide.",
-				"here": "ici",
-				"title": "Date",
-				"url": "https://momentjs.com/docs/#/displaying/format/"
-			},
-
-			"folderName": "Nom du dossier",
-			"none": "Aucun"
-		},
-		"position": {
-			"append": "Ajouter après",
-			"prepend": "Ajouter avant",
-			"title": "Choisissez où ajouter le modèle."
-		},
-		"separator": "Séparateur",
-		"title": "Choisissez un modèle si vous voulez ajouter quelque chose avant ou après le nom du fichier."
-	},
-	"title": "Dossiers",
-	"increments": {
-		"title" : "Incrémentation",
-		"desc" : "Désactivé, n'incrémente pas le nom si le fichier existe déjà et ouvre la note existante à la place."
-	}
+  "commandName": "Nom de la commande",
+  "common": {
+    "date": "Date",
+    "example": "Exemple :",
+    "name": "Le nom",
+    "string": "Texte",
+    "submit": "Valider",
+    "value": "La valeur"
+  },
+  "editFolder": {
+    "add": "Ajouter un dossier",
+    "fileName": {
+      "desc": "Le nom sera incrémenté si le nom existe déjà.",
+      "title": "Choisissez la façon dont les notes seront nommées."
+    },
+    "focus": {
+      "desc": "Focus sur la nouvelle note après sa création",
+      "title": "Focus"
+    },
+    "increments": {
+      "desc": "Désactivé, n'incrémente pas le nom si le fichier existe déjà et ouvre la note existante à la place.",
+      "title": "Incrémentation"
+    },
+    "opening": {
+      "desc": "Comment la note sera ouverte après sa création",
+      "dropDown": {
+        "current": "Onglet courant",
+        "newTab": "Nouvel onglet",
+        "newWindow": "Nouvelle fenêtre",
+        "split": "Fenêtre divisée"
+      },
+      "head": "Ouverture",
+      "split": {
+        "horizontal": "Horizontale",
+        "vertical": "Verticale"
+      },
+      "title": "Ouverture par défaut"
+    },
+    "template": {
+      "dropDown": {
+        "folderName": "Nom du dossier",
+        "none": "Aucun"
+      },
+      "title": "Choisissez un modèle si vous voulez ajouter quelque chose avant ou après le nom du fichier."
+    },
+    "title": "Modifier les paramètres spécifiques au dossier"
+  },
+  "error": {
+    "date": "Format de date invalide, veuillez utiliser un format valide.",
+    "duplicate": "{{- name}} existe déjà.",
+    "empty": "{{- name}} ne peut pas être vide",
+    "fileName": "Nom de fichier invalide, veuillez utiliser un nom de fichier si vous n'utilisez pas de modèle.",
+    "invalidExpression": "Le nom du fichier ne peut contenir aucun des caractères suivants : *, \", , /, <, >, :, |, ?",
+    "pathNoFound": "Ce dossier n'existe pas."
+  },
+  "example": "Exemple: chemin/vers/dossier",
+  "log": "Création de la note dans le dossier {{- path}}, avec le nom {{- name}}.",
+  "remove": "Supprimer le dossier",
+  "template": {
+    "desc": "Le nom du fichier peut être vide si vous utilisez un modèle.",
+    "dropDown": {
+      "date": {
+        "desc": "Les formats valides peuvent être trouvés ",
+        "here": "ici",
+        "url": "https://momentjs.com/docs/#/displaying/format/"
+      }
+    },
+    "header": "Modèle",
+    "position": {
+      "append": "Ajouter après",
+      "prepend": "Ajouter avant",
+      "title": "Choisissez où ajouter le modèle."
+    },
+    "separator": "Séparateur"
+  },
+  "title": "Dossiers",
+  "variable": {
+    "add": "Ajouter une nouvelle variable",
+    "desc": {
+      "explain": "Les variables personnalisées seront remplacées par leurs valeurs lors de la création.",
+      "filename": "Vous pouvez utiliser des variables personnalisées dans le chemin du fichier. ",
+      "insensitive": "Sans Regex, le nom sera sensible à la casse, y compris le type \"date\".",
+      "regex": {
+        "info": "Pour utiliser un nom avec un RegEx, il faut l'entourer de \"/\"",
+        "warn": "Les regex ne fonctionne que sur le type \"texte\"."
+      },
+      "warn": {
+        "usage": "Pour utiliser la variable, vous devez entourer son nom de \"{{}}\" dans le chemin du fichier."
+      }
+    },
+    "name": "Nom",
+    "remove": "Supprimer la variable",
+    "title": "Gérer les variables personnalisées",
+    "value": "Valeur"
+  }
 }

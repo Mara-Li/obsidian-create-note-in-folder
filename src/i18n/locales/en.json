@@ -1,65 +1,97 @@
 {
-	"add": "Add Folder",
-	"error": "This path is already in the list or not found",
-	"example": "Example: path/to/path",
-	"fileName": {
-		"desc": "The name will be incremented if the name already exists.",
-		"error": "Invalid file name, please use a filename if you don't use a template.",
-		"title": "Choose how notes will be named."
+  "commandName": "Command Name",
+  "common": {
+    "date": "Date",
+    "example": "Example:",
+    "name": "The name",
+    "string": "String",
+    "submit": "Submit",
+    "value": "The value"
+  },
+  "editFolder": {
+    "add": "Add folder",
+    "fileName": {
+      "desc": "The name will be incremented if the name already exists.",
+      "title": "Choose how notes will be named."
     },
-	"focus": {
-		"desc": "Focus on the new note after creation",
-		"title": "Focus"
+    "focus": {
+      "desc": "Focus on the new note after creation",
+      "title": "Focus"
     },
-	"folderNotFound": "Folder not found",
-	"header": {
-		"opening": "Opening",
-		"template": "Template"
+    "increments": {
+      "desc": "Disabled, will not increment the name if the file already exists and open the already existing note instead.",
+      "title": "Increments the name if the file already exists"
     },
-	"log": "Creating note in path {{- path}}, with name {{- name}}",
-	"modal": "Edit Folder specific settings",
-	"opening": {
-		"desc": "How note will be opened after creation",
-		"dropDown": {
-			"current": "Current Tab",
-			"newTab": "New Tab",
-			"newWindow": "New Window",
-			"split": {
-				"dropDown": {
-					"horizontal": "Horizontal",
-					"vertical": "Vertical"
-                },
-				"title": "Split Pane"
-            }
-        },
-		"title": "Default Opening"
+    "opening": {
+      "desc": "How note will be opened after creation",
+      "dropDown": {
+        "current": "Current Tab",
+        "newTab": "New Tab",
+        "newWindow": "New Window",
+        "split": "Split Pane"
+      },
+      "head": "Opening",
+      "split": {
+        "horizontal": "Horizontal",
+        "vertical": "Vertical"
+      },
+      "title": "Default Opening"
     },
-	"remove": "Remove Folder",
-	"submit": "Submit",
-	"template": {
-		"desc": "The filename can be empty if you use a template.",
-		"dropDown": {
-			"date": {
-				"desc": "Valid format can be found ",
-				"error": "Invalid date format, please use a valid format.",
-				"here": "here",
-				"title": "Date",
-				"url": "https://momentjs.com/docs/#/displaying/format/"
-			},
-			"folderName": "Folder Name",
-			"none": "None"
-        },
-		"position": {
-			"append": "Append",
-			"prepend": "Prepend",
-			"title": "Choose where to add the template."
-        },
-		"separator": "Separator",
-		"title": "Choose a template if you want to add something before or after the filename."
+    "template": {
+      "dropDown": {
+        "folderName": "Folder Name",
+        "none": "None"
+      },
+      "title": "Choose a template if you want to add something before or after the filename."
     },
-	"title": "Folders",
-	"increments": {
-		"title" : "Increments the name if the file already exists",
-		"desc": "Disabled, will not increment the name if the file already exists and open the already existing note instead."
-	}
+    "title": "Edit Folder specific settings"
+  },
+  "error": {
+    "date": "Invalid date format, please use a valid format.",
+    "duplicate": "{{- name}} already exists.",
+    "empty": "{{- name}} cannot be empty",
+    "fileName": "Invalid file name, please use a filename if you don't use a template.",
+    "invalidExpression": "File name cannot contain any of the following characters: *, \", , /, <, >, :, |, ?",
+    "pathNoFound": "This folder doesn't exists."
+  },
+  "example": "Example: path/to/path",
+  "log": "Creating note in path {{- path}}, with name {{- name}}",
+  "remove": "Remove Folder",
+  "template": {
+    "desc": "The filename can be empty if you use a template.",
+    "dropDown": {
+      "date": {
+        "desc": "Valid format can be found ",
+        "here": "here",
+        "url": "https://momentjs.com/docs/#/displaying/format/"
+      }
+    },
+    "header": "Template",
+    "position": {
+      "append": "Append",
+      "prepend": "Prepend",
+      "title": "Choose where to add the template."
+    },
+    "separator": "Separator"
+  },
+  "title": "Folders",
+  "variable": {
+    "add": "Add new variable",
+    "desc": {
+      "explain": "Custom variables will be replaced by their value upon creation.",
+      "filename": "You can use custom variables in the folder path. ",
+      "insensitive": "Without a regex, the name will be case-sensitive, including the \"date\" type.",
+      "regex": {
+        "info": "To use a name with a RegEx, enclose it by \"/\"",
+        "warn": "Regex only work on \"string\" type."
+      },
+      "warn": {
+        "usage": "To use the variable, you need to enclose the name in \"{{}}\" in the folder path."
+      }
+    },
+    "name": "Name",
+    "remove": "Remove variable",
+    "title": "Manage custom variables",
+    "value": "Value"
+  }
 }

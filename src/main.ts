@@ -1,8 +1,9 @@
 import i18next from "i18next";
-import {moment, Notice, Plugin, TFile,WorkspaceLeaf} from "obsidian";
+import {moment, Notice, Plugin, TFile, WorkspaceLeaf} from "obsidian";
 
 import { ressources, translationLanguage } from "./i18n/i18next";
 import {
+	CustomVariables,
 	DEFAULT_FOLDER_SETTINGS,
 	DEFAULT_SETTINGS,
 	DefaultOpening,
@@ -18,8 +19,8 @@ export default class NoteInFolder extends Plugin {
 	
 	/**
 	 * A function to generate the filename using the template settings & filename settings
-	 * @param folder {FolderSettings} - The folder settings
-	 * @returns {string} - The generated filename
+	 * @param folder {FolderSettings} The folder settings
+	 * @returns {string} The generated filename
 	 */
 	generateFileName(folder: FolderSettings): string {
 		let defaultName = folder.fileName;
@@ -46,23 +47,47 @@ export default class NoteInFolder extends Plugin {
 			const newIncrement = increment ? parseInt(increment[0]) + 1 : 1;
 			defaultName = defaultName.replace(/ \d+$/, "") + " " + newIncrement;
 		}
-		return defaultName + ".md";
+		return `${defaultName}.md`;
 	}
 	
+	replaceVariables(filePath: string, customVariables: CustomVariables[]) {
+		const hasBeenReplaced: boolean[] = [];
+		for (const variable of customVariables) {
+			if (filePath.match(`{{${variable.name}}}`)) {
+				if (variable.type === "string") {
+					filePath = filePath.replace(`{{${variable.name}}}`, variable.value);
+				} else {
+					filePath = filePath.replace(`{{${variable.name}}}`, moment().format(variable.value));
+				}
+				hasBeenReplaced.push(true);
+			} else if (variable.name.match(/^\/.+\/[gimy]*$/)) {
+				const regex = new RegExp(variable.name.replace(/^\/(.+)\/[gimy]*$/, "{{$1}}"), variable.name.replace(/^\/.+\/([gimy]*)$/, "$1"));
+				if (filePath.match(regex)) {
+					filePath = filePath.replace(regex, variable.value);
+					hasBeenReplaced.push(true);
+				}
+			}
+		}
+		console.log(hasBeenReplaced);
+		return {path: filePath, hasBeenReplaced: hasBeenReplaced.length > 0};
+	}
+	
+
+	
 	/**
-	 * For an unknow reason, the remove commands for a specific folderpath is not working
+	 * For an unknown reason, the remove commands for a specific folder-path is not working
 	 * This function check all the commands of the plugin and remove the ones that are not in the settings
 	 * @returns {Promise<void>}
 	 */
-	async removeCommands()
+	async removeCommands(): Promise<void>
 	{
 		//@ts-ignore
 		const pluginCommands = Object.keys(this.app.commands.commands).filter((command) => command.startsWith("create-note-in-folder"));
 		for (const command of pluginCommands) {
 			//remove commands if the folder is not in the settings
-			if (!this.settings.folder.some((folder) => folder.path === command.replace("create-note-in-folder:", ""))) {
+			if (!this.settings.folder.some((folder) => folder.commandName === command.replace("create-note-in-folder:", ""))) {
 				//@ts-ignore
-				app.commands.removeCommand(command);
+				this.app.commands.removeCommand(command);
 			}
 		}
 	}
@@ -82,20 +107,27 @@ export default class NoteInFolder extends Plugin {
 			this.app.commands.removeCommand(`create-note-in-folder:${oldFolder}`); //doesn't work in some condition
 		}
 		if (newFolder !== undefined) {
+			const {path, hasBeenReplaced} = this.replaceVariables(newFolder.path, this.settings.customVariables);
 			this.addCommand({
-				id: `${newFolder.path}`,
-				name: `${newFolder.path}`,
+				id: `${newFolder.commandName ?? newFolder.path}`,
+				name: `${newFolder.commandName ?? newFolder.path}`,
 				callback: async () => {
 					const defaultName = this.generateFileName(newFolder);
-					//check if path exists
-					if (!this.app.vault.getAbstractFileByPath(newFolder.path)) {
-						new Notice(i18next.t("folderNotFound"));
-						this.settings.folder = this.settings.folder.filter((folder) => folder !== newFolder);
-						await this.addNewCommands(newFolder.path, undefined);
-						await this.saveSettings();
-						return;
+					if (!this.app.vault.getAbstractFileByPath(path)) {
+						if (hasBeenReplaced) {
+						//create folder if it doesn't exist
+							await this.app.vault.createFolder(path);
+						} else {
+							//warning and remove command if the folder doesn't exist
+							new Notice(i18next.t("error.pathNoFound", {path: newFolder.path}));
+							//remove from settings
+							this.settings.folder.splice(this.settings.folder.indexOf(newFolder), 1);
+							await this.saveSettings();
+							await this.addNewCommands(newFolder.commandName, undefined);
+							return;
+						}
 					}
-					console.log(i18next.t("log", {path: newFolder.path, name: defaultName}));
+					console.log(i18next.t("log", {path: path, name: defaultName}));
 					let leaf: WorkspaceLeaf;
 					switch (newFolder.opening) {
 					case DefaultOpening.split:
@@ -111,7 +143,7 @@ export default class NoteInFolder extends Plugin {
 						leaf = this.app.workspace.getLeaf(false);
 						break;
 					}
-					const newFolderPath = newFolder.path === "/" ? "" : newFolder.path + "/";
+					const newFolderPath = path === "/" ? "" : path + "/";
 					const file = this.app.vault.getAbstractFileByPath(`${newFolderPath}${defaultName}`);
 					if (file instanceof TFile) {
 						await leaf.openFile(file, {active: newFolder.focused});
@@ -126,8 +158,8 @@ export default class NoteInFolder extends Plugin {
 	}
 	
 	async onload() {
-		console.log("Create Note in Folder plugin loaded");
-		i18next.init({
+		console.info(`${this.manifest.name} v${this.manifest.version} loaded`);
+		await i18next.init({
 			lng: translationLanguage,
 			fallbackLng: "en",
 			resources: ressources,
@@ -170,12 +202,14 @@ export default class NoteInFolder extends Plugin {
 		this.addSettingTab(new NoteInFolderSettingsTab(this.app, this));
 		const folders = this.settings.folder;
 		for (const folder of folders) {
+			folder.commandName = folder.commandName && folder.commandName.length > 0 ? folder.commandName : folder.path;
+			await this.saveSettings();
 			await this.addNewCommands(undefined, folder);
 		}
 	}
 
 	onunload() {
-		console.log("Create Note in Folder plugin unloaded");
+		console.info(`${this.manifest.name} v${this.manifest.version} unloaded`);
 	}
 
 	async loadSettings() {

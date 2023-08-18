@@ -31,6 +31,17 @@ The title will be incremented if a file with the same name already exists.
 
 You can choose to increment the title if a file with the same name already exists. If this option is disabled, the plugin will open the existing file instead of creating a new one.
 
+## Custom variables
+
+When creating files or folders, you can use custom variables in the path to customize the names. To use a variable, simply put its name between `{{` and `}}`. For instance, if you have a variable named `myVar`, you can incorporate it into the path like this: `{{myVar}}`.
+
+Remember that if the folder you're referencing doesn't exist yet, it will only be created when you use a variable in the path.
+
+You have several naming options:
+1. **Regular Expression (regex):** Enclose the regex in `//`, e.g., `/\d+-\d+/gi`. This will match numbers separated by a dash, like `{{/\d+-\d+/gi}}`. Any folder name matching this regex will be replaced with the contents of that folder. For example, it allows you to create a file in a folder named `2021-01` by using the regex `/\d+-\d+/gi` in the path. This works for `2021-02`, `2021-03`, etc., as well. Without using the regex, you'd need a separate template for each folder.
+2. **Strict String:** Use a plain text string as is.
+3. **Date Format:** Utilize date formats based on [moment.js](https://momentjs.com/docs/#/displaying/), like `YYYY-MM-DD`, which would be replaced by the current date in the format `2021-01-01`. This enables you to use dynamic dates in your paths, such as the folder of the current month by using `YYYY-MM`. Without this feature, you'd have to create individual templates for each month.
+
 ## Installation  
 
 - [x] From Obsidian's community plugins  
