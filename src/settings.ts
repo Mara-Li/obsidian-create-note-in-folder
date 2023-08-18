@@ -3,7 +3,7 @@ import {App, PluginSettingTab, Setting} from "obsidian";
 
 import {FolderSuggest} from "./fileSuggest";
 import {
-	DEFAULT_FOLDER_SETTINGS
+	DEFAULT_FOLDER_SETTINGS, FolderSettings
 } from "./interface";
 import NoteInFolder from "./main";
 import {AddFolderModal, ManageCustomVariables} from "./modal";
@@ -39,6 +39,28 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 			new Setting(containerEl)
 				.setClass("create-note-in-folder")
 				.setClass("settingsTab")
+				.addButton(cb =>
+					cb
+						.setIcon("copy")
+						.setTooltip(i18next.t("duplicate"))
+						.onClick(async () => {
+							let defaultSettings = JSON.parse(JSON.stringify(folder));
+							defaultSettings = this.duplicateFolder(defaultSettings);
+							this.plugin.settings.folder.push(defaultSettings);
+							await this.plugin.saveSettings();
+							this.display();
+						})
+				)
+				.addButton(cb =>
+					cb
+						.setIcon("pencil")
+						.setTooltip(i18next.t("editFolder.title"))
+						.onClick(async () => {
+							new AddFolderModal(this.app, folder, (result)  => {
+								this.plugin.settings.folder[this.plugin.settings.folder.indexOf(folder)] = result;
+								this.plugin.saveSettings();
+							}).open();
+						}))
 				.addText(cb => {
 					cb
 						.setPlaceholder(i18next.t("commandName"))
@@ -73,16 +95,6 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 							await this.plugin.saveSettings();
 							await this.plugin.addNewCommands(folder.commandName, undefined);
 							this.display();
-						}))
-				.addButton(cb =>
-					cb
-						.setIcon("pencil")
-						.setTooltip(i18next.t("editFolder.title"))
-						.onClick(async () => {
-							new AddFolderModal(this.app, folder, (result)  => {
-								this.plugin.settings.folder[this.plugin.settings.folder.indexOf(folder)] = result;
-								this.plugin.saveSettings();
-							}).open();
 						}));
 		}
 		new Setting(containerEl)
@@ -95,6 +107,14 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 					await this.plugin.saveSettings();
 					this.display();
 				}));
-		
+	}
+	
+	duplicateFolder(folder: FolderSettings) {
+		const defaultSettings = JSON.parse(JSON.stringify(folder));
+		const duplicatedFolders = this.plugin.settings.folder.filter((f) => f.commandName.replace(/ \(\d+\)+/, "") === folder.commandName.replace(/ \(\d+\)+/, ""));
+		if (duplicatedFolders.length > 0) {
+			defaultSettings.commandName = `${folder.commandName.replace(/ \(\d+\)+/, "")} (${duplicatedFolders.length})`;
+		}
+		return defaultSettings;
 	}
 }

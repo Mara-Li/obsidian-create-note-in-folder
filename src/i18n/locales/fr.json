@@ -8,6 +8,7 @@
     "submit": "Valider",
     "value": "La valeur"
   },
+  "duplicate": "Dupliquer",
   "editFolder": {
     "add": "Ajouter un dossier",
     "fileName": {
