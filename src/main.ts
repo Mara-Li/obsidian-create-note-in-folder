@@ -13,7 +13,6 @@ import {
 	TemplateType
 } from "./interface";
 import {NoteInFolderSettingsTab} from "./settings";
-import {App as AppUndocumented} from "obsidian-undocumented";
 
 export default class NoteInFolder extends Plugin {
 	settings: NoteInFolderSettings;

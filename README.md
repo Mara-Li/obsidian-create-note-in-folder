@@ -11,7 +11,7 @@ You can choose how per each folder :
 
 After adding the path, you can use the command "Create new note in folder {path}" to create a new note in this path.  
 
-### About file name & template
+## About file name & template
 
 You can choose to set a filename and a template. The template can be :
 - The folder name
@@ -19,13 +19,17 @@ You can choose to set a filename and a template. The template can be :
 
 In the case you choose to use a template, you don't need to set a filename. Moreover, you can choose how the template will be added :
 - Before the filename (if any)
-- After it.
+- After it.  
 And you can set a separator. 
 
 The title will be incremented if a file with the same name already exists.
 
-> **Note**  
-> If you have set a template for the path, the new note will be created with the template.  
+If you have the Templater plugin installed and configured, you can assign a template to a note. Once a note is created, the assigned template will be executed. This functionality enables you to replicate the behavior of "Folder Templates." However, because I permit the utilization of folder paths with variables, you gain a higher degree of flexibility.
+
+> [!NOTE]
+> In other words, there is no necessity to individually add a template for each folder and employ a regular expression instead. 
+> For instance, if your folders are named `2021-01`, `2021-02`, etc., you can utilize the regex `/\d+-\d+/gi` to match all of them automatically and apply the template accordingly. There's no need to configure a separate template for each folder.
+> Alternatively, consider a scenario where you possess multiple wikis for role-playing and have a generic template (like "wiki"). By using `(.*)wiki(.*)`, the template will be automatically applied to any folder containing the term "wiki."
 
 ### Incrementing title
 
@@ -42,7 +46,10 @@ You have several naming options:
 2. **Strict String:** Use a plain text string as is.
 3. **Date Format:** Utilize date formats based on [moment.js](https://momentjs.com/docs/#/displaying/), like `YYYY-MM-DD`, which would be replaced by the current date in the format `2021-01-01`. This enables you to use dynamic dates in your paths, such as the folder of the current month by using `YYYY-MM`. Without this feature, you'd have to create individual templates for each month.
 
-## Installation  
+
+
+---
+# Installation  
 
 - [x] From Obsidian's community plugins  
 - [x] Using [BRAT](https://github.com/TfTHacker/obsidian42-brat#adding-a-beta-plugin) using `https://github.com/Lisandra-dev/create-note-in-folder`  
@@ -52,7 +59,7 @@ You have several naming options:
   - In Obsidian settings, reload the plugin  
   - Enable the plugin  
 
-## Translations  
+# Translations  
 
 - [x] English  
 - [x] French  
@@ -64,7 +71,7 @@ To add a translation:
 - Translate the content of the file
 - Create a pull request
 
-## Credit  
+# Credit  
 Many thanks to @SilentVoid13 and @RafaelGB for their [Templater](https://github.com/SilentVoid13/Templater) and [dbFolder](https://github.com/RafaelGB/obsidian-db-folder), where some part of the code where taken.  
 
 ---
