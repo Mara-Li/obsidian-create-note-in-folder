@@ -19,6 +19,7 @@ specifiers:
   i18next: ^22.4.10
   obsidian: latest
   obsidian-plugin-cli: ^0.9.0
+  obsidian-undocumented: ^0.1.3
   tslib: ^2.5.0
   typescript: ^4.9.5
 
@@ -43,6 +44,7 @@ devDependencies:
   eslint: 8.47.0
   eslint-plugin-jsonc: 2.9.0_eslint@8.47.0
   obsidian: 1.4.0_wjvbqwn5xht4hmxttrop2angdm
+  obsidian-undocumented: 0.1.3_obsidian@1.4.0
   tslib: 2.6.1
   typescript: 4.9.5
 
@@ -3087,6 +3089,14 @@ packages:
       - encoding
       - supports-color
     dev: false
+
+  /obsidian-undocumented/0.1.3_obsidian@1.4.0:
+    resolution: {integrity: sha512-JjJuY8aepETPMumGwleq/lVa7gM7yfQxbVbk83sim21wZv6oo2v2GA/KZf62pO5Jri37Lj6XWVlqnxQKSQ/9Hw==}
+    peerDependencies:
+      obsidian: '>=1.0.0'
+    dependencies:
+      obsidian: 1.4.0_wjvbqwn5xht4hmxttrop2angdm
+    dev: true
 
   /obsidian-utils/0.10.2:
     resolution: {integrity: sha512-LvD098hza7o+WnM7ra39xsvSazrjSLjynDsiMlCAE5Nv/mCcbYex72WeZkZ32TqdXLspTjfiI0pgRhKH4VuNEQ==}

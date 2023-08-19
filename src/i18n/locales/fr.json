@@ -45,6 +45,14 @@
       },
       "title": "Choisissez un modèle si vous voulez ajouter quelque chose avant ou après le nom du fichier."
     },
+    "templater": {
+      "setting": {
+        "desc": "Permet d'utiliser une template du plugin templater",
+        "placeholder": "template",
+        "title": "Chemin de la template"
+      },
+      "title": "Paramètre de templater"
+    },
     "title": "Modifier les paramètres spécifiques au dossier"
   },
   "error": {
@@ -53,7 +61,9 @@
     "empty": "{{- name}} ne peut pas être vide",
     "fileName": "Nom de fichier invalide, veuillez utiliser un nom de fichier si vous n'utilisez pas de modèle.",
     "invalidExpression": "Le nom du fichier ne peut contenir aucun des caractères suivants : *, \", , /, <, >, :, |, ?",
-    "pathNoFound": "Ce dossier n'existe pas."
+    "pathNoFound": "Ce dossier n'existe pas.",
+    "templateNotFile": "{{- path}} n'est pas un fichier valide.",
+    "templateNotFound": "{{- path}} n'existe pas."
   },
   "example": "Exemple: chemin/vers/dossier",
   "log": "Création de la note dans le dossier {{- path}}, avec le nom {{- name}}.",

@@ -1,8 +1,8 @@
 /** Credit to @liamcain, @RafaelGB and @SilentVoid13 for the original code. */
 
 import { createPopper, Instance as PopperInstance } from "@popperjs/core";
-import { ISuggestOwner, Scope,TAbstractFile, TFolder  } from "obsidian";
-
+import {App, ISuggestOwner, normalizePath, Notice, Scope, TAbstractFile, TFile, TFolder, Vault} from "obsidian";
+import {App as AppUndocumented} from "obsidian-undocumented";
 
 export enum FileSuggestMode {
     TemplateFiles,
@@ -236,3 +236,97 @@ export class FolderSuggest extends TextInputSuggest<TFolder> {
 		this.close();
 	}
 }
+
+
+
+export class FileSuggest extends TextInputSuggest<TFile> {
+	constructor(
+	public inputEl: HTMLInputElement,
+		public app: App,
+	) {
+		super(inputEl);
+		this.app = app;
+	}
+
+	get_folder(): string {
+		const templaterPlugin = (this.app as AppUndocumented).plugins.getPlugin("templater-obsidian");
+		if (!templaterPlugin) {
+			return "";
+		} else {
+			//@ts-ignore
+			return this.app.plugins.getPlugin("templater-obsidian").settings.templates_folder;
+		}
+	}
+
+	get_error_msg(): string {
+		return "Templates folder doesn't exist";
+		
+	}
+	
+	resolve_tfolder(folder_str: string): TFolder | null {
+		folder_str = normalizePath(folder_str);
+
+		const folder = this.app.vault.getAbstractFileByPath(folder_str);
+		if (!folder) {
+			return null;
+		}
+		if (!(folder instanceof TFolder)) {
+			return null;
+		}
+
+		return folder;
+	}
+
+	get_tfiles_from_folder(folder_str: string): Array<TFile> {
+		const folder = this.resolve_tfolder(folder_str);
+		if (!folder) {
+			new Notice(this.get_error_msg());
+			return [];
+		}
+		const files: Array<TFile> = [];
+		Vault.recurseChildren(folder, (file: TAbstractFile) => {
+			if (file instanceof TFile) {
+				files.push(file);
+			}
+		});
+
+		files.sort((a, b) => {
+			return a.basename.localeCompare(b.basename);
+		});
+
+		return files;
+	}
+	
+	getSuggestions(input_str: string): TFile[] {
+		const all_files = this.get_tfiles_from_folder(this.get_folder());
+		if (!all_files) {
+			return [];
+		}
+
+		const files: TFile[] = [];
+		const lower_input_str = input_str.toLowerCase();
+
+		all_files.forEach((file: TAbstractFile) => {
+			if (
+				file instanceof TFile &&
+                file.extension === "md" &&
+                file.path.toLowerCase().contains(lower_input_str)
+			) {
+				files.push(file);
+			}
+		});
+
+		return files;
+	}
+
+	renderSuggestion(file: TFile, el: HTMLElement): void {
+		el.setText(file.path);
+	}
+
+	selectSuggestion(file: TFile): void {
+		this.inputEl.value = file.path;
+		this.inputEl.trigger("input");
+		this.close();
+	}
+}
+

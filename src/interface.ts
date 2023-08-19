@@ -36,7 +36,7 @@ export interface FolderSettings {
 	opening: DefaultOpening;
 	focused: boolean;
 	splitDefault: SplitDirection;
-	
+	templater?: string;
 }
 
 

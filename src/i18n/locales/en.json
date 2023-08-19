@@ -45,6 +45,14 @@
       },
       "title": "Choose a template if you want to add something before or after the filename."
     },
+    "templater": {
+      "setting": {
+        "desc": "Allow to trigger a template from the templater plugin",
+        "placeholder": "template",
+        "title": "Template path"
+      },
+      "title": "Templater settings"
+    },
     "title": "Edit Folder specific settings"
   },
   "error": {
@@ -53,7 +61,9 @@
     "empty": "{{- name}} cannot be empty",
     "fileName": "Invalid file name, please use a filename if you don't use a template.",
     "invalidExpression": "File name cannot contain any of the following characters: *, \", , /, <, >, :, |, ?",
-    "pathNoFound": "This folder doesn't exists."
+    "pathNoFound": "This folder doesn't exists.",
+    "templateNotFile": "{{- path}} is not a valid file.",
+    "templateNotFound": "{{- path}} doesn't exists."
   },
   "example": "Example: path/to/path",
   "log": "Creating note in path {{- path}}, with name {{- name}}",

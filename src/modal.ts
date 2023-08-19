@@ -1,7 +1,9 @@
 import i18next from "i18next";
 import {App, Modal, moment,Notice, Setting} from "obsidian";
+import {App as ObsidianApp} from "obsidian-undocumented";
 
-import {CustomVariables,DefaultOpening, FolderSettings, Position, SplitDirection, TemplateType} from "./interface";
+import {FileSuggest} from "./fileSuggest";
+import {CustomVariables, DefaultOpening, FolderSettings, Position, SplitDirection, TemplateType} from "./interface";
 
 
 function validateDate(date: string) {
@@ -49,6 +51,25 @@ export class AddFolderModal extends Modal {
 					});
 			});
 		return paramName;
+	}
+	
+	settingTemplater(contentEl: HTMLElement) {
+		if ((this.app as ObsidianApp).plugins.getPlugin("templater-obsidian")) {
+			contentEl.createEl("h3", {text: i18next.t("editFolder.templater.title")});
+			return new Setting(contentEl)
+				.setName(i18next.t("editFolder.templater.setting.title"))
+				.setDesc(i18next.t("editFolder.templater.setting.desc"))
+				.addSearch(cb => {
+					new FileSuggest(cb.inputEl, this.app);
+					cb
+						.setPlaceholder(i18next.t("editFolder.templater.setting.placeholder"))
+						.setValue(this.result.templater ?? "")
+						.onChange((value) => {
+							this.result.templater = value;
+						});
+				});
+		}
+		return null;
 	}
 	
 	/**
@@ -184,6 +205,8 @@ export class AddFolderModal extends Modal {
 				.onChange(async (value) => {
 					this.result.focused = value;
 				}));
+		
+		this.settingTemplater(contentEl);
 		
 		new Setting(contentEl)
 			.addButton(cb =>

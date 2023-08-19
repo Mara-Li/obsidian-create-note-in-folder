@@ -13,6 +13,7 @@ import {
 	TemplateType
 } from "./interface";
 import {NoteInFolderSettingsTab} from "./settings";
+import {App as AppUndocumented} from "obsidian-undocumented";
 
 export default class NoteInFolder extends Plugin {
 	settings: NoteInFolderSettings;
@@ -151,9 +152,39 @@ export default class NoteInFolder extends Plugin {
 					if (!file) {
 						const newFile = await this.app.vault.create(`${newFolderPath}${defaultName}`, "");
 						await leaf.openFile(newFile, {active: newFolder.focused});
+						await this.triggerTemplater(newFile, newFolder);
 					}
 				}
 			});
+		}
+	}
+	
+	async triggerTemplater(file: TFile, settings: FolderSettings) {
+		//@ts-ignore
+		if (this.app.plugins.enabledPlugins.has("templater-obsidian")) {
+			const templatePath = settings.templater;
+			if (!templatePath) {
+				return;
+			}
+			const templateFile = this.app.vault.getAbstractFileByPath(templatePath);
+			if (!templateFile) {
+				new Notice(i18next.t("error.templateNotFound", {path: templatePath}));
+				return;
+			} else if (!(templateFile instanceof TFile)) {
+				new Notice(i18next.t("error.templateNotFile", {path: templatePath}));
+				return;
+			}
+			const templateContent = await this.app.vault.read(templateFile);
+			//add the content to the file
+			await this.app.vault.modify(file, templateContent);
+			//trigger templater
+			try {
+				//@ts-ignore
+				this.app.commands.executeCommandById("templater-obsidian:replace-in-file-templater");
+			} catch (e) {
+				console.log(e);
+				// I think it can work if the file is not opened in main view or something. Prevent error like that.
+			}
 		}
 	}
 	
@@ -165,6 +196,10 @@ export default class NoteInFolder extends Plugin {
 			resources: ressources,
 			returnNull: false,
 		});
+		
+		//@ts-ignore
+		console.log(this.app.plugins.enabledPlugins.has("templater-obsidian"));
+		
 		await this.loadSettings();
 		if (this.settings.folder.length > 0 && typeof this.settings.folder[0] === "string") {
 			const oldFolders = this.settings.folder as unknown as string[];
