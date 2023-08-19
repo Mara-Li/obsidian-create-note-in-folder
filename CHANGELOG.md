@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.1.0](https://github.com/Lisandra-dev/create-note-in-folder/compare/1.0.0...1.1.0) (2023-08-19)
+
+
+### Features
+
+* **templater:** allow triggering specific template upon file creation ([bc41591](https://github.com/Lisandra-dev/create-note-in-folder/commit/bc41591f96a30eedd51e241b7c67d221becfa4d7))
+
 ## [1.0.0](https://github.com/Lisandra-dev/create-note-in-folder/compare/0.1.4...1.0.0) (2023-08-18)
 
 ## [0.1.4](https://github.com/Lisandra-dev/create-note-in-folder/compare/0.1.3...0.1.4) (2023-08-18)
