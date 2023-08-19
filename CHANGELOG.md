@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.1.1](https://github.com/Lisandra-dev/create-note-in-folder/compare/1.1.0...1.1.1) (2023-08-19)
+
+
+### Bug Fixes
+
+* **setting:** add tooltip for information on the input area ([43dfb90](https://github.com/Lisandra-dev/create-note-in-folder/commit/43dfb905935b3f53f49c926105737e4594f75401))
+
 ## [1.1.0](https://github.com/Lisandra-dev/create-note-in-folder/compare/1.0.0...1.1.0) (2023-08-19)
 
 
