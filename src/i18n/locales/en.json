@@ -67,6 +67,7 @@
   },
   "example": "Example: path/to/path",
   "log": "Creating note in path {{- path}}, with name {{- name}}",
+  "path": "folder-path",
   "remove": "Remove Folder",
   "template": {
     "desc": "The filename can be empty if you use a template.",

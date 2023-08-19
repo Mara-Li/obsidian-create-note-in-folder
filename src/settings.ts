@@ -36,7 +36,7 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 		containerEl.createEl("h3", {text: i18next.t("title")} as const);
 		
 		for (const folder of this.plugin.settings.folder) {
-			new Setting(containerEl)
+			const setting = new Setting(containerEl)
 				.setClass("create-note-in-folder")
 				.setClass("settingsTab")
 				.addButton(cb =>
@@ -60,7 +60,8 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 								this.plugin.settings.folder[this.plugin.settings.folder.indexOf(folder)] = result;
 								this.plugin.saveSettings();
 							}).open();
-						}))
+						}));
+			const commandNameSetting = setting
 				.addText(cb => {
 					cb
 						.setPlaceholder(i18next.t("commandName"))
@@ -72,7 +73,13 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 							await this.plugin.removeCommands();
 							await this.plugin.saveSettings();
 						});
-				})
+					/**
+					 * When the user focus the cb input, a tooltip must be displayed to say "command name"
+					 */
+					this.addTooltip(i18next.t("commandName"), cb.inputEl);
+				});
+			
+			const SearchSetting = setting
 				.addSearch((cb) => {
 					new FolderSuggest(cb.inputEl);
 					cb.setPlaceholder(i18next.t("example"));
@@ -85,7 +92,9 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 						await this.plugin.removeCommands();
 						await this.plugin.saveSettings();
 					});
-				})
+					this.addTooltip(i18next.t("path"), cb.inputEl);
+				});
+			setting
 				.addButton(cb =>
 					cb
 						.setIcon("cross")
@@ -116,5 +125,19 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 			defaultSettings.commandName = `${folder.commandName.replace(/ \(\d+\)+/, "")} (${duplicatedFolders.length})`;
 		}
 		return defaultSettings;
+	}
+	
+	addTooltip(text: string, cb: HTMLElement) {
+		cb.onfocus = () => {
+			const tooltip = cb.parentElement?.createEl("div", {text: text, cls: "tooltip"});
+			if (tooltip) {
+				const rec = cb.getBoundingClientRect();
+				tooltip.style.top = `${rec.top + rec.height + 5}px`;
+				tooltip.style.left = `${rec.left + rec.width / 2}px`;
+			}
+		};
+		cb.onblur = () => {
+			cb.parentElement?.querySelector(".tooltip")?.remove();
+		};
 	}
 }
