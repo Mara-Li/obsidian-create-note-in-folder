@@ -36,7 +36,7 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 		containerEl.createEl("h3", {text: i18next.t("title")} as const);
 		
 		for (const folder of this.plugin.settings.folder) {
-			const setting = new Setting(containerEl)
+			new Setting(containerEl)
 				.setClass("create-note-in-folder")
 				.setClass("settingsTab")
 				.addButton(cb =>
@@ -60,8 +60,7 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 								this.plugin.settings.folder[this.plugin.settings.folder.indexOf(folder)] = result;
 								this.plugin.saveSettings();
 							}).open();
-						}));
-			const commandNameSetting = setting
+						}))
 				.addText(cb => {
 					cb
 						.setPlaceholder(i18next.t("commandName"))
@@ -77,9 +76,7 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 					 * When the user focus the cb input, a tooltip must be displayed to say "command name"
 					 */
 					this.addTooltip(i18next.t("commandName"), cb.inputEl);
-				});
-			
-			const SearchSetting = setting
+				})
 				.addSearch((cb) => {
 					new FolderSuggest(cb.inputEl);
 					cb.setPlaceholder(i18next.t("example"));
@@ -93,8 +90,7 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 						await this.plugin.saveSettings();
 					});
 					this.addTooltip(i18next.t("path"), cb.inputEl);
-				});
-			setting
+				})
 				.addButton(cb =>
 					cb
 						.setIcon("cross")
