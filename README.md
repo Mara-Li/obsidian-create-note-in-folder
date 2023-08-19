@@ -26,10 +26,10 @@ The title will be incremented if a file with the same name already exists.
 
 If you have the Templater plugin installed and configured, you can assign a template to a note. Once a note is created, the assigned template will be executed. This functionality enables you to replicate the behavior of "Folder Templates." However, because I permit the utilization of folder paths with variables, you gain a higher degree of flexibility.
 
-> [!NOTE]
-> In other words, there is no necessity to individually add a template for each folder and employ a regular expression instead. 
-> For instance, if your folders are named `2021-01`, `2021-02`, etc., you can utilize the regex `/\d+-\d+/gi` to match all of them automatically and apply the template accordingly. There's no need to configure a separate template for each folder.
-> Alternatively, consider a scenario where you possess multiple wikis for role-playing and have a generic template (like "wiki"). By using `(.*)wiki(.*)`, the template will be automatically applied to any folder containing the term "wiki."
+> [!NOTE]   
+> In other words, there is no necessity to individually add a template for each folder and employ a regular expression instead.  
+> For instance, if your folders are named `2021-01`, `2021-02`, etc., you can utilize the regex `/\d+-\d+/gi` to match all of them automatically and apply the template accordingly. There's no need to configure a separate template for each folder.  
+> Alternatively, consider a scenario where you possess multiple wikis for role-playing and have a generic template (like "wiki"). By using `(.*)wiki(.*)`, the template will be automatically applied to any folder containing the term "wiki."  
 
 ### Incrementing title
 
