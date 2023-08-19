@@ -46,7 +46,6 @@ You have several naming options:
 
 > [!NOTE]
 > Using this with the templater settings could you prevent to set-up in templater option a lot of folder.
-> For example, you can set a generic templater file for all your `wiki` folder, with setting a path based on `(.*)wiki(.*)`. Each time you create a new wiki file, in any project, the generic will be triggered.
 
 ---
 # Installation  
