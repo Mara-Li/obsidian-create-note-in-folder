@@ -19,7 +19,7 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 	display(): void {
 		const {containerEl} = this;
 		containerEl.empty();
-		containerEl.addClass("create-note-in-folder");
+		containerEl.addClasses(["create-note-in-folder", "settingsTab"]);
 		containerEl.createEl("h1", {text: this.plugin.manifest.name});
 		
 		new Setting(containerEl)
@@ -37,8 +37,6 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 		
 		for (const folder of this.plugin.settings.folder) {
 			new Setting(containerEl)
-				.setClass("create-note-in-folder")
-				.setClass("settingsTab")
 				.addButton(cb =>
 					cb
 						.setIcon("copy")
@@ -63,6 +61,7 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 						}))
 				.addText(cb => {
 					cb
+						
 						.setPlaceholder(i18next.t("commandName"))
 						.setValue(folder.commandName ?? folder.path)
 						.onChange(async (value) => {

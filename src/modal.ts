@@ -109,7 +109,6 @@ export class AddFolderModal extends Modal {
 				})
 			
 				.addText(cb => {
-					cb.inputEl.style.width = "30%";
 					cb.setPlaceholder(i18next.t("template.separator"));
 					cb.setValue(this.result.template.separator);
 					cb.onChange((value) => {
@@ -143,6 +142,7 @@ export class AddFolderModal extends Modal {
 	onOpen() {
 		const {contentEl} = this;
 		contentEl.empty();
+		contentEl.addClasses(["create-note-in-folder", "edit"]);
 		contentEl.createEl("h2", {text: i18next.t("editFolder.title")});
 		
 		const fileNameSettings = new Setting(contentEl)
@@ -215,13 +215,13 @@ export class AddFolderModal extends Modal {
 					.onClick(() => {
 						if (this.result.template.type === TemplateType.none && this.result.fileName.trim().length === 0) {
 							new Notice(i18next.t("error.fileName"));
-							fileNameSettings.controlEl.classList.add("is-error", "edit", "create-note-in-folder");
+							fileNameSettings.controlEl.classList.add("is-error");
 						} else if ((this.result.template.type === TemplateType.date) && !validateDate(this.result.template.format)) {
 							new Notice(i18next.t("error.date"));
-							paramName?.controlEl.classList.add("is-error", "edit", "create-note-in-folder");
+							paramName?.controlEl.classList.add("is-error");
 						} else if (this.result.fileName.match(/[*"/\\<>:|?]+/)) {
 							new Notice(i18next.t("error.invalidExpression"));
-							fileNameSettings.controlEl.classList.add("is-error", "edit", "create-note-in-folder");
+							fileNameSettings.controlEl.classList.add("is-error");
 						} else {
 							this.onSubmit(this.result);
 							this.close();
@@ -251,25 +251,26 @@ export class ManageCustomVariables extends Modal {
 	onOpen() {
 		const {contentEl} = this;
 		contentEl.empty();
+		contentEl.addClasses(["create-note-in-folder", "manage"]);
 		contentEl.createEl("h2", {text: i18next.t("variable.title")});
 		const p = contentEl.createEl("p", {text: i18next.t("variable.desc.filename")});
 		p.createEl("ul", undefined, (ul) => {
 			ul.createEl("li", {text: i18next.t("variable.desc.explain")});
 			const reg = ul.createEl("li", {text: i18next.t("variable.desc.regex.info")});
 			const pReg = reg.createEl("p", {text: `${i18next.t("common.example")} `});
-			pReg.createEl("code", {text: "/\\d+-\\d+/gi"}).addClass("create-note-in-folder");
-			pReg.addClass("list", "create-note-in-folder");
+			pReg.createEl("code", {text: "/\\d+-\\d+/gi"});
+			pReg.addClass("list");
 			ul.createEl("li", {text: i18next.t("variable.desc.regex.warn")} );
 			ul.createEl("li", {text: i18next.t("variable.desc.insensitive")});
 		});
 		contentEl.createEl("p", undefined, (p) => {
-			p.createEl("p", {text: "⚠️ " + i18next.t("variable.desc.warn.usage"), cls: "title"});
+			p.createEl("p", {text: `⚠️ ${i18next.t("variable.desc.warn.usage")}`, cls: "title"});
 			p.createEl("p", undefined, (pWarn) => {
 				pWarn.createEl("span", {text: i18next.t("common.example")});
 				pWarn.createEl("span", {text: " ", cls: "code"});
 				pWarn.createEl("code", {text: "MyFolder/{{month}}/{{date}}.md", cls: "code"});
 			});
-		}).addClass("create-note-in-folder", "is-warning");
+		}).addClass("is-warning");
 		new Setting(contentEl)
 			.addButton(cb =>
 				cb
@@ -284,8 +285,9 @@ export class ManageCustomVariables extends Modal {
 					}));
 		
 		for (const custom of this.result) {
-			const settings = new Setting(contentEl)
-				.setClass("manage-custom-variables")
+			new Setting(contentEl)
+				.setClass("no-display")
+				.setClass("custom-variables")
 				.addText(cb => {
 					cb
 						.setPlaceholder(i18next.t("variable.name"))
@@ -319,19 +321,6 @@ export class ManageCustomVariables extends Modal {
 							this.onOpen();
 						});
 				});
-			settings.infoEl.style.display = "none";
-			const input = settings.controlEl.querySelectorAll("input");
-			if (input) {
-				input.forEach((input) => {
-					input.style.width = "100%";
-				});
-			}
-			const select = settings.controlEl.querySelectorAll("select");
-			if (select) {
-				select.forEach((select) => {
-					select.style.width = "25%";
-				});
-			}
 		}
 		new Setting(contentEl)
 			.addButton(cb =>

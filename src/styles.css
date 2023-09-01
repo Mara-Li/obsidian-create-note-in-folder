@@ -6,8 +6,8 @@
     width: 100%;
 }
 
-input.is-error.edit.create-note-in-folder,
-.is-error.edit.create-note-in-folder input {
+.edit.create-note-in-folder input.is-error,
+.edit.create-note-in-folder .is-error input {
     border: 1px solid var(--text-error);
 }
 
@@ -22,7 +22,7 @@ input.is-error.edit.create-note-in-folder,
     opacity: 0.7;
 }
 
-.create-note-in-folder.is-warning {
+.create-note-in-folder .is-warning {
     border-left: 3px solid var(--color-orange);
     padding-left: 5px;
     color: var(--color-orange);
@@ -38,29 +38,43 @@ input.is-error.edit.create-note-in-folder,
     border-radius: var(--code-radius);
 }
 
-.create-note-in-folder.is-warning code{
+.create-note-in-folder .is-warning code{
     color: var(--color-orange);
     text-decoration: none;
 }
 
-p.create-note-in-folder.list,
-.create-note-in-folder.is-warning p{
+p.create-note-in-folder .list,
+.create-note-in-folder .is-warning p{
     margin: 0;
     padding: 0;
 }
 
-p.create-note-in-folder.is-warning p>*:not(.code) {
+p.create-note-in-folder .is-warning p>*:not(.code) {
     text-decoration: underline;
 }
 
-.create-note-in-folder.is-warning p > code {
+.create-note-in-folder .is-warning p > code {
     text-decoration: none;
 }
 
-.create-note-in-folder.is-warning p.title {
+.create-note-in-folder .is-warning p.title {
     font-weight: bold;
 }
 
 .create-note-in-folder h3 {
     margin-top: 0;
 }
+
+.create-note-in-folder .no-display .setting-item-info {
+    display: none;
+}
+
+.create-note-in-folder.manage .custom-variables input{
+    width: 100%;
+}
+
+.create-note-in-folder .custom-variable select {
+    width: 25%;
+}
+
+
