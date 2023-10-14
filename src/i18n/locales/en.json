@@ -90,6 +90,10 @@
   "title": "Folders",
   "variable": {
     "add": "Add new variable",
+    "current": {
+      "desc": "You can use the {{current}} variable to use the current folder.",
+      "warning": "⚠️ You need to have a file already open to use the command."
+    },
     "desc": {
       "explain": "Custom variables will be replaced by their value upon creation.",
       "filename": "You can use custom variables in the folder path. ",

@@ -90,6 +90,10 @@
   "title": "Dossiers",
   "variable": {
     "add": "Ajouter une nouvelle variable",
+    "current": {
+      "desc": "Vous pouvez utiliser la variable {{current}} pour utiliser le dossier actuel.",
+      "warning": "⚠️ Vous avez besoin d'avoir un fichier déjà ouvert pour utiliser la commande."
+    },
     "desc": {
       "explain": "Les variables personnalisées seront remplacées par leurs valeurs lors de la création.",
       "filename": "Vous pouvez utiliser des variables personnalisées dans le chemin du fichier. ",

@@ -103,59 +103,118 @@ export default class NoteInFolder extends Plugin {
 			//@ts-ignore
 			this.app.commands.removeCommand(`create-note-in-folder:${oldFolder}`); //doesn't work in some condition
 		}
-		if (newFolder !== undefined && !newFolder.path.contains("{{current}}")) {
+		if (newFolder !== undefined) {
+			if (!newFolder.path.contains("{{current}}")) {
 			// eslint-disable-next-line prefer-const
-			let { path, hasBeenReplaced } = this.replaceVariables(newFolder.path, this.settings.customVariables);
-			this.addCommand({
-				id: `${newFolder.commandName ?? newFolder.path}`,
-				name: `${newFolder.commandName ?? newFolder.path}`,
-				callback: async () => {
-					newFolder.path = path.endsWith("/") && path !== "/" ? path : `${path}/`;
-					const defaultName = this.generateFileName(newFolder);
-					if (!this.app.vault.getAbstractFileByPath(path)) {
-						if (hasBeenReplaced) {
-							//create folder if it doesn't exist
-							await this.app.vault.createFolder(path);
-						} else {
-							if (newFolder.path.contains("{{current}}")) {
-								new Notice(i18next.t("error.currentWithoutfile", { path: newFolder.path }));
+				let { path, hasBeenReplaced } = this.replaceVariables(newFolder.path, this.settings.customVariables);
+				this.addCommand({
+					id: `${newFolder.commandName ?? newFolder.path}`,
+					name: `${newFolder.commandName ?? newFolder.path}`,
+					callback: async () => {
+						newFolder.path = path.endsWith("/") && path !== "/" ? path : `${path}/`;
+						const defaultName = this.generateFileName(newFolder);
+						if (!this.app.vault.getAbstractFileByPath(path)) {
+							if (hasBeenReplaced) {
+								//create folder if it doesn't exist
+								await this.app.vault.createFolder(path);
+							} else {
+								if (newFolder.path.contains("{{current}}")) {
+									new Notice(i18next.t("error.currentWithoutfile", { path: newFolder.path }));
+									return;
+								}
+								new Notice(i18next.t("error.pathNoFound", { path: newFolder.path }));
+								//remove from settings
+								this.settings.folder.splice(this.settings.folder.indexOf(newFolder), 1);
+								await this.saveSettings();
+								await this.addNewCommands(newFolder.commandName, undefined);
 								return;
 							}
-							new Notice(i18next.t("error.pathNoFound", { path: newFolder.path }));
-							//remove from settings
-							//this.settings.folder.splice(this.settings.folder.indexOf(newFolder), 1);
-							await this.saveSettings();
-							//await this.addNewCommands(newFolder.commandName, undefined);
-							return;
+						}
+						console.log(i18next.t("log", { path: path, name: defaultName }));
+						let leaf: WorkspaceLeaf;
+						switch (newFolder.opening) {
+						case DefaultOpening.split:
+							leaf = this.app.workspace.getLeaf("split", newFolder.splitDefault);
+							break;
+						case DefaultOpening.newWindow:
+							leaf = this.app.workspace.getLeaf("window");
+							break;
+						case DefaultOpening.newTab:
+							leaf = this.app.workspace.getLeaf(true);
+							break;
+						default:
+							leaf = this.app.workspace.getLeaf(false);
+							break;
+						}
+						const file = this.app.vault.getAbstractFileByPath(`${newFolder.path}${defaultName}`);
+						if (file instanceof TFile) {
+							await leaf.openFile(file, { active: newFolder.focused });
+						}
+						if (!file) {
+							const newFile = await this.app.vault.create(`${newFolder.path}${defaultName}`, "");
+							await leaf.openFile(newFile, { active: newFolder.focused });
+							await this.triggerTemplater(newFile, newFolder);
 						}
 					}
-					console.log(i18next.t("log", { path: path, name: defaultName }));
-					let leaf: WorkspaceLeaf;
-					switch (newFolder.opening) {
-					case DefaultOpening.split:
-						leaf = this.app.workspace.getLeaf("split", newFolder.splitDefault);
-						break;
-					case DefaultOpening.newWindow:
-						leaf = this.app.workspace.getLeaf("window");
-						break;
-					case DefaultOpening.newTab:
-						leaf = this.app.workspace.getLeaf(true);
-						break;
-					default:
-						leaf = this.app.workspace.getLeaf(false);
-						break;
-					}
-					const file = this.app.vault.getAbstractFileByPath(`${newFolder.path}${defaultName}`);
-					if (file instanceof TFile) {
-						await leaf.openFile(file, { active: newFolder.focused });
-					}
-					if (!file) {
-						const newFile = await this.app.vault.create(`${newFolder.path}${defaultName}`, "");
-						await leaf.openFile(newFile, { active: newFolder.focused });
-						await this.triggerTemplater(newFile, newFolder);
-					}
-				}
-			});
+				});
+			} else {
+				this.addCommand({
+					id: `${newFolder.commandName ?? newFolder.path}`,
+					name: `${newFolder.commandName ?? newFolder.path}`,
+					checkCallback: (checking: boolean) => {
+						//display only {{current}} folder & only if a file exists
+						const currentFile = this.app.workspace.getActiveFile() ?? undefined;
+						if (currentFile) {
+							if (!checking) {
+								const { path, hasBeenReplaced } = this.replaceVariables(newFolder.path, this.settings.customVariables);
+								const parent = currentFile.parent ? currentFile.parent.path : "/";
+								const currentFolder = JSON.parse(JSON.stringify(newFolder)) as FolderSettings;
+								currentFolder.path = path.replace("{{current}}", `${parent}/`);
+								currentFolder.path = currentFolder.path === "//" ? "/" : currentFolder.path;
+								const folderPath = currentFolder.path !== "/" ? currentFolder.path.replace(/\/$/, "") : "/";
+								const defaultName = this.generateFileName(currentFolder);
+								if (!this.app.vault.getAbstractFileByPath(folderPath)) {
+									if (hasBeenReplaced) {
+										//create folder if it doesn't exist
+										this.app.vault.createFolder(currentFolder.path);
+									} else {
+										new Notice(i18next.t("error.pathNoFound", { path: currentFolder.path }));
+										return;
+									}
+								}
+								console.log(i18next.t("log", { path: currentFolder.path, name: defaultName }));
+								let leaf: WorkspaceLeaf;
+								switch (currentFolder.opening) {
+								case DefaultOpening.split:
+									leaf = this.app.workspace.getLeaf("split", currentFolder.splitDefault);
+									break;
+								case DefaultOpening.newWindow:
+									leaf = this.app.workspace.getLeaf("window");
+									break;
+								case DefaultOpening.newTab:
+									leaf = this.app.workspace.getLeaf(true);
+									break;
+								default:
+									leaf = this.app.workspace.getLeaf(false);
+									break;
+								}
+								const file = this.app.vault.getAbstractFileByPath(`${currentFolder.path}${defaultName}`);
+								if (file instanceof TFile) {
+									leaf.openFile(file, { active: currentFolder.focused });
+								}
+								if (!file) {
+									this.app.vault.create(`${currentFolder.path}${defaultName}`, "").then((file) => {
+										leaf.openFile(file, { active: currentFolder.focused });
+										this.triggerTemplater(file, currentFolder);
+									});
+								}
+							}
+							return true;
+						}
+						return false;
+					},
+				});
+			}
 		}
 	}
 
@@ -236,67 +295,7 @@ export default class NoteInFolder extends Plugin {
 		for (const folder of folders) {
 			folder.commandName = folder.commandName && folder.commandName.length > 0 ? folder.commandName : folder.path;
 			await this.saveSettings();
-			if (!folder.path.contains("{{current}}")){
-				await this.addNewCommands(undefined, folder);}
-			else if (folder.path.contains("{{current}}")) {
-				console.log("FOLDER CHECKED", folder);
-				this.addCommand({
-					id: `${folder.commandName ?? folder.path}`,
-					name: `${folder.commandName ?? folder.path}`,
-					checkCallback: (checking: boolean) => {
-						//display only {{current}} folder & only if a file exists
-						const currentFile = this.app.workspace.getActiveFile() ?? undefined;
-						if (currentFile) {
-							if (!checking) {
-								const { path, hasBeenReplaced } = this.replaceVariables(folder.path, this.settings.customVariables);
-								const parent = currentFile.parent ? currentFile.parent.path : "/";
-								const newFolder = JSON.parse(JSON.stringify(folder)) as FolderSettings;
-								newFolder.path = path.replace("{{current}}", `${parent}/`);
-								newFolder.path = newFolder.path === "//" ? "/" : newFolder.path;
-								const folderPath = newFolder.path !== "/" ? newFolder.path.replace(/\/$/, "") : "/";
-								const defaultName = this.generateFileName(newFolder);
-								if (!this.app.vault.getAbstractFileByPath(folderPath)) {
-									if (hasBeenReplaced) {
-										//create folder if it doesn't exist
-										this.app.vault.createFolder(newFolder.path);
-									} else {
-										new Notice(i18next.t("error.pathNoFound", { path: newFolder.path }));
-										return;
-									}
-								}
-								console.log(i18next.t("log", { path: newFolder.path, name: defaultName }));
-								let leaf: WorkspaceLeaf;
-								switch (folder.opening) {
-								case DefaultOpening.split:
-									leaf = this.app.workspace.getLeaf("split", newFolder.splitDefault);
-									break;
-								case DefaultOpening.newWindow:
-									leaf = this.app.workspace.getLeaf("window");
-									break;
-								case DefaultOpening.newTab:
-									leaf = this.app.workspace.getLeaf(true);
-									break;
-								default:
-									leaf = this.app.workspace.getLeaf(false);
-									break;
-								}
-								const file = this.app.vault.getAbstractFileByPath(`${newFolder.path}${defaultName}`);
-								if (file instanceof TFile) {
-									leaf.openFile(file, { active: folder.focused });
-								}
-								if (!file) {
-									this.app.vault.create(`${newFolder.path}${defaultName}`, "").then((file) => {
-										leaf.openFile(file, { active: newFolder.focused });
-										this.triggerTemplater(file, newFolder);
-									});
-								}
-							}
-							return true;
-						}
-						return false;
-					},
-				});
-			}
+			await this.addNewCommands(undefined, folder);
 		}
 	}
 

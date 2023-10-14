@@ -21,8 +21,8 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 		containerEl.empty();
 		containerEl.addClasses(["create-note-in-folder", "settingsTab"]);
 		containerEl.createEl("h1", {text: this.plugin.manifest.name});
-		containerEl.createEl("p", {text: "Use {{current}} to use the current folder (only if a file is already open)."});
-
+		containerEl.createEl("p", {text: i18next.t("variable.current.desc")});
+		containerEl.createEl("p", {text: i18next.t("variable.current.warning"), cls: "is-warning"});
 		new Setting(containerEl)
 			.addButton(cb => cb
 				.setButtonText(i18next.t("variable.title"))
