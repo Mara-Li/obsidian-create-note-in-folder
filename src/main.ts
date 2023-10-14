@@ -1,5 +1,5 @@
 import i18next from "i18next";
-import {moment, Notice, Plugin, TFile, WorkspaceLeaf} from "obsidian";
+import { moment, Notice, Plugin, TFile, WorkspaceLeaf } from "obsidian";
 
 import { ressources, translationLanguage } from "./i18n/i18next";
 import {
@@ -12,11 +12,11 @@ import {
 	Position,
 	TemplateType
 } from "./interface";
-import {NoteInFolderSettingsTab} from "./settings";
+import { NoteInFolderSettingsTab } from "./settings";
 
 export default class NoteInFolder extends Plugin {
 	settings: NoteInFolderSettings;
-	
+
 	/**
 	 * A function to generate the filename using the template settings & filename settings
 	 * @param folder {FolderSettings} The folder settings
@@ -34,22 +34,22 @@ export default class NoteInFolder extends Plugin {
 			}
 			generatedName = moment().format(template.format);
 		} else if (typeName === TemplateType.folderName) {
-			generatedName = folder.path.split("/").pop() ;
+			generatedName = folder.path.split("/").pop();
 		}
 		if (template.position === Position.prepend && generatedName) {
 			defaultName = generatedName + template.separator + defaultName;
 		} else if (template.position === Position.append && generatedName) {
 			defaultName = defaultName + template.separator + generatedName;
 		}
-		const folderPath = folder.path !== "/" ? folder.path + "/" : "";
+		const folderPath = folder.path !== "/" ? `${folder.path}/` : "";
 		while (this.app.vault.getAbstractFileByPath(`${folderPath}${defaultName}.md`) && template.increment) {
 			const increment = defaultName.match(/ \d+$/);
 			const newIncrement = increment ? parseInt(increment[0]) + 1 : 1;
-			defaultName = defaultName.replace(/ \d+$/, "") + " " + newIncrement;
+			defaultName = `${defaultName.replace(/ \d+$/, "")} ${newIncrement}`;
 		}
 		return `${defaultName}.md`;
 	}
-	
+
 	replaceVariables(filePath: string, customVariables: CustomVariables[]) {
 		const hasBeenReplaced: boolean[] = [];
 		for (const variable of customVariables) {
@@ -68,19 +68,17 @@ export default class NoteInFolder extends Plugin {
 				}
 			}
 		}
-		console.log(hasBeenReplaced);
-		return {path: filePath, hasBeenReplaced: hasBeenReplaced.length > 0};
+		return { path: filePath, hasBeenReplaced: hasBeenReplaced.length > 0 };
 	}
-	
 
-	
+
+
 	/**
 	 * For an unknown reason, the remove commands for a specific folder-path is not working
 	 * This function check all the commands of the plugin and remove the ones that are not in the settings
 	 * @returns {Promise<void>}
 	 */
-	async removeCommands(): Promise<void>
-	{
+	async removeCommands(): Promise<void> {
 		//@ts-ignore
 		const pluginCommands = Object.keys(this.app.commands.commands).filter((command) => command.startsWith("create-note-in-folder"));
 		for (const command of pluginCommands) {
@@ -91,7 +89,7 @@ export default class NoteInFolder extends Plugin {
 			}
 		}
 	}
-	
+
 	/**
 	 * Adds or removes commands if the settings changed
 	 * @param oldFolder {string | undefined} - the old folder path to remove the command
@@ -100,34 +98,38 @@ export default class NoteInFolder extends Plugin {
 	async addNewCommands(
 		oldFolder: string | undefined,
 		newFolder: FolderSettings | undefined,
-	)
-	{
+	) {
 		if (oldFolder !== undefined) {
 			//@ts-ignore
 			this.app.commands.removeCommand(`create-note-in-folder:${oldFolder}`); //doesn't work in some condition
 		}
-		if (newFolder !== undefined) {
-			const {path, hasBeenReplaced} = this.replaceVariables(newFolder.path, this.settings.customVariables);
+		if (newFolder !== undefined && !newFolder.path.contains("{{current}}")) {
+			// eslint-disable-next-line prefer-const
+			let { path, hasBeenReplaced } = this.replaceVariables(newFolder.path, this.settings.customVariables);
 			this.addCommand({
 				id: `${newFolder.commandName ?? newFolder.path}`,
 				name: `${newFolder.commandName ?? newFolder.path}`,
 				callback: async () => {
+					newFolder.path = path.endsWith("/") && path !== "/" ? path : `${path}/`;
 					const defaultName = this.generateFileName(newFolder);
 					if (!this.app.vault.getAbstractFileByPath(path)) {
 						if (hasBeenReplaced) {
-						//create folder if it doesn't exist
+							//create folder if it doesn't exist
 							await this.app.vault.createFolder(path);
 						} else {
-							//warning and remove command if the folder doesn't exist
-							new Notice(i18next.t("error.pathNoFound", {path: newFolder.path}));
+							if (newFolder.path.contains("{{current}}")) {
+								new Notice(i18next.t("error.currentWithoutfile", { path: newFolder.path }));
+								return;
+							}
+							new Notice(i18next.t("error.pathNoFound", { path: newFolder.path }));
 							//remove from settings
-							this.settings.folder.splice(this.settings.folder.indexOf(newFolder), 1);
+							//this.settings.folder.splice(this.settings.folder.indexOf(newFolder), 1);
 							await this.saveSettings();
-							await this.addNewCommands(newFolder.commandName, undefined);
+							//await this.addNewCommands(newFolder.commandName, undefined);
 							return;
 						}
 					}
-					console.log(i18next.t("log", {path: path, name: defaultName}));
+					console.log(i18next.t("log", { path: path, name: defaultName }));
 					let leaf: WorkspaceLeaf;
 					switch (newFolder.opening) {
 					case DefaultOpening.split:
@@ -143,21 +145,20 @@ export default class NoteInFolder extends Plugin {
 						leaf = this.app.workspace.getLeaf(false);
 						break;
 					}
-					const newFolderPath = path === "/" ? "" : path + "/";
-					const file = this.app.vault.getAbstractFileByPath(`${newFolderPath}${defaultName}`);
+					const file = this.app.vault.getAbstractFileByPath(`${newFolder.path}${defaultName}`);
 					if (file instanceof TFile) {
-						await leaf.openFile(file, {active: newFolder.focused});
+						await leaf.openFile(file, { active: newFolder.focused });
 					}
 					if (!file) {
-						const newFile = await this.app.vault.create(`${newFolderPath}${defaultName}`, "");
-						await leaf.openFile(newFile, {active: newFolder.focused});
+						const newFile = await this.app.vault.create(`${newFolder.path}${defaultName}`, "");
+						await leaf.openFile(newFile, { active: newFolder.focused });
 						await this.triggerTemplater(newFile, newFolder);
 					}
 				}
 			});
 		}
 	}
-	
+
 	async triggerTemplater(file: TFile, settings: FolderSettings) {
 		//@ts-ignore
 		if (this.app.plugins.enabledPlugins.has("templater-obsidian")) {
@@ -167,10 +168,10 @@ export default class NoteInFolder extends Plugin {
 			}
 			const templateFile = this.app.vault.getAbstractFileByPath(templatePath);
 			if (!templateFile) {
-				new Notice(i18next.t("error.templateNotFound", {path: templatePath}));
+				new Notice(i18next.t("error.templateNotFound", { path: templatePath }));
 				return;
 			} else if (!(templateFile instanceof TFile)) {
-				new Notice(i18next.t("error.templateNotFile", {path: templatePath}));
+				new Notice(i18next.t("error.templateNotFile", { path: templatePath }));
 				return;
 			}
 			const templateContent = await this.app.vault.read(templateFile);
@@ -186,7 +187,7 @@ export default class NoteInFolder extends Plugin {
 			}
 		}
 	}
-	
+
 	async onload() {
 		console.info(`${this.manifest.name} v${this.manifest.version} loaded`);
 		await i18next.init({
@@ -195,10 +196,7 @@ export default class NoteInFolder extends Plugin {
 			resources: ressources,
 			returnNull: false,
 		});
-		
-		//@ts-ignore
-		console.log(this.app.plugins.enabledPlugins.has("templater-obsidian"));
-		
+
 		await this.loadSettings();
 		if (this.settings.folder.length > 0 && typeof this.settings.folder[0] === "string") {
 			const oldFolders = this.settings.folder as unknown as string[];
@@ -210,7 +208,7 @@ export default class NoteInFolder extends Plugin {
 			}
 			await this.saveSettings();
 		}
-		
+
 		//check of old settings are still valid
 		for (const folder of this.settings.folder) {
 			//check if template is in folderSettings
@@ -219,7 +217,7 @@ export default class NoteInFolder extends Plugin {
 				folder.fileName = folder.formatName;
 				folder.template = {
 					//@ts-ignore
-					type:  folder.typeName === "string" ? TemplateType.none : folder.typeName,
+					type: folder.typeName === "string" ? TemplateType.none : folder.typeName,
 					//@ts-ignore
 					format: folder.formatName,
 					position: Position.append,
@@ -232,15 +230,76 @@ export default class NoteInFolder extends Plugin {
 			}
 			await this.saveSettings();
 		}
-		
+
 		this.addSettingTab(new NoteInFolderSettingsTab(this.app, this));
 		const folders = this.settings.folder;
 		for (const folder of folders) {
 			folder.commandName = folder.commandName && folder.commandName.length > 0 ? folder.commandName : folder.path;
 			await this.saveSettings();
-			await this.addNewCommands(undefined, folder);
+			if (!folder.path.contains("{{current}}")){
+				await this.addNewCommands(undefined, folder);}
+			else if (folder.path.contains("{{current}}")) {
+				console.log("FOLDER CHECKED", folder);
+				this.addCommand({
+					id: `${folder.commandName ?? folder.path}`,
+					name: `${folder.commandName ?? folder.path}`,
+					checkCallback: (checking: boolean) => {
+						//display only {{current}} folder & only if a file exists
+						const currentFile = this.app.workspace.getActiveFile() ?? undefined;
+						if (currentFile) {
+							if (!checking) {
+								const { path, hasBeenReplaced } = this.replaceVariables(folder.path, this.settings.customVariables);
+								const parent = currentFile.parent ? currentFile.parent.path : "/";
+								const newFolder = JSON.parse(JSON.stringify(folder)) as FolderSettings;
+								newFolder.path = path.replace("{{current}}", `${parent}/`);
+								newFolder.path = newFolder.path === "//" ? "/" : newFolder.path;
+								const folderPath = newFolder.path !== "/" ? newFolder.path.replace(/\/$/, "") : "/";
+								const defaultName = this.generateFileName(newFolder);
+								if (!this.app.vault.getAbstractFileByPath(folderPath)) {
+									if (hasBeenReplaced) {
+										//create folder if it doesn't exist
+										this.app.vault.createFolder(newFolder.path);
+									} else {
+										new Notice(i18next.t("error.pathNoFound", { path: newFolder.path }));
+										return;
+									}
+								}
+								console.log(i18next.t("log", { path: newFolder.path, name: defaultName }));
+								let leaf: WorkspaceLeaf;
+								switch (folder.opening) {
+								case DefaultOpening.split:
+									leaf = this.app.workspace.getLeaf("split", newFolder.splitDefault);
+									break;
+								case DefaultOpening.newWindow:
+									leaf = this.app.workspace.getLeaf("window");
+									break;
+								case DefaultOpening.newTab:
+									leaf = this.app.workspace.getLeaf(true);
+									break;
+								default:
+									leaf = this.app.workspace.getLeaf(false);
+									break;
+								}
+								const file = this.app.vault.getAbstractFileByPath(`${newFolder.path}${defaultName}`);
+								if (file instanceof TFile) {
+									leaf.openFile(file, { active: folder.focused });
+								}
+								if (!file) {
+									this.app.vault.create(`${newFolder.path}${defaultName}`, "").then((file) => {
+										leaf.openFile(file, { active: newFolder.focused });
+										this.triggerTemplater(file, newFolder);
+									});
+								}
+							}
+							return true;
+						}
+						return false;
+					},
+				});
+			}
 		}
 	}
+
 
 	onunload() {
 		console.info(`${this.manifest.name} v${this.manifest.version} unloaded`);

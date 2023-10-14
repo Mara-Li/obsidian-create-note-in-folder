@@ -10,18 +10,19 @@ import {AddFolderModal, ManageCustomVariables} from "./modal";
 
 export class NoteInFolderSettingsTab extends PluginSettingTab {
 	plugin: NoteInFolder;
-	
+
 	constructor(app: App, plugin: NoteInFolder) {
 		super(app, plugin);
 		this.plugin = plugin;
 	}
-	
+
 	display(): void {
 		const {containerEl} = this;
 		containerEl.empty();
 		containerEl.addClasses(["create-note-in-folder", "settingsTab"]);
 		containerEl.createEl("h1", {text: this.plugin.manifest.name});
-		
+		containerEl.createEl("p", {text: "Use {{current}} to use the current folder (only if a file is already open)."});
+
 		new Setting(containerEl)
 			.addButton(cb => cb
 				.setButtonText(i18next.t("variable.title"))
@@ -32,9 +33,9 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 					}).open();
 				})
 			);
-		
+
 		containerEl.createEl("h3", {text: i18next.t("title")} as const);
-		
+
 		for (const folder of this.plugin.settings.folder) {
 			new Setting(containerEl)
 				.addButton(cb =>
@@ -61,7 +62,7 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 						}))
 				.addText(cb => {
 					cb
-						
+
 						.setPlaceholder(i18next.t("commandName"))
 						.setValue(folder.commandName ?? folder.path)
 						.onChange(async (value) => {
@@ -112,7 +113,7 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 					this.display();
 				}));
 	}
-	
+
 	duplicateFolder(folder: FolderSettings) {
 		const defaultSettings = JSON.parse(JSON.stringify(folder));
 		const duplicatedFolders = this.plugin.settings.folder.filter((f) => f.commandName.replace(/ \(\d+\)+/, "") === folder.commandName.replace(/ \(\d+\)+/, ""));
@@ -121,7 +122,7 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 		}
 		return defaultSettings;
 	}
-	
+
 	addTooltip(text: string, cb: HTMLElement) {
 		cb.onfocus = () => {
 			const tooltip = cb.parentElement?.createEl("div", {text: text, cls: "tooltip"});

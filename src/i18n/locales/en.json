@@ -56,12 +56,13 @@
     "title": "Edit Folder specific settings"
   },
   "error": {
+    "currentWithoutfile": "You must have a file open to use the {{current}} path",
     "date": "Invalid date format, please use a valid format.",
     "duplicate": "{{- name}} already exists.",
     "empty": "{{- name}} cannot be empty",
     "fileName": "Invalid file name, please use a filename if you don't use a template.",
     "invalidExpression": "File name cannot contain any of the following characters: *, \", , /, <, >, :, |, ?",
-    "pathNoFound": "This folder doesn't exists.",
+    "pathNoFound": "The folder {{- path}} doesn't exists.",
     "templateNotFile": "{{- path}} is not a valid file.",
     "templateNotFound": "{{- path}} doesn't exists."
   },

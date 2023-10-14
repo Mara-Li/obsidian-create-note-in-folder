@@ -56,12 +56,13 @@
     "title": "Modifier les paramètres spécifiques au dossier"
   },
   "error": {
+    "currentWithoutfile": "Vous devez avoir un fichier ouvert pour pouvoir utiliser le chemin {{current}}",
     "date": "Format de date invalide, veuillez utiliser un format valide.",
     "duplicate": "{{- name}} existe déjà.",
     "empty": "{{- name}} ne peut pas être vide",
     "fileName": "Nom de fichier invalide, veuillez utiliser un nom de fichier si vous n'utilisez pas de modèle.",
     "invalidExpression": "Le nom du fichier ne peut contenir aucun des caractères suivants : *, \", , /, <, >, :, |, ?",
-    "pathNoFound": "Ce dossier n'existe pas.",
+    "pathNoFound": "Le dossier {{- path}} n'existe pas.",
     "templateNotFile": "{{- path}} n'est pas un fichier valide.",
     "templateNotFound": "{{- path}} n'existe pas."
   },
