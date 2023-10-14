@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.2.0](https://github.com/Lisandra-dev/create-note-in-folder/compare/1.1.3...1.2.0) (2023-10-14)
+
+
+### Features
+
+* add support for {{current}} variable ([cd2229f](https://github.com/Lisandra-dev/create-note-in-folder/commit/cd2229f157a671fa803fd107b230c7570dada41e)), closes [#6](https://github.com/Lisandra-dev/create-note-in-folder/issues/6)
+* quick switcher for create note in folder ([57c11bb](https://github.com/Lisandra-dev/create-note-in-folder/commit/57c11bb3858279d5d36752b41ecfbc63e9067032)), closes [#5](https://github.com/Lisandra-dev/create-note-in-folder/issues/5)
+
+
+### Bug Fixes
+
+* **currentFolder:** Adjust usage ; no need to reload the plugin now ([0d80d8f](https://github.com/Lisandra-dev/create-note-in-folder/commit/0d80d8fd166f29383c177e8c3ac6027f211a9f88))
+
 ## [1.1.3](https://github.com/Lisandra-dev/create-note-in-folder/compare/1.1.2...1.1.3) (2023-09-01)
 
 ## [1.1.2](https://github.com/Lisandra-dev/create-note-in-folder/compare/1.1.1...1.1.2) (2023-08-19)
