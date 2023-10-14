@@ -1,9 +1,10 @@
 import i18next from "i18next";
-import {App, Modal, moment,Notice, Setting} from "obsidian";
+import {App, FuzzySuggestModal, Modal, moment,Notice, Setting, TFile} from "obsidian";
 import {App as ObsidianApp} from "obsidian-undocumented";
 
 import {FileSuggest} from "./fileSuggest";
 import {CustomVariables, DefaultOpening, FolderSettings, Position, SplitDirection, TemplateType} from "./interface";
+import NoteInFolder from "./main";
 
 
 function validateDate(date: string) {
@@ -16,13 +17,13 @@ function validateDate(date: string) {
 export class AddFolderModal extends Modal {
 	result: FolderSettings;
 	onSubmit: (result: FolderSettings) => void;
-	
+
 	constructor(app: App, actualFolder: FolderSettings, onSubmit: (result: FolderSettings) => void) {
 		super(app);
 		this.result = actualFolder;
 		this.onSubmit = onSubmit;
 	}
-	
+
 	/**
 	 * Parameters for the date template
 	 * @param contentEl {HTMLElement} - The content of the modal
@@ -52,7 +53,7 @@ export class AddFolderModal extends Modal {
 			});
 		return paramName;
 	}
-	
+
 	settingTemplater(contentEl: HTMLElement) {
 		if ((this.app as ObsidianApp).plugins.getPlugin("templater-obsidian")) {
 			contentEl.createEl("h3", {text: i18next.t("editFolder.templater.title")});
@@ -71,7 +72,7 @@ export class AddFolderModal extends Modal {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Settings for the template if TemplateType is not none
 	 * Call settingsTemplateDate if TemplateType is date to create the setting for the date template
@@ -91,11 +92,11 @@ export class AddFolderModal extends Modal {
 
 			if (TemplateType.date === this.result.template.type) {
 				paramName = this.settingsTemplateDate(contentEl);
-				
+
 			} else if (TemplateType.folderName === this.result.template.type) {
 				this.result.template.format = this.result.path.split("/").pop() as string;
 			}
-			
+
 			new Setting(contentEl)
 				.setName(i18next.t("template.position.title"))
 				.addDropdown(cb => {
@@ -107,7 +108,7 @@ export class AddFolderModal extends Modal {
 							this.result.template.position = value as Position;
 						});
 				})
-			
+
 				.addText(cb => {
 					cb.setPlaceholder(i18next.t("template.separator"));
 					cb.setValue(this.result.template.separator);
@@ -118,7 +119,7 @@ export class AddFolderModal extends Modal {
 		}
 		return paramName;
 	}
-	
+
 	/**
 	 * Settings for the split if DefaultOpening is split
 	 * @param opening {Setting} - The setting for the default opening
@@ -137,14 +138,14 @@ export class AddFolderModal extends Modal {
 					}));
 		}
 	}
-	
-	
+
+
 	onOpen() {
 		const {contentEl} = this;
 		contentEl.empty();
 		contentEl.addClasses(["create-note-in-folder", "edit"]);
 		contentEl.createEl("h2", {text: i18next.t("editFolder.title")});
-		
+
 		const fileNameSettings = new Setting(contentEl)
 			.setName(i18next.t("editFolder.fileName.title"))
 			.setDesc(i18next.t("editFolder.fileName.desc"))
@@ -177,9 +178,9 @@ export class AddFolderModal extends Modal {
 					});
 			});
 		const paramName = this.settingTemplate(contentEl, this.result.template.type as TemplateType, fileNameSettings);
-		
+
 		contentEl.createEl("h2", {text: i18next.t("editFolder.opening.head")});
-		
+
 		const opening = new Setting(contentEl)
 			.setName(i18next.t("editFolder.opening.title"))
 			.setDesc(i18next.t("editFolder.opening.desc"))
@@ -205,9 +206,9 @@ export class AddFolderModal extends Modal {
 				.onChange(async (value) => {
 					this.result.focused = value;
 				}));
-		
+
 		this.settingTemplater(contentEl);
-		
+
 		new Setting(contentEl)
 			.addButton(cb =>
 				cb
@@ -226,12 +227,12 @@ export class AddFolderModal extends Modal {
 							this.onSubmit(this.result);
 							this.close();
 						}
-						
-						
-						
+
+
+
 					}));
 	}
-	
+
 	onClose() {
 		const {contentEl} = this;
 		contentEl.empty();
@@ -241,13 +242,13 @@ export class AddFolderModal extends Modal {
 export class ManageCustomVariables extends Modal {
 	result: CustomVariables[];
 	onSubmit: (result: CustomVariables[]) => void;
-	
+
 	constructor(app: App, actualVariables: CustomVariables[], onSubmit: (result: CustomVariables[]) => void) {
 		super(app);
 		this.result = actualVariables;
 		this.onSubmit = onSubmit;
 	}
-	
+
 	onOpen() {
 		const {contentEl} = this;
 		contentEl.empty();
@@ -283,7 +284,7 @@ export class ManageCustomVariables extends Modal {
 						});
 						this.onOpen();
 					}));
-		
+
 		for (const custom of this.result) {
 			new Setting(contentEl)
 				.setClass("no-display")
@@ -330,12 +331,12 @@ export class ManageCustomVariables extends Modal {
 						this.addErrorClass();
 					}));
 	}
-	
+
 	onClose() {
 		const {contentEl} = this;
 		contentEl.empty();
 	}
-	
+
 	validateEntry() {
 		const wrongResultIndex: {
 			"type" : "name" | "value",
@@ -385,7 +386,7 @@ export class ManageCustomVariables extends Modal {
 		}
 		return wrongResultIndex;
 	}
-	
+
 	addErrorClass() {
 		const wrongResultIndex = this.validateEntry();
 		console.log(wrongResultIndex);
@@ -409,6 +410,35 @@ export class ManageCustomVariables extends Modal {
 				const input = setting.getElementsByTagName("input")[1];
 				input.classList.add("is-error", "edit", "create-note-in-folder");
 			}
+		}
+	}
+}
+
+export class ChooseFolder extends FuzzySuggestModal<FolderSettings> {
+	currentFile?: TFile;
+	plugin: NoteInFolder;
+
+	constructor(app: App, plugin: NoteInFolder, currentFile?: TFile) {
+		super(app);
+		this.plugin = plugin;
+		this.currentFile = currentFile;
+	}
+
+	getItems(): FolderSettings[] {
+		if (!this.currentFile) {
+			return this.plugin.settings.folder.filter((folder) => !folder.path.contains("{{current}}"));
+		}
+		return this.plugin.settings.folder;
+	}
+	getItemText(item: FolderSettings): string {
+		return item.commandName;
+	}
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	async onChooseItem(item: FolderSettings, evt: MouseEvent | KeyboardEvent): Promise<void> {
+		if (this.currentFile && item.path.contains("{{current}}")) {
+			this.plugin.createFolderInCurrent(item, this.currentFile);
+		} else {
+			await this.plugin.createNoteInFolder(item);
 		}
 	}
 }
