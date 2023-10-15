@@ -81,7 +81,9 @@ export default class NoteInFolder extends Plugin {
 	 */
 	async removeCommands(): Promise<void> {
 		//@ts-ignore
-		const pluginCommands = Object.keys(this.app.commands.commands).filter((command) => command.startsWith("create-note-in-folder"));
+		let pluginCommands = Object.keys(this.app.commands.commands).filter((command) => command.startsWith("create-note-in-folder"));
+		//remove quickswitcher command
+		pluginCommands = pluginCommands.filter((command) => command.replace("create-note-in-folder:", "") !== "quickSwitcher-command");
 		for (const command of pluginCommands) {
 			//remove commands if the folder is not in the settings
 			if (!this.settings.folder.some((folder) => folder.commandName === command.replace("create-note-in-folder:", ""))) {
@@ -191,6 +193,7 @@ export default class NoteInFolder extends Plugin {
 	async addNewCommands(
 		oldFolder: string | undefined,
 		newFolder: FolderSettings | undefined,
+		quickSwitcher = false
 	) {
 		if (oldFolder !== undefined) {
 			//@ts-ignore
@@ -223,6 +226,8 @@ export default class NoteInFolder extends Plugin {
 				});
 			}
 		}
+		if (quickSwitcher)
+			this.quickSwitcherCommand(); //reload the quickswitcher command
 	}
 
 	async triggerTemplater(file: TFile, settings: FolderSettings) {
@@ -252,6 +257,21 @@ export default class NoteInFolder extends Plugin {
 				// I think it can work if the file is not opened in main view or something. Prevent error like that.
 			}
 		}
+	}
+
+	quickSwitcherCommand() {
+		this.addCommand({
+			id: "quickSwitcher-creator",
+			name: i18next.t("quickSwitcher"),
+			callback: () => {
+				try {
+					const currentFile = this.app.workspace.getActiveFile() ?? undefined;
+					new ChooseFolder(this.app, this, currentFile).open();
+				} catch (e) {
+					console.log(e);
+				}
+			},
+		});
 	}
 
 	async onload() {
@@ -305,14 +325,9 @@ export default class NoteInFolder extends Plugin {
 			await this.addNewCommands(undefined, folder);
 		}
 
-		this.addCommand({
-			id: "quickswitcher-create-note",
-			name: i18next.t("quickswitcher.createNote"),
-			callback: () => {
-				const currentFile= this.app.workspace.getActiveFile() ?? undefined;
-				new ChooseFolder(this.app, this, currentFile).open();
-			},
-		});
+		this.quickSwitcherCommand();
+
+
 	}
 
 

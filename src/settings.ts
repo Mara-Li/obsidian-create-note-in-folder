@@ -68,7 +68,7 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 						.onChange(async (value) => {
 							const oldCommandName = folder.commandName;
 							folder.commandName = value;
-							await this.plugin.addNewCommands(oldCommandName, folder);
+							await this.plugin.addNewCommands(oldCommandName, folder, true);
 							await this.plugin.removeCommands();
 							await this.plugin.saveSettings();
 						});
@@ -85,7 +85,7 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 						const oldCommandName = folder.commandName && folder.commandName.length > 0 ? folder.commandName : value;
 						folder.path = value;
 						folder.commandName = oldCommandName;
-						await this.plugin.addNewCommands(oldCommandName, folder);
+						await this.plugin.addNewCommands(oldCommandName, folder, true);
 						await this.plugin.removeCommands();
 						await this.plugin.saveSettings();
 					});
@@ -98,7 +98,7 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 						.onClick(async () => {
 							this.plugin.settings.folder.splice(this.plugin.settings.folder.indexOf(folder), 1);
 							await this.plugin.saveSettings();
-							await this.plugin.addNewCommands(folder.commandName, undefined);
+							await this.plugin.addNewCommands(folder.commandName, undefined, true);
 							this.display();
 						}));
 		}

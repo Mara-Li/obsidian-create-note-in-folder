@@ -69,9 +69,7 @@
   "example": "Exemple: chemin/vers/dossier",
   "log": "Création de la note dans le dossier {{- path}}, avec le nom {{- name}}.",
   "path": "Chemin du dossier",
-  "quickswitcher": {
-    "createNote": "Quick Switcher"
-  },
+  "quickSwitcher": "Quick Switcher",
   "remove": "Supprimer le dossier",
   "template": {
     "desc": "Le nom du fichier peut être vide si vous utilisez un modèle.",
