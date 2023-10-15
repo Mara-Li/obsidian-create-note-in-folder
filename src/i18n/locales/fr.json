@@ -1,4 +1,12 @@
 {
+  "allFolder": {
+    "default": {
+      "title": "Template par défaut",
+      "tooltip": "Set the default template for all folders if they are not registered"
+    },
+    "enable": "Activer le plugin pour tous les dossier",
+    "listAllModals": "Lister tous les dossiers dans le quick-switcher, au lieu d'ouvrir un autre menu"
+  },
   "commandName": "Nom de la commande",
   "common": {
     "date": "Date",
@@ -56,7 +64,6 @@
     "title": "Modifier les paramètres spécifiques au dossier"
   },
   "error": {
-    "currentWithoutfile": "Vous devez avoir un fichier ouvert pour pouvoir utiliser le chemin {{current}}",
     "date": "Format de date invalide, veuillez utiliser un format valide.",
     "duplicate": "{{- name}} existe déjà.",
     "empty": "{{- name}} ne peut pas être vide",
@@ -69,7 +76,10 @@
   "example": "Exemple: chemin/vers/dossier",
   "log": "Création de la note dans le dossier {{- path}}, avec le nom {{- name}}.",
   "path": "Chemin du dossier",
-  "quickSwitcher": "Quick Switcher",
+  "quickSwitcher": {
+    "anyFolder": "Quick Switcher (tout dossier)",
+    "simple": "Quick Switcher"
+  },
   "remove": "Supprimer le dossier",
   "template": {
     "desc": "Le nom du fichier peut être vide si vous utilisez un modèle.",

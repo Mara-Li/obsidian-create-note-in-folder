@@ -23,7 +23,43 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 		containerEl.createEl("h1", {text: this.plugin.manifest.name});
 		containerEl.createEl("p", {text: i18next.t("variable.current.desc")});
 		containerEl.createEl("p", {text: i18next.t("variable.current.warning"), cls: "is-warning"});
+
 		new Setting(containerEl)
+			.setName(i18next.t("allFolder.enable"))
+			.addToggle(cb => cb
+				.setValue(this.plugin.settings.enableAllFolder ?? false)
+				.onChange(async (value) => {
+					this.plugin.settings.enableAllFolder = value;
+					await this.plugin.saveSettings();
+					this.plugin.quickSwitcherAnyFolder();
+					this.display();
+				})
+			)
+			.addButton(cb => cb
+				.setButtonText(i18next.t("allFolder.default.title"))
+				.setTooltip(i18next.t("allFolder.default.tooltip"))
+				.onClick(() => {
+					const defaultTemplate = this.plugin.settings.defaultTemplate ?? DEFAULT_FOLDER_SETTINGS;
+					new AddFolderModal(this.app, defaultTemplate, true, (result) => {
+						this.plugin.settings.defaultTemplate = result;
+						this.plugin.saveSettings();
+					}).open();
+				})
+			);
+		if (this.plugin.settings.enableAllFolder) {
+			new Setting(containerEl)
+				.setName(i18next.t("allFolder.listAllModals"))
+				.addToggle(cb => cb
+					.setValue(this.plugin.settings.listAllFolderInModals ?? false)
+					.onChange(async (value) => {
+						this.plugin.settings.listAllFolderInModals = value;
+						await this.plugin.saveSettings();
+					})
+				);
+		}
+
+		new Setting(containerEl)
+			.setClass("no-display")
 			.addButton(cb => cb
 				.setButtonText(i18next.t("variable.title"))
 				.onClick(() => {
@@ -38,6 +74,7 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 
 		for (const folder of this.plugin.settings.folder) {
 			new Setting(containerEl)
+				.setClass("no-display")
 				.addButton(cb =>
 					cb
 						.setIcon("copy")
@@ -55,14 +92,13 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 						.setIcon("pencil")
 						.setTooltip(i18next.t("editFolder.title"))
 						.onClick(async () => {
-							new AddFolderModal(this.app, folder, (result)  => {
+							new AddFolderModal(this.app, folder, false, (result)  => {
 								this.plugin.settings.folder[this.plugin.settings.folder.indexOf(folder)] = result;
 								this.plugin.saveSettings();
 							}).open();
 						}))
 				.addText(cb => {
 					cb
-
 						.setPlaceholder(i18next.t("commandName"))
 						.setValue(folder.commandName ?? folder.path)
 						.onChange(async (value) => {

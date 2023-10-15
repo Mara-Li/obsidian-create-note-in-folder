@@ -1,9 +1,9 @@
 import i18next from "i18next";
-import {App, FuzzySuggestModal, Modal, moment,Notice, Setting, TFile} from "obsidian";
+import {App, FuzzySuggestModal, Modal, moment,Notice, Setting, TFile, TFolder} from "obsidian";
 import {App as ObsidianApp} from "obsidian-undocumented";
 
 import {FileSuggest} from "./fileSuggest";
-import {CustomVariables, DefaultOpening, FolderSettings, Position, SplitDirection, TemplateType} from "./interface";
+import {CustomVariables, DEFAULT_FOLDER_SETTINGS, DefaultOpening, FolderSettings, Position, SplitDirection, TemplateType} from "./interface";
 import NoteInFolder from "./main";
 
 
@@ -16,12 +16,14 @@ function validateDate(date: string) {
 
 export class AddFolderModal extends Modal {
 	result: FolderSettings;
+	defaultTemp: boolean;
 	onSubmit: (result: FolderSettings) => void;
 
-	constructor(app: App, actualFolder: FolderSettings, onSubmit: (result: FolderSettings) => void) {
+	constructor(app: App, actualFolder: FolderSettings, defaultTemp = false, onSubmit: (result: FolderSettings) => void) {
 		super(app);
 		this.result = actualFolder;
 		this.onSubmit = onSubmit;
+		this.defaultTemp = defaultTemp;
 	}
 
 	/**
@@ -144,7 +146,10 @@ export class AddFolderModal extends Modal {
 		const {contentEl} = this;
 		contentEl.empty();
 		contentEl.addClasses(["create-note-in-folder", "edit"]);
-		contentEl.createEl("h2", {text: i18next.t("editFolder.title")});
+		if (!this.defaultTemp)
+			contentEl.createEl("h2", {text: i18next.t("editFolder.title")});
+		else
+			contentEl.createEl("h2", {text: "Default template for all folders if they are not registered"});
 
 		const fileNameSettings = new Setting(contentEl)
 			.setName(i18next.t("editFolder.fileName.title"))
@@ -227,9 +232,6 @@ export class AddFolderModal extends Modal {
 							this.onSubmit(this.result);
 							this.close();
 						}
-
-
-
 					}));
 	}
 
@@ -425,20 +427,104 @@ export class ChooseFolder extends FuzzySuggestModal<FolderSettings> {
 	}
 
 	getItems(): FolderSettings[] {
-		if (!this.currentFile) {
-			return this.plugin.settings.folder.filter((folder) => !folder.path.contains("{{current}}"));
+		const allFoldersSettings = JSON.parse(JSON.stringify(this.plugin.settings.folder)) as FolderSettings[];
+		if (this.plugin.settings.enableAllFolder) {
+			//add a sort of placeholder to open the other modals on selection
+
+			if (!this.plugin.settings.listAllFolderInModals)
+				allFoldersSettings.push({
+					...DEFAULT_FOLDER_SETTINGS,
+					path: "",
+					commandName: "Other folders..."
+				});
+			else {
+			/** add placeholder for css */
+				allFoldersSettings.push({
+					...DEFAULT_FOLDER_SETTINGS,
+					path: "",
+					commandName: "-------"
+				});
+
+				const allFolders = this.app.vault.getAllLoadedFiles().filter((file) => file instanceof TFolder);
+				allFolders.push(this.app.vault.getRoot());
+				//create object with adding the default template to the folder
+				const toPush = allFolders.map((folder) => {
+					const defaultTemplate = this.plugin.settings.defaultTemplate ?? DEFAULT_FOLDER_SETTINGS;
+					return {
+						...defaultTemplate,
+						path: folder.path,
+						commandName: folder.path
+					};
+				}).filter((folder) => !this.plugin.settings.folder.some((folderSettings) => folderSettings.path === folder.path));
+				allFoldersSettings.push(...toPush);
+			}
+
+
 		}
-		return this.plugin.settings.folder;
+		if (!this.currentFile) {
+			return allFoldersSettings.filter((folder) => !folder.path.contains("{{current}}"));
+		}
+
+		return allFoldersSettings;
 	}
 	getItemText(item: FolderSettings): string {
+		if (this.plugin.settings.listAllFolderInModals && (item.commandName === "-------")) {
+			const promptResult = this.resultContainerEl.querySelectorAll(".suggestion-item");
+			const lastElement = promptResult[promptResult.length - 1];
+			if (lastElement) {
+				//remove item name
+				item.commandName = "";
+				//add css
+				lastElement.classList.add("hr-item");
+				lastElement.createEl("hr");
+			}
+		}
 		return item.commandName;
 	}
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	async onChooseItem(item: FolderSettings, evt: MouseEvent | KeyboardEvent): Promise<void> {
-		if (this.currentFile && item.path.contains("{{current}}")) {
-			this.plugin.createFolderInCurrent(item, this.currentFile);
-		} else {
-			await this.plugin.createNoteInFolder(item);
+		if (this.plugin.settings.enableAllFolder && item.commandName === "Other folders..." && item.path === "") {
+			new ChooseInAllFolder(this.app, this.plugin).open();
+			return;
 		}
+		else if (this.currentFile && item.path.contains("{{current}}") && item.commandName !== "" && item.path !== "") {
+			this.plugin.createFolderInCurrent(item, this.currentFile);
+		} else if (item.commandName !== "" && item.path !== "") {
+			await this.plugin.createNoteInFolder(item);
+		} else if (this.plugin.settings.listAllFolderInModals) {
+			new ChooseFolder(this.app, this.plugin, this.currentFile).open();
+		}
+	}
+}
+
+export class ChooseInAllFolder extends FuzzySuggestModal<FolderSettings> {
+	plugin: NoteInFolder;
+
+	constructor(app: App, plugin: NoteInFolder) {
+		super(app);
+		this.plugin = plugin;
+	}
+
+	getItems(): FolderSettings[] {
+		//list all folder of the Obsidian vault and filter them to keep only the one unregister
+		const allFolders = this.app.vault.getAllLoadedFiles().filter((file) => file instanceof TFolder);
+		allFolders.push(this.app.vault.getRoot());
+		//create object with adding the default template to the folder
+		return allFolders.map((folder) => {
+			const defaultTemplate = this.plugin.settings.defaultTemplate ?? DEFAULT_FOLDER_SETTINGS;
+			return {
+				...defaultTemplate,
+				path: folder.path,
+				commandName: folder.path.split("/").pop() as string
+			};
+		}).filter((folder) => !this.plugin.settings.folder.some((folderSettings) => folderSettings.path === folder.path));
+	}
+	getItemText(item: FolderSettings): string {
+		return item.commandName;
+	}
+
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	async onChooseItem(item: FolderSettings, evt: MouseEvent | KeyboardEvent): Promise<void> {
+		await this.plugin.createNoteInFolder(item, true);
 	}
 }

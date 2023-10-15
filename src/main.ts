@@ -12,7 +12,7 @@ import {
 	Position,
 	TemplateType
 } from "./interface";
-import { ChooseFolder } from "./modal";
+import { ChooseFolder, ChooseInAllFolder } from "./modal";
 import { NoteInFolderSettingsTab } from "./settings";
 
 export default class NoteInFolder extends Plugin {
@@ -83,7 +83,7 @@ export default class NoteInFolder extends Plugin {
 		//@ts-ignore
 		let pluginCommands = Object.keys(this.app.commands.commands).filter((command) => command.startsWith("create-note-in-folder"));
 		//remove quickswitcher command
-		pluginCommands = pluginCommands.filter((command) => command.replace("create-note-in-folder:", "") !== "quickSwitcher-command");
+		pluginCommands = pluginCommands.filter((command) => command.replace("create-note-in-folder:", "").contains("quickSwitcher-creator"));
 		for (const command of pluginCommands) {
 			//remove commands if the folder is not in the settings
 			if (!this.settings.folder.some((folder) => folder.commandName === command.replace("create-note-in-folder:", ""))) {
@@ -93,7 +93,7 @@ export default class NoteInFolder extends Plugin {
 		}
 	}
 
-	async createNoteInFolder(newFolder: FolderSettings) {
+	async createNoteInFolder(newFolder: FolderSettings, quickSwitcher = false) {
 		const { path, hasBeenReplaced } = this.replaceVariables(newFolder.path, this.settings.customVariables);
 		const currentFolder = JSON.parse(JSON.stringify(newFolder)) as FolderSettings;
 		currentFolder.path = path.endsWith("/") ? path : `${path}/`;
@@ -104,7 +104,7 @@ export default class NoteInFolder extends Plugin {
 			if (hasBeenReplaced) {
 				//create folder if it doesn't exist
 				await this.app.vault.createFolder(currentFolder.path);
-			} else  {
+			} else if (!quickSwitcher) {
 				new Notice(i18next.t("error.pathNoFound", { path: newFolder.path }));
 				//remove from settings
 				this.settings.folder = this.settings.folder.filter((folder) => folder.commandName !== currentFolder.commandName);
@@ -262,7 +262,7 @@ export default class NoteInFolder extends Plugin {
 	quickSwitcherCommand() {
 		this.addCommand({
 			id: "quickSwitcher-creator",
-			name: i18next.t("quickSwitcher"),
+			name: i18next.t("quickSwitcher.simple"),
 			callback: () => {
 				try {
 					const currentFile = this.app.workspace.getActiveFile() ?? undefined;
@@ -272,6 +272,25 @@ export default class NoteInFolder extends Plugin {
 				}
 			},
 		});
+	}
+
+	quickSwitcherAnyFolder() {
+		if (this.settings.enableAllFolder) {
+			this.addCommand({
+				id: "quickSwitcher-creator-anyFolder",
+				name: i18next.t("quickSwitcher.anyFolder"),
+				callback: () => {
+					try {
+						new ChooseInAllFolder(this.app, this).open();
+					} catch (e) {
+						console.log(e);
+					}
+				},
+			});
+		} else {
+			//@ts-ignore
+			this.app.commands.removeCommand("create-note-in-folder:quickSwitcher-creator-anyFolder");
+		}
 	}
 
 	async onload() {
@@ -326,8 +345,7 @@ export default class NoteInFolder extends Plugin {
 		}
 
 		this.quickSwitcherCommand();
-
-
+		this.quickSwitcherAnyFolder();
 	}
 
 

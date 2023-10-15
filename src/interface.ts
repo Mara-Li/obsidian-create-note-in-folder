@@ -22,16 +22,18 @@ export enum Position {
 	none = "none"
 }
 
+export interface Template {
+	type: TemplateType;
+	format: string;
+	position: Position;
+	separator: string;
+	increment ?: boolean;
+}
+
 export interface FolderSettings {
 	commandName: string;
 	path: string;
-	template: {
-		type: TemplateType;
-		format: string;
-		position: Position;
-		separator: string;
-		increment?: boolean;
-	};
+	template: Template;
 	fileName: string;
 	opening: DefaultOpening;
 	focused: boolean;
@@ -49,6 +51,9 @@ export interface CustomVariables {
 export interface NoteInFolderSettings {
 	folder: FolderSettings[];
 	customVariables: CustomVariables[];
+	enableAllFolder?: boolean;
+	defaultTemplate?: FolderSettings;
+	listAllFolderInModals?: boolean;
 }
 
 export const DEFAULT_SETTINGS: NoteInFolderSettings = {

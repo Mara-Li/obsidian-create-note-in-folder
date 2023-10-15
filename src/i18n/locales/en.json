@@ -1,4 +1,12 @@
 {
+  "allFolder": {
+    "default": {
+      "title": "Default template",
+      "tooltip": "Set the default template for all folders if they are not registered"
+    },
+    "enable": "Enable the plugin all folders",
+    "listAllModals": "List all folders in quick-switcher, instead to open another modal"
+  },
   "commandName": "Command Name",
   "common": {
     "date": "Date",
@@ -8,7 +16,6 @@
     "submit": "Submit",
     "value": "The value"
   },
-  "quickSwitcher" : "Quick Switcher",
   "duplicate": "Duplicate",
   "editFolder": {
     "add": "Add folder",
@@ -57,7 +64,6 @@
     "title": "Edit Folder specific settings"
   },
   "error": {
-    "currentWithoutfile": "You must have a file open to use the {{current}} path",
     "date": "Invalid date format, please use a valid format.",
     "duplicate": "{{- name}} already exists.",
     "empty": "{{- name}} cannot be empty",
@@ -70,6 +76,10 @@
   "example": "Example: path/to/path",
   "log": "Creating note in path {{- path}}, with name {{- name}}",
   "path": "folder-path",
+  "quickSwitcher": {
+    "anyFolder": "Quick Switcher (any folder)",
+    "simple": "Quick Switcher"
+  },
   "remove": "Remove Folder",
   "template": {
     "desc": "The filename can be empty if you use a template.",

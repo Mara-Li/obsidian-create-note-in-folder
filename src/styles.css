@@ -1,7 +1,3 @@
-.create-note-in-folder.settingsTab .setting-item-info{
-    display: none;
-}
-
 .create-note-in-folder.settingsTab .search-input-container {
     width: 100%;
 }
@@ -15,6 +11,16 @@
 .create-note-in-folder.edit.is-facultative .setting-item-description {
     font-style: italic;
 }
+
+.suggestion-item.hr-item hr{
+    margin: 1px;
+}
+
+
+.suggestion-item.hr-item.is-selected {
+    background-color: transparent;
+}
+
 
 .create-note-in-folder.edit.is-facultative input[type="text"],
 .create-note-in-folder.edit.is-facultative .setting-item-name {
