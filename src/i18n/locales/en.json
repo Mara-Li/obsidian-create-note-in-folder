@@ -5,6 +5,10 @@
       "tooltip": "Set the default template for all folders if they are not registered"
     },
     "enable": "Enable the plugin all folders",
+    "filterAnyFolderCommand": {
+      "desc": "Will remove user-defined templates from the \"all folders\" list. \nIf disabled, will display defined templates with their paths rather than their command name.",
+      "title": "Filter the list of the \"all folders\" command"
+    },
     "listAllModals": "List all folders in quick-switcher, instead to open another modal"
   },
   "commandName": "Command Name",

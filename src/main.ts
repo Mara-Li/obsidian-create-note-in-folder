@@ -285,7 +285,7 @@ export default class NoteInFolder extends Plugin {
 				callback: () => {
 					try {
 						const isCurrentFile = this.app.workspace.getActiveFile() ?? undefined;
-						new ChooseInAllFolder(this.app, this, false, isCurrentFile).open();
+						new ChooseInAllFolder(this.app, this, this.settings.filterAnyFolderCommand ?? false, isCurrentFile).open();
 					} catch (e) {
 						console.log(e);
 					}

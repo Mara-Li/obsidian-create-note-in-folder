@@ -56,6 +56,16 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 						await this.plugin.saveSettings();
 					})
 				);
+			new Setting(containerEl)
+				.setName(i18next.t("allFolder.filterAnyFolderCommand.title"))
+				.setDesc(i18next.t("allFolder.filterAnyFolderCommand.desc"))
+				.addToggle(cb => cb
+					.setValue(this.plugin.settings.filterAnyFolderCommand ?? false)
+					.onChange(async (value) => {
+						this.plugin.settings.filterAnyFolderCommand = value;
+						await this.plugin.saveSettings();
+					})
+				);
 		}
 
 		new Setting(containerEl)

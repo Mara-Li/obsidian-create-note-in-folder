@@ -54,6 +54,7 @@ export interface NoteInFolderSettings {
 	enableAllFolder?: boolean;
 	defaultTemplate?: FolderSettings;
 	listAllFolderInModals?: boolean;
+	filterAnyFolderCommand?: boolean;
 }
 
 export const DEFAULT_SETTINGS: NoteInFolderSettings = {

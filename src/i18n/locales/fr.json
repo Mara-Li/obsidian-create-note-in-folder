@@ -5,6 +5,10 @@
       "tooltip": "Set the default template for all folders if they are not registered"
     },
     "enable": "Activer le plugin pour tous les dossier",
+    "filterAnyFolderCommand": {
+      "desc": "Supprimera de la liste \"tous les dossiers\" les templates définies par l'utilisateur. Si désactiver, affichera les template définies avec leur chemins plutôt que leur nom de commande.",
+      "title": "Filtrer la liste de la commande \"tous les dossiers\""
+    },
     "listAllModals": "Lister tous les dossiers dans le quick-switcher, au lieu d'ouvrir un autre menu"
   },
   "commandName": "Nom de la commande",
