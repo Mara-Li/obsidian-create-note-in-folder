@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.3.0](https://github.com/Lisandra-dev/create-note-in-folder/compare/1.2.0...1.3.0) (2023-10-15)
+
+
+### Features
+
+* **quickSwitcher:** allow quick switcher for any folder ([ba731f5](https://github.com/Lisandra-dev/create-note-in-folder/commit/ba731f5f0f9a4cb0c0da8f6fcd24ddd10fa983b5)), closes [#8](https://github.com/Lisandra-dev/create-note-in-folder/issues/8)
+
+
+### Bug Fixes
+
+* QuickSwitcher was removed when adding a new folder ([d5fc039](https://github.com/Lisandra-dev/create-note-in-folder/commit/d5fc039f4b0c5383c1a60fc88cfb7cf871ccbd6b)), closes [#7](https://github.com/Lisandra-dev/create-note-in-folder/issues/7)
+
 ## [1.2.0](https://github.com/Lisandra-dev/create-note-in-folder/compare/1.1.3...1.2.0) (2023-10-14)
 
 
