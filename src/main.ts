@@ -83,7 +83,7 @@ export default class NoteInFolder extends Plugin {
 		//@ts-ignore
 		let pluginCommands = Object.keys(this.app.commands.commands).filter((command) => command.startsWith("create-note-in-folder"));
 		//remove quickswitcher command
-		pluginCommands = pluginCommands.filter((command) => command.replace("create-note-in-folder:", "").contains("quickSwitcher-creator"));
+		pluginCommands = pluginCommands.filter((command) => !command.replace("create-note-in-folder:", "").contains("quickSwitcher-creator"));
 		for (const command of pluginCommands) {
 			//remove commands if the folder is not in the settings
 			if (!this.settings.folder.some((folder) => folder.commandName === command.replace("create-note-in-folder:", ""))) {
