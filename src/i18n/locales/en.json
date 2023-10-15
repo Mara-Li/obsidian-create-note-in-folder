@@ -20,6 +20,7 @@
     "submit": "Submit",
     "value": "The value"
   },
+  "down": "Move down",
   "duplicate": "Duplicate",
   "editFolder": {
     "add": "Add folder",
@@ -103,6 +104,7 @@
     "separator": "Separator"
   },
   "title": "Folders",
+  "up": "Move up",
   "variable": {
     "add": "Add new variable",
     "current": {

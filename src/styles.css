@@ -21,6 +21,15 @@
     background-color: transparent;
 }
 
+.create-note-in-folder .is-disabled {
+    opacity: 0.2;
+}
+
+@media (hover: hover) {
+    .create-note-in-folder .clickable-icon.is-disabled:hover {
+        background-color: var(--background-primary);
+    }
+}
 
 .create-note-in-folder.edit.is-facultative input[type="text"],
 .create-note-in-folder.edit.is-facultative .setting-item-name {

@@ -20,6 +20,7 @@
     "submit": "Valider",
     "value": "La valeur"
   },
+  "down": "Déplacer vers le bas",
   "duplicate": "Dupliquer",
   "editFolder": {
     "add": "Ajouter un dossier",
@@ -79,6 +80,7 @@
   },
   "example": "Exemple: chemin/vers/dossier",
   "log": "Création de la note dans le dossier {{- path}}, avec le nom {{- name}}.",
+  "moveUp": "Déplacer en haut",
   "path": "Chemin du dossier",
   "quickSwitcher": {
     "anyFolder": "Quick Switcher (tout dossier)",
@@ -103,6 +105,7 @@
     "separator": "Séparateur"
   },
   "title": "Dossiers",
+  "up": "Déplacer vers le haut",
   "variable": {
     "add": "Ajouter une nouvelle variable",
     "current": {

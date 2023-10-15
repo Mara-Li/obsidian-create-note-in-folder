@@ -83,7 +83,7 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 		containerEl.createEl("h3", {text: i18next.t("title")} as const);
 
 		for (const folder of this.plugin.settings.folder) {
-			new Setting(containerEl)
+			const sett = new Setting(containerEl)
 				.setClass("no-display")
 				.addButton(cb =>
 					cb
@@ -136,17 +136,58 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 						await this.plugin.saveSettings();
 					});
 					this.addTooltip(i18next.t("path"), cb.inputEl);
-				})
-				.addButton(cb =>
-					cb
-						.setIcon("cross")
-						.setTooltip(i18next.t("remove"))
-						.onClick(async () => {
-							this.plugin.settings.folder.splice(this.plugin.settings.folder.indexOf(folder), 1);
-							await this.plugin.saveSettings();
-							await this.plugin.addNewCommands(folder.commandName, undefined, true);
-							this.display();
-						}));
+				});
+
+			/**
+			 * if folder is not the first one in the setting
+			 * add a "up-arrow" button */
+			const disableUpArrow = this.plugin.settings.folder.indexOf(folder) === 0;
+
+			sett.addExtraButton(cb => {
+				if (!disableUpArrow)
+					cb.setTooltip(i18next.t("up"));
+				cb
+					.setDisabled(disableUpArrow)
+					.setIcon("arrow-up")
+					.setTooltip(i18next.t("up"))
+					.onClick(async () => {
+						const index = this.plugin.settings.folder.indexOf(folder);
+						this.plugin.settings.folder.splice(index, 1);
+						this.plugin.settings.folder.splice(index - 1, 0, folder);
+						await this.plugin.saveSettings();
+						this.display();
+					});
+			});
+			/**
+			 * if folder is not the last one in the setting
+			 * add a "down-arrow" button */
+			const disableDownArrow = this.plugin.settings.folder.indexOf(folder) === this.plugin.settings.folder.length - 1;
+			sett.addExtraButton(cb => {
+				if (!disableDownArrow)
+					cb.setTooltip(i18next.t("down"));
+				cb
+					.setDisabled(disableDownArrow)
+					.setIcon("arrow-down")
+					.onClick(async () => {
+						const index = this.plugin.settings.folder.indexOf(folder);
+						this.plugin.settings.folder.splice(index, 1);
+						this.plugin.settings.folder.splice(index + 1, 0, folder);
+						await this.plugin.saveSettings();
+						this.display();
+					});
+			});
+
+
+			sett.addButton(cb =>
+				cb
+					.setIcon("cross")
+					.setTooltip(i18next.t("remove"))
+					.onClick(async () => {
+						this.plugin.settings.folder.splice(this.plugin.settings.folder.indexOf(folder), 1);
+						await this.plugin.saveSettings();
+						await this.plugin.addNewCommands(folder.commandName, undefined, true);
+						this.display();
+					}));
 		}
 		new Setting(containerEl)
 			.addButton(cb => cb
