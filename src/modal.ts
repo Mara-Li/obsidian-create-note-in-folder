@@ -484,7 +484,7 @@ export class ChooseFolder extends FuzzySuggestModal<FolderSettings> {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	async onChooseItem(item: FolderSettings, evt: MouseEvent | KeyboardEvent): Promise<void> {
 		if (this.plugin.settings.enableAllFolder && item.commandName === "Other folders..." && item.path === "") {
-			new ChooseInAllFolder(this.app, this.plugin).open();
+			new ChooseInAllFolder(this.app, this.plugin, true, this.currentFile).open();
 			return;
 		}
 		else if (this.currentFile && item.path.contains("{{current}}") && item.commandName !== "" && item.path !== "") {
@@ -499,10 +499,14 @@ export class ChooseFolder extends FuzzySuggestModal<FolderSettings> {
 
 export class ChooseInAllFolder extends FuzzySuggestModal<FolderSettings> {
 	plugin: NoteInFolder;
+	filter: boolean;
+	currentFile?: TFile;
 
-	constructor(app: App, plugin: NoteInFolder) {
+	constructor(app: App, plugin: NoteInFolder, filter=true, currentFile?: TFile) {
 		super(app);
+		this.filter = filter;
 		this.plugin = plugin;
+		this.currentFile = currentFile;
 	}
 
 	getItems(): FolderSettings[] {
@@ -510,14 +514,53 @@ export class ChooseInAllFolder extends FuzzySuggestModal<FolderSettings> {
 		const allFolders = this.app.vault.getAllLoadedFiles().filter((file) => file instanceof TFolder);
 		allFolders.push(this.app.vault.getRoot());
 		//create object with adding the default template to the folder
-		return allFolders.map((folder) => {
+		let templatedFolders = allFolders.map((folder) => {
 			const defaultTemplate = this.plugin.settings.defaultTemplate ?? DEFAULT_FOLDER_SETTINGS;
 			return {
 				...defaultTemplate,
 				path: folder.path,
-				commandName: folder.path.split("/").pop() as string
+				commandName: folder.path
 			};
 		}).filter((folder) => !this.plugin.settings.folder.some((folderSettings) => folderSettings.path === folder.path));
+		if (this.currentFile) {
+			const currentFolder = this.currentFile.parent?.path ?? "/";
+			//remove current folder from the list
+			templatedFolders = templatedFolders.filter((folder) => folder.path !== currentFolder);
+			console.log(this.plugin.settings.folder);
+			const userDefinedFolder = this.plugin.settings.folder.find((folder) => {
+				console.log(folder.path.replace("{{current}}", currentFolder), currentFolder);
+				return folder.path.replace("{{current}}", currentFolder) === currentFolder;
+			});
+			console.log(userDefinedFolder, currentFolder);
+			if (!this.filter && userDefinedFolder) {
+				//search in the user defined list & add it to the list
+				templatedFolders.push({
+					...userDefinedFolder,
+					commandName: "{{current}}"
+				});
+			} else if (!userDefinedFolder) { //add the default template with current only if the user didn't define it
+				//add the current folder to the list
+				templatedFolders.push({
+					...DEFAULT_FOLDER_SETTINGS,
+					path: currentFolder,
+					commandName: "{{current}}"
+				});
+			}
+		}
+
+		if (this.filter)
+			return templatedFolders;
+
+		let allFoldersSettings = JSON.parse(JSON.stringify(this.plugin.settings.folder)) as FolderSettings[];
+		//remove the {{current}} path from the list
+		allFoldersSettings = allFoldersSettings.filter((folder) => !folder.path.contains("{{current}}"));
+		return templatedFolders.concat(allFoldersSettings.map((folder) => {
+			return {
+				...folder,
+				commandName: folder.path,
+				path: folder.path
+			};
+		}));
 	}
 	getItemText(item: FolderSettings): string {
 		return item.commandName;
@@ -525,6 +568,9 @@ export class ChooseInAllFolder extends FuzzySuggestModal<FolderSettings> {
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	async onChooseItem(item: FolderSettings, evt: MouseEvent | KeyboardEvent): Promise<void> {
-		await this.plugin.createNoteInFolder(item, true);
+		if (this.currentFile && item.path.contains("{{current}}"))
+			this.plugin.createFolderInCurrent(item, this.currentFile);
+		else
+			await this.plugin.createNoteInFolder(item);
 	}
 }

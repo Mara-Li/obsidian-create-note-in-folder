@@ -143,7 +143,7 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 				.setButtonText(i18next.t("editFolder.add"))
 				.onClick(async () => {
 					//create a copy of the default settings
-					const defaultSettings = JSON.parse(JSON.stringify(DEFAULT_FOLDER_SETTINGS));
+					const defaultSettings = JSON.parse(JSON.stringify(this.plugin.settings.defaultTemplate ?? DEFAULT_FOLDER_SETTINGS));
 					this.plugin.settings.folder.push(defaultSettings);
 					await this.plugin.saveSettings();
 					this.display();

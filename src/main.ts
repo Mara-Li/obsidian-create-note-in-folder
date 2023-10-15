@@ -25,7 +25,7 @@ export default class NoteInFolder extends Plugin {
 	 */
 	generateFileName(folder: FolderSettings): string {
 		let defaultName = folder.fileName;
-		defaultName.replace(".md", "");
+		defaultName = defaultName.replace(".md", "");
 		const template = folder.template;
 		const typeName = template.type;
 		let generatedName = null;
@@ -35,7 +35,9 @@ export default class NoteInFolder extends Plugin {
 			}
 			generatedName = moment().format(template.format);
 		} else if (typeName === TemplateType.folderName) {
-			generatedName = folder.path.split("/").pop();
+			//remove the last / if it exists
+			const folderPath = folder.path.endsWith("/") && folder.path !== "/" ? folder.path.replace(/\/$/, "") : folder.path;
+			generatedName = folderPath.split("/").pop();
 		}
 		if (template.position === Position.prepend && generatedName) {
 			defaultName = generatedName + template.separator + defaultName;
@@ -148,6 +150,7 @@ export default class NoteInFolder extends Plugin {
 		currentFolder.path = currentFolder.path === "//" ? "/" : currentFolder.path;
 		const folderPath = currentFolder.path !== "/" ? currentFolder.path.replace(/\/$/, "") : "/";
 		const defaultName = this.generateFileName(currentFolder);
+		console.log(currentFolder);
 		if (!this.app.vault.getAbstractFileByPath(folderPath)) {
 			if (hasBeenReplaced) {
 				//create folder if it doesn't exist
@@ -281,7 +284,8 @@ export default class NoteInFolder extends Plugin {
 				name: i18next.t("quickSwitcher.anyFolder"),
 				callback: () => {
 					try {
-						new ChooseInAllFolder(this.app, this).open();
+						const isCurrentFile = this.app.workspace.getActiveFile() ?? undefined;
+						new ChooseInAllFolder(this.app, this, false, isCurrentFile).open();
 					} catch (e) {
 						console.log(e);
 					}
