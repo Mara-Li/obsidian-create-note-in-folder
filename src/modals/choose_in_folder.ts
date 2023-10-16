@@ -3,6 +3,20 @@ import { DEFAULT_FOLDER_SETTINGS, FolderSettings } from "src/interface";
 import NoteInFolder from "src/main";
 import { createFolderInCurrent, createNoteInFolder } from "src/utils/create_note";
 
+function specialSortCurrentRoot(template: FolderSettings[]) {
+	return template.sort((a, b) => {
+		if (a.commandName === "/")
+			return -1;
+		if (b.commandName === "/")
+			return 1;
+		if (a.commandName === "{{current}}")
+			return -1;
+		if (b.commandName === "{{current}}")
+			return 1;
+		return a.commandName.localeCompare(b.commandName);
+	});
+}
+
 export class ChooseFolder extends FuzzySuggestModal<FolderSettings> {
 	currentFile?: TFile;
 	plugin: NoteInFolder;
@@ -42,7 +56,9 @@ export class ChooseFolder extends FuzzySuggestModal<FolderSettings> {
 						path: folder.path,
 						commandName: folder.path
 					};
-				}).filter((folder) => !this.plugin.settings.folder.some((folderSettings) => folderSettings.path === folder.path));
+				})
+					.filter((folder) => !this.plugin.settings.folder.some((folderSettings) => folderSettings.path === folder.path))
+					.sort((a, b) => a.path.localeCompare(b.path));
 				allFoldersSettings.push(...toPush);
 			}
 
@@ -103,7 +119,7 @@ export class ChooseInAllFolder extends FuzzySuggestModal<FolderSettings> {
 		const allFolders = this.app.vault.getAllLoadedFiles().filter((file) => file instanceof TFolder);
 		allFolders.push(this.app.vault.getRoot());
 		//create object with adding the default template to the folder
-		let templatedFolders = allFolders.map((folder) => {
+		let templatedFolders : FolderSettings[] = allFolders.map((folder) => {
 			const defaultTemplate = this.plugin.settings.defaultTemplate ?? DEFAULT_FOLDER_SETTINGS;
 			return {
 				...defaultTemplate,
@@ -138,18 +154,19 @@ export class ChooseInAllFolder extends FuzzySuggestModal<FolderSettings> {
 		}
 
 		if (this.filter)
-			return templatedFolders;
+			return specialSortCurrentRoot(templatedFolders);
 
 		let allFoldersSettings = JSON.parse(JSON.stringify(this.plugin.settings.folder)) as FolderSettings[];
 		//remove the {{current}} path from the list
 		allFoldersSettings = allFoldersSettings.filter((folder) => !folder.path.contains("{{current}}"));
-		return templatedFolders.concat(allFoldersSettings.map((folder) => {
+		templatedFolders = templatedFolders.concat(allFoldersSettings.map((folder) => {
 			return {
 				...folder,
 				commandName: folder.path,
 				path: folder.path
 			};
 		}));
+		return specialSortCurrentRoot(templatedFolders);
 	}
 	getItemText(item: FolderSettings): string {
 		return item.commandName;
