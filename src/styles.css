@@ -14,11 +14,13 @@
 
 .suggestion-item.hr-item hr{
     margin: 1px;
+    pointer-events: none;
 }
 
 
 .suggestion-item.hr-item.is-selected {
     background-color: transparent;
+    pointer-events: none;
 }
 
 .create-note-in-folder .is-disabled {
