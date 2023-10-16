@@ -55,7 +55,7 @@ export class ChooseFolder extends FuzzySuggestModal<FolderSettings> {
 		return allFoldersSettings;
 	}
 	getItemText(item: FolderSettings): string {
-		if (this.plugin.settings.listAllFolderInModals && (item.commandName === "-------")) {
+		if (this.plugin.settings.listAllFolderInModals && (item.commandName === "-------") || (item.path === "-------")) {
 			const promptResult = this.resultContainerEl.querySelectorAll(".suggestion-item");
 			const lastElement = promptResult[promptResult.length - 1];
 			if (lastElement) {
@@ -64,6 +64,7 @@ export class ChooseFolder extends FuzzySuggestModal<FolderSettings> {
 				//add css
 				lastElement.classList.add("hr-item");
 				lastElement.createEl("hr");
+				item.path = "-------";
 			}
 		}
 		return item.commandName;
