@@ -6,7 +6,8 @@ import {
 	DEFAULT_FOLDER_SETTINGS, FolderSettings
 } from "./interface";
 import NoteInFolder from "./main";
-import {AddFolderModal, ManageCustomVariables} from "./modal";
+import {AddFolderModal} from "./modals/add_folder";
+import { ManageCustomVariables } from "./modals/manage_custom_variables";
 
 export class NoteInFolderSettingsTab extends PluginSettingTab {
 	plugin: NoteInFolder;
