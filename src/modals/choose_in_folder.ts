@@ -79,9 +79,10 @@ export class ChooseFolder extends FuzzySuggestModal<FolderSettings> {
 			createFolderInCurrent(item, this.currentFile, this.plugin);
 		} else if (item.commandName !== "" && item.path !== "") {
 			await createNoteInFolder(item, this.plugin);
-		} else if (this.plugin.settings.listAllFolderInModals) {
+		} else if (this.plugin.settings.listAllFolderInModals) { //TODO: FOUND ANOTHER WAY TO DO THIS
 			new ChooseFolder(this.app, this.plugin, this.currentFile).open();
 		}
+
 	}
 }
 
