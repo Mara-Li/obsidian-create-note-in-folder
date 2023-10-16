@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.5.1](https://github.com/Lisandra-dev/create-note-in-folder/compare/1.5.0...1.5.1) (2023-10-16)
+
+
+### Bug Fixes
+
+* **quickSwitcher:** disable pointer event on line ([9cca3ea](https://github.com/Lisandra-dev/create-note-in-folder/commit/9cca3ea98dda3f2b73ffbcc1bf7106dd511e5bb5))
+* **quickSwitcher:** line disappear if search is made ([d4aa399](https://github.com/Lisandra-dev/create-note-in-folder/commit/d4aa399e2074ee2cc8da82ba8b730dfa338d3d45))
+* **quickswitch:** fix item not alphebetically sorted ([7ce336e](https://github.com/Lisandra-dev/create-note-in-folder/commit/7ce336e49351e9883f208a27b5aaef8cb7106f29)), closes [#11](https://github.com/Lisandra-dev/create-note-in-folder/issues/11)
+
 ## [1.5.0](https://github.com/Lisandra-dev/create-note-in-folder/compare/1.4.0...1.5.0) (2023-10-15)
 
 
