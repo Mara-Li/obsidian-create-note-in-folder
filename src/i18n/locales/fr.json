@@ -24,6 +24,7 @@
   "duplicate": "Dupliquer",
   "editFolder": {
     "add": "Ajouter un dossier",
+    "default": "Template par défaut pour tous les dossiers s'ils ne sont pas enregistrés",
     "fileName": {
       "desc": "Le nom sera incrémenté si le nom existe déjà.",
       "title": "Choisissez la façon dont les notes seront nommées."
@@ -42,6 +43,7 @@
         "current": "Onglet courant",
         "newTab": "Nouvel onglet",
         "newWindow": "Nouvelle fenêtre",
+        "nothing": "Ne pas ouvrir",
         "split": "Fenêtre divisée"
       },
       "head": "Ouverture",

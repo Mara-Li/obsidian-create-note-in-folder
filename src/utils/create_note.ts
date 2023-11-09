@@ -1,9 +1,9 @@
 import i18next from "i18next";
-import { Notice, TFile, WorkspaceLeaf } from "obsidian";
+import { normalizePath,Notice, TFile, TFolder, WorkspaceLeaf } from "obsidian";
 import { DefaultOpening, FolderSettings } from "src/interface";
 import NoteInFolder from "src/main";
 
-import { generateFileName, replaceVariables } from "./utils";
+import { generateFileName, isTemplaterNeeded, replaceVariables } from "./utils";
 
 export async function createNoteInFolder(newFolder: FolderSettings, plugin: NoteInFolder, quickSwitcher = false) {
 	const {settings, app} = plugin;
@@ -27,7 +27,7 @@ export async function createNoteInFolder(newFolder: FolderSettings, plugin: Note
 		}
 	}
 	console.log(i18next.t("log", { path: currentFolder.path, name: defaultName }));
-	let leaf: WorkspaceLeaf;
+	let leaf: WorkspaceLeaf | undefined = undefined;
 	switch (currentFolder.opening) {
 	case DefaultOpening.split:
 		leaf = app.workspace.getLeaf("split", currentFolder.splitDefault);
@@ -38,18 +38,34 @@ export async function createNoteInFolder(newFolder: FolderSettings, plugin: Note
 	case DefaultOpening.newTab:
 		leaf = app.workspace.getLeaf(true);
 		break;
+	case DefaultOpening.nothing:
+		leaf= undefined;
+		break;
 	default:
 		leaf = app.workspace.getLeaf(false);
 		break;
 	}
 	const file = app.vault.getAbstractFileByPath(`${currentFolder.path}${defaultName}`);
-	if (file instanceof TFile) {
+	if (leaf && file instanceof TFile) {
 		await leaf.openFile(file, { active: currentFolder.focused });
 	}
 	if (!file) {
-		const newFile = await app.vault.create(`${currentFolder.path}${defaultName}`, "");
-		await leaf.openFile(newFile, { active: currentFolder.focused });
-		await plugin.triggerTemplater(newFile, currentFolder);
+		if (leaf) {
+			const newFile = await app.vault.create(`${currentFolder.path}${defaultName}`, "");
+			await leaf.openFile(newFile, { active: currentFolder.focused });
+			await plugin.triggerTemplater(newFile, currentFolder);
+		} else if (isTemplaterNeeded(app, currentFolder)) {
+			//directly templater to create and templating the things
+			const templateFile = this.app.vault.getAbstractFileByPath(currentFolder.templater);
+			if (!templateFile || !(templateFile instanceof TFile)) {
+				new Notice(i18next.t("error.templateNotFound", { path: currentFolder.templater }));
+				return;
+			}
+			const folder = app.vault.getAbstractFileByPath(normalizePath(currentFolder.path)) as TFolder;
+			//@ts-ignore
+			app.plugins.plugins["templater-obsidian"].templater.create_new_note_from_template(templateFile, folder, defaultName, false);
+
+		}
 	}
 }
 
@@ -73,7 +89,7 @@ export function createFolderInCurrent(newFolder: FolderSettings, currentFile: TF
 		}
 	}
 	console.log(i18next.t("log", { path: currentFolder.path, name: defaultName }));
-	let leaf: WorkspaceLeaf;
+	let leaf: WorkspaceLeaf | undefined = undefined;
 	switch (currentFolder.opening) {
 	case DefaultOpening.split:
 		leaf = app.workspace.getLeaf("split", currentFolder.splitDefault);
@@ -84,17 +100,20 @@ export function createFolderInCurrent(newFolder: FolderSettings, currentFile: TF
 	case DefaultOpening.newTab:
 		leaf = app.workspace.getLeaf(true);
 		break;
+	case DefaultOpening.nothing:
+		leaf= undefined;
+		break;
 	default:
 		leaf = app.workspace.getLeaf(false);
 		break;
 	}
 	const file = app.vault.getAbstractFileByPath(`${currentFolder.path}${defaultName}`);
-	if (file instanceof TFile) {
+	if (leaf && file instanceof TFile) {
 		leaf.openFile(file, { active: currentFolder.focused });
 	}
 	if (!file) {
 		app.vault.create(`${currentFolder.path}${defaultName}`, "").then((file) => {
-			leaf.openFile(file, { active: currentFolder.focused });
+			if (leaf) leaf.openFile(file, { active: currentFolder.focused });
 			plugin.triggerTemplater(file, currentFolder);
 		});
 	}

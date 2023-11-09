@@ -147,7 +147,7 @@ export class AddFolderModal extends Modal {
 		if (!this.defaultTemp)
 			contentEl.createEl("h2", {text: i18next.t("editFolder.title")});
 		else
-			contentEl.createEl("h2", {text: "Default template for all folders if they are not registered"});
+			contentEl.createEl("h2", {text: i18next.t("editFolder.default")});
 
 		const fileNameSettings = new Setting(contentEl)
 			.setName(i18next.t("editFolder.fileName.title"))
@@ -193,6 +193,7 @@ export class AddFolderModal extends Modal {
 					.addOption(DefaultOpening.current, i18next.t("editFolder.opening.dropDown.current"))
 					.addOption(DefaultOpening.newWindow, i18next.t("editFolder.opening.dropDown.newWindow"))
 					.addOption(DefaultOpening.split, i18next.t("editFolder.opening.dropDown.split"))
+					.addOption(DefaultOpening.nothing, i18next.t("editFolder.opening.dropDown.nothing"))
 					.setValue(this.result.opening)
 					.onChange((value) => {
 						this.result.opening = value as DefaultOpening;

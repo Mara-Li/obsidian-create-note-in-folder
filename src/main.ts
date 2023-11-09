@@ -109,6 +109,9 @@ export default class NoteInFolder extends Plugin {
 			//trigger templater
 			try {
 				//@ts-ignore
+				//note : it will not work if the file is not opened in any leaf
+				//maybe we could run templater internally and write the result to the file
+
 				this.app.commands.executeCommandById("templater-obsidian:replace-in-file-templater");
 			} catch (e) {
 				console.log(e);

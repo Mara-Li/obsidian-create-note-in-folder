@@ -24,6 +24,7 @@
   "duplicate": "Duplicate",
   "editFolder": {
     "add": "Add folder",
+    "default": "Default template for all folders if they are not registered",
     "fileName": {
       "desc": "The name will be incremented if the name already exists.",
       "title": "Choose how notes will be named."
@@ -42,6 +43,7 @@
         "current": "Current Tab",
         "newTab": "New Tab",
         "newWindow": "New Window",
+        "nothing": "Do not open",
         "split": "Split Pane"
       },
       "head": "Opening",

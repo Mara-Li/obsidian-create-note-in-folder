@@ -7,6 +7,11 @@ export function validateDate(date: string) {
 	return moment(moment().format(date), date, true).isValid();
 }
 
+export function isTemplaterNeeded(app: App, settings: FolderSettings) {
+	//@ts-ignore
+	return app.plugins.enabledPlugins.has("templater-obsidian") && settings.templater;
+}
+
 /**
  * A function to generate the filename using the template settings & filename settings
  * @param folder {FolderSettings} The folder settings

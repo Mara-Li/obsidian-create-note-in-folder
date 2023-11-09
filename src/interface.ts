@@ -2,7 +2,8 @@ export enum DefaultOpening {
 	newTab = "newTab",
 	current = "current",
 	split = "split",
-	newWindow = "newWindow"
+	newWindow = "newWindow",
+	nothing = "nothing" //don't open the note at all! Useful for templates
 }
 
 export enum SplitDirection {
