@@ -40,6 +40,11 @@ export interface FolderSettings {
 	focused: boolean;
 	splitDefault: SplitDirection;
 	templater?: string;
+	alreadyExistOpening: {
+		opening: DefaultOpening;
+		splitDefault: SplitDirection;
+		focused: boolean;
+	};
 }
 
 
@@ -77,4 +82,9 @@ export const DEFAULT_FOLDER_SETTINGS: FolderSettings = {
 	opening: DefaultOpening.newTab,
 	focused: true,
 	splitDefault: SplitDirection.horizontal,
+	alreadyExistOpening: {
+		opening: DefaultOpening.newTab,
+		splitDefault: SplitDirection.horizontal,
+		focused: true,
+	},
 };

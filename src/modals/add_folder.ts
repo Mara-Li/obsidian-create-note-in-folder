@@ -56,7 +56,7 @@ export class AddFolderModal extends Modal {
 
 	settingTemplater(contentEl: HTMLElement) {
 		if ((this.app as ObsidianApp).plugins.getPlugin("templater-obsidian")) {
-			contentEl.createEl("h3", {text: i18next.t("editFolder.templater.title")});
+			contentEl.createEl("h2", {text: i18next.t("editFolder.templater.title")});
 			return new Setting(contentEl)
 				.setName(i18next.t("editFolder.templater.setting.title"))
 				.setDesc(i18next.t("editFolder.templater.setting.desc"))
@@ -122,19 +122,24 @@ export class AddFolderModal extends Modal {
 
 	/**
 	 * Settings for the split if DefaultOpening is split
-	 * @param opening {Setting} - The setting for the default opening
+	 * @param settingComp {Setting} - The setting component to add the dropdown
 	 * @param split {DefaultOpening} - The default opening
 	 * @returns {void}
 	 */
-	settingSplit(opening: Setting, split: DefaultOpening) {
+	settingSplit(settingComp: Setting, split: DefaultOpening, type: "default" | "exists" = "default"): void {
+		const value = type === "default" ? this.result.splitDefault : this.result.alreadyExistOpening.splitDefault;
+
 		if (split === DefaultOpening.split) {
-			opening
+			settingComp
 				.addDropdown(cb => cb
 					.addOption(SplitDirection.horizontal, i18next.t("editFolder.opening.split.horizontal"))
 					.addOption(SplitDirection.vertical, i18next.t("editFolder.opening.split.vertical"))
-					.setValue(this.result.splitDefault)
+					.setValue(value)
 					.onChange(async (value) => {
-						this.result.splitDefault = value as SplitDirection;
+						if (type === "default")
+							this.result.splitDefault = value as SplitDirection;
+						else
+							this.result.alreadyExistOpening.splitDefault = value as SplitDirection;
 					}));
 		}
 	}
@@ -166,6 +171,7 @@ export class AddFolderModal extends Modal {
 				.setValue(this.result.template.increment ?? true)
 				.onChange(async (value) => {
 					this.result.template.increment = value;
+					this.onOpen();
 				}));
 		new Setting(contentEl)
 			.setName(i18next.t("editFolder.template.title"))
@@ -210,6 +216,36 @@ export class AddFolderModal extends Modal {
 					.onChange(async (value) => {
 						this.result.focused = value;
 					}));
+		} else if (!this.result.template.increment && this.result.opening === DefaultOpening.nothing) {
+			contentEl.createEl("h3", {text: i18next.t("editFolder.opening.nothing")});
+			contentEl.createEl("p", { text: i18next.t("editFolder.alreadyExist.desc")});
+			const alreadyExist = this.result.alreadyExistOpening;
+			const dp = new Setting(contentEl)
+				.setName(i18next.t("editFolder.alreadyExist.title"))
+				.addDropdown(cb => {
+					cb
+						.addOption(DefaultOpening.newTab, i18next.t("editFolder.opening.dropDown.newTab"))
+						.addOption(DefaultOpening.current, i18next.t("editFolder.opening.dropDown.current"))
+						.addOption(DefaultOpening.newWindow, i18next.t("editFolder.opening.dropDown.newWindow"))
+						.addOption(DefaultOpening.split, i18next.t("editFolder.opening.dropDown.split"))
+						.setValue(this.result.alreadyExistOpening.opening as DefaultOpening)
+						.onChange((value) => {
+							this.result.alreadyExistOpening.opening = value as DefaultOpening;
+							this.onOpen();
+						});
+				});
+			this.settingSplit(dp, alreadyExist.opening, "exists");
+			if (alreadyExist.opening !== DefaultOpening.nothing) {
+				new Setting(contentEl)
+					.setName(i18next.t("editFolder.focus.title"))
+					.setDesc(i18next.t("editFolder.alreadyExist.focus"))
+					.addToggle(cb => cb
+						.setValue(alreadyExist.focused)
+						.onChange(async (value) => {
+							alreadyExist.focused = value;
+						}));
+			}
+
 		}
 
 		this.settingTemplater(contentEl);

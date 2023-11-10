@@ -24,6 +24,11 @@
   "duplicate": "Duplicate",
   "editFolder": {
     "add": "Add folder",
+    "alreadyExist": {
+      "desc": "If you do not open the notes upon creation, it still allows you to open the file if it already exists.",
+      "focus": "Focus on the already existing note",
+      "title": "Default opening of notes that already exist"
+    },
     "default": "Default template for all folders if they are not registered",
     "fileName": {
       "desc": "The name will be incremented if the name already exists.",
@@ -47,6 +52,7 @@
         "split": "Split Pane"
       },
       "head": "Opening",
+      "nothing": "Setting for existing notes",
       "split": {
         "horizontal": "Horizontal",
         "vertical": "Vertical"

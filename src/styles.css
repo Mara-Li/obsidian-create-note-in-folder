@@ -79,7 +79,11 @@ p.create-note-in-folder .is-warning p>*:not(.code) {
 }
 
 .create-note-in-folder h3 {
-    margin-top: 0;
+    margin: 15px 0 5px 0;
+}
+
+.create-note-in-folder h2 {
+    margin: 20px 0 5px 0;
 }
 
 .create-note-in-folder .no-display .setting-item-info {

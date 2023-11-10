@@ -24,6 +24,11 @@
   "duplicate": "Dupliquer",
   "editFolder": {
     "add": "Ajouter un dossier",
+    "alreadyExist": {
+      "desc": "Dans le cas où vous n'ouvrez pas les notes à la création, vous permet tout de même d'ouvrir le fichier s'il existe déjà.",
+      "focus": "Focus sur la note déjà existante",
+      "title": "Ouverture par défaut des notes qui existent déjà"
+    },
     "default": "Template par défaut pour tous les dossiers s'ils ne sont pas enregistrés",
     "fileName": {
       "desc": "Le nom sera incrémenté si le nom existe déjà.",
@@ -47,6 +52,7 @@
         "split": "Fenêtre divisée"
       },
       "head": "Ouverture",
+      "nothing": "Paramètre pour les notes déjà existantes",
       "split": {
         "horizontal": "Horizontale",
         "vertical": "Verticale"
