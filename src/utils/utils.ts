@@ -1,4 +1,4 @@
-import { App, moment } from "obsidian";
+import { App, moment, normalizePath } from "obsidian";
 
 import { CustomVariables, FolderSettings, Position, TemplateType } from "../interface";
 
@@ -30,7 +30,7 @@ export function generateFileName(folder: FolderSettings, app: App): string {
 		generatedName = moment().format(template.format);
 	} else if (typeName === TemplateType.folderName) {
 		//remove the last / if it exists
-		const folderPath = folder.path.endsWith("/") && folder.path !== "/" ? folder.path.replace(/\/$/, "") : folder.path;
+		const folderPath = normalizePath(folder.path);
 		generatedName = folderPath.split("/").pop();
 	}
 	if (template.position === Position.prepend && generatedName) {
@@ -38,8 +38,7 @@ export function generateFileName(folder: FolderSettings, app: App): string {
 	} else if (template.position === Position.append && generatedName) {
 		defaultName = defaultName + template.separator + generatedName;
 	}
-	const folderPath = folder.path !== "/" ? `${folder.path}/` : "";
-	while (app.vault.getAbstractFileByPath(`${folderPath}${defaultName}.md`) && template.increment) {
+	while (app.vault.getAbstractFileByPath(normalizePath(`${folder.path}/${defaultName}.md`)) && template.increment) {
 		const increment = defaultName.match(/ \d+$/);
 		const newIncrement = increment ? parseInt(increment[0]) + 1 : 1;
 		defaultName = `${defaultName.replace(/ \d+$/, "")} ${newIncrement}`;
