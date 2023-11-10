@@ -17,10 +17,6 @@ import { createFolderInCurrent, createNoteInFolder } from "./utils/create_note";
 export default class NoteInFolder extends Plugin {
 	settings: NoteInFolderSettings;
 
-
-
-
-
 	/**
 	 * For an unknown reason, the remove commands for a specific folder-path is not working
 	 * This function check all the commands of the plugin and remove the ones that are not in the settings

@@ -64,7 +64,8 @@ export async function createNoteInFolder(newFolder: FolderSettings, plugin: Note
 			const folder = app.vault.getAbstractFileByPath(normalizePath(currentFolder.path)) as TFolder;
 			//@ts-ignore
 			app.plugins.plugins["templater-obsidian"].templater.create_new_note_from_template(templateFile, folder, defaultName, false);
-
+		} else {
+			await app.vault.create(`${currentFolder.path}${defaultName}`, "");
 		}
 	}
 }
@@ -101,7 +102,7 @@ export function createFolderInCurrent(newFolder: FolderSettings, currentFile: TF
 		leaf = app.workspace.getLeaf(true);
 		break;
 	case DefaultOpening.nothing:
-		leaf= undefined;
+		leaf = undefined;
 		break;
 	default:
 		leaf = app.workspace.getLeaf(false);
@@ -112,9 +113,24 @@ export function createFolderInCurrent(newFolder: FolderSettings, currentFile: TF
 		leaf.openFile(file, { active: currentFolder.focused });
 	}
 	if (!file) {
-		app.vault.create(`${currentFolder.path}${defaultName}`, "").then((file) => {
-			if (leaf) leaf.openFile(file, { active: currentFolder.focused });
-			plugin.triggerTemplater(file, currentFolder);
-		});
+		if (leaf) {
+			leaf = leaf as WorkspaceLeaf;
+			app.vault.create(`${currentFolder.path}${defaultName}`, "").then((file) => {
+				leaf?.openFile(file, { active: currentFolder.focused });
+				plugin.triggerTemplater(file, currentFolder);
+			});
+		} else if (isTemplaterNeeded(app, currentFolder)) {
+			//directly templater to create and templating the things
+			const templateFile = app.vault.getAbstractFileByPath(currentFolder.templater ?? "");
+			if (!templateFile || !(templateFile instanceof TFile)) {
+				new Notice(i18next.t("error.templateNotFound", { path: currentFolder.templater }));
+				return;
+			}
+			const folder = app.vault.getAbstractFileByPath(normalizePath(currentFolder.path)) as TFolder;
+			//@ts-ignore
+			app.plugins.plugins["templater-obsidian"].templater.create_new_note_from_template(templateFile, folder, defaultName, false);
+		} else {
+			app.vault.create(`${currentFolder.path}${defaultName}`, "");
+		}
 	}
 }
