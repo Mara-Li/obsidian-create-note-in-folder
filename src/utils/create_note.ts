@@ -1,9 +1,62 @@
 import i18next from "i18next";
-import { App, normalizePath,Notice, TFile, TFolder, WorkspaceLeaf } from "obsidian";
+import { App, getLinkpath,MarkdownView, normalizePath,Notice, TFile, TFolder, WorkspaceLeaf } from "obsidian";
 import { DefaultOpening, FolderSettings, SplitDirection } from "src/interface";
 import NoteInFolder from "src/main";
 
 import { generateFileName, isTemplaterNeeded, replaceVariables } from "./utils";
+
+function scrollToPosition(app: App, parts: {
+	path: string
+	heading?: string
+	block?: string
+}) {
+	const cache = app.metadataCache.getCache(parts.path);
+	const view = app.workspace.getActiveViewOfType(MarkdownView);
+	if (!view || !cache) return;
+	// Get the corresponding position for the heading/block
+	if (parts.heading) {
+		const heading = cache.headings?.find(
+			heading => heading.heading === parts.heading
+		);
+		if (heading) {
+			view.editor.setCursor(heading.position.start.line);
+		}
+	} else if (parts.block) {
+		const block = cache.blocks?.[parts.block];
+		if (block) {
+			view.editor.setCursor(block.position.start.line);
+		}
+	}
+}
+
+function getLinkParts(path: string, app: App): {
+	path: string
+	heading?: string
+	block?: string
+} {
+	// Extract the #^block from the path
+	const blockMatch = path.match(/\^(.*)$/);
+	const block = blockMatch ? blockMatch[1] : undefined;
+	// Remove the #^block
+	path = path.replace(/(\^.*)$/, "");
+
+	// Extract the #heading from the path
+	const headingMatch = path.match(/#(.*)$/);
+	const heading = headingMatch ? headingMatch[1] : undefined;
+	// Remove the #heading
+	path = path.replace(/(#.*)$/, "");
+
+	return {
+		path:
+			app.metadataCache.getFirstLinkpathDest(
+				getLinkpath(path),
+				app.workspace.getActiveFile()?.path ?? ""
+			)?.path ?? path,
+		heading,
+		block,
+	};
+}
+
 
 function getOpening(app: App, currentFolder: FolderSettings, param: DefaultOpening = currentFolder.opening, split: SplitDirection = currentFolder.splitDefault) {
 	switch (param) {
@@ -59,15 +112,23 @@ export async function createNoteInFolder(newFolder: FolderSettings, plugin: Note
 		if (currentFolder.opening !== DefaultOpening.nothing) {
 			//search if the file is already open to prevent opening it twice
 			let leaf = getLeafWithNote(app, file);
-			if (!leaf)
+			if (leaf) {
+				leaf.openFile(file, { active: currentFolder.focused });
+				scrollToPosition(app, getLinkParts(defaultName, app));
+			} else {
 				leaf = getOpening(app, currentFolder, currentFolder.opening, currentFolder.splitDefault) as WorkspaceLeaf;
-			await leaf.openFile(file, { active: currentFolder.focused });
+				await leaf.openFile(file, { active: currentFolder.focused });
+			}
 		} else if (currentFolder.alreadyExistOpening.opening !== DefaultOpening.nothing) {
 			//search if the file is already open to prevent opening it twice
 			let leaf = getLeafWithNote(app, file);
-			if (!leaf)
+			if (leaf) {
+				leaf.openFile(file, { active: currentFolder.alreadyExistOpening.focused });
+				scrollToPosition(app, getLinkParts(defaultName, app));
+			} else {
 				leaf = getOpening(app, currentFolder, currentFolder.alreadyExistOpening.opening, currentFolder.alreadyExistOpening.splitDefault);
-			if (leaf) await leaf.openFile(file, { active: currentFolder.alreadyExistOpening.focused });
+				if (leaf) await leaf.openFile(file, { active: currentFolder.alreadyExistOpening.focused });
+			}
 		}
 	} else if (!file) {
 		const leaf = getOpening(app, currentFolder);
@@ -113,13 +174,28 @@ export function createFolderInCurrent(newFolder: FolderSettings, currentFile: TF
 
 	const createdFilePath = normalizePath(`${currentFolder.path}/${defaultName}`);
 	const file = app.vault.getAbstractFileByPath(createdFilePath);
-	if (leaf && file instanceof TFile) {
-		leaf.openFile(file, { active: currentFolder.focused });
-	} else if (!leaf && file instanceof TFile && currentFolder.alreadyExistOpening.opening !== DefaultOpening.nothing) {
-		leaf = getLeafWithNote(app, file);
-		if (!leaf)
-			leaf = getOpening(app, currentFolder, currentFolder.alreadyExistOpening.opening);
-		if (leaf) leaf.openFile(file, { active: currentFolder.alreadyExistOpening.focused });
+	if (file instanceof TFile) {
+		if (currentFolder.opening !== DefaultOpening.nothing) {
+			//search if the file is already open to prevent opening it twice
+			let leaf = getLeafWithNote(app, file);
+			if (leaf) {
+				leaf.openFile(file, { active: currentFolder.focused });
+				scrollToPosition(app, getLinkParts(defaultName, app));
+			} else {
+				leaf = getOpening(app, currentFolder, currentFolder.opening, currentFolder.splitDefault) as WorkspaceLeaf;
+				leaf.openFile(file, { active: currentFolder.focused });
+			}
+		} else if (currentFolder.alreadyExistOpening.opening !== DefaultOpening.nothing) {
+			//search if the file is already open to prevent opening it twice
+			let leaf = getLeafWithNote(app, file);
+			if (leaf) {
+				leaf.openFile(file, { active: currentFolder.alreadyExistOpening.focused });
+				scrollToPosition(app, getLinkParts(defaultName, app));
+			} else {
+				leaf = getOpening(app, currentFolder, currentFolder.alreadyExistOpening.opening, currentFolder.alreadyExistOpening.splitDefault);
+				if (leaf) leaf.openFile(file, { active: currentFolder.alreadyExistOpening.focused });
+			}
+		}
 	} else if (!file) {
 		if (leaf) {
 			leaf = leaf as WorkspaceLeaf;
