@@ -20,6 +20,18 @@ function getOpening(app: App, currentFolder: FolderSettings, param: DefaultOpeni
 	}
 }
 
+function getLeafWithNote(app: App, file: TFile): undefined | WorkspaceLeaf {
+	let openedLeaf: WorkspaceLeaf | undefined = undefined;
+	app.workspace.iterateAllLeaves((leaf) => {
+		// @ts-ignore
+		const leafFile = leaf.view.file as TFile;
+		if (leafFile?.path === file.path) {
+			openedLeaf = leaf;
+		}
+	});
+	return openedLeaf;
+}
+
 export async function createNoteInFolder(newFolder: FolderSettings, plugin: NoteInFolder, quickSwitcher = false) {
 	const {settings, app} = plugin;
 	const { path, hasBeenReplaced } = replaceVariables(newFolder.path, settings.customVariables);
@@ -40,15 +52,25 @@ export async function createNoteInFolder(newFolder: FolderSettings, plugin: Note
 		}
 	}
 	console.log(i18next.t("log", { path: currentFolder.path, name: defaultName }));
-	let leaf = getOpening(app, currentFolder);
 	const createdFilePath = normalizePath(`${currentFolder.path}/${defaultName}`);
 	const file = app.vault.getAbstractFileByPath(createdFilePath);
-	if (leaf && file instanceof TFile) {
-		await leaf.openFile(file, { active: currentFolder.focused });
-	} else if (!leaf && file instanceof TFile && currentFolder.alreadyExistOpening.opening !== DefaultOpening.nothing) {
-		leaf = getOpening(app, currentFolder, currentFolder.alreadyExistOpening.opening, currentFolder.alreadyExistOpening.splitDefault);
-		if (leaf) await leaf.openFile(file, { active: currentFolder.alreadyExistOpening.focused });
+
+	if (file instanceof TFile) {
+		if (currentFolder.opening !== DefaultOpening.nothing) {
+			//search if the file is already open to prevent opening it twice
+			let leaf = getLeafWithNote(app, file);
+			if (!leaf)
+				leaf = getOpening(app, currentFolder, currentFolder.opening, currentFolder.splitDefault) as WorkspaceLeaf;
+			await leaf.openFile(file, { active: currentFolder.focused });
+		} else if (currentFolder.alreadyExistOpening.opening !== DefaultOpening.nothing) {
+			//search if the file is already open to prevent opening it twice
+			let leaf = getLeafWithNote(app, file);
+			if (!leaf)
+				leaf = getOpening(app, currentFolder, currentFolder.alreadyExistOpening.opening, currentFolder.alreadyExistOpening.splitDefault);
+			if (leaf) await leaf.openFile(file, { active: currentFolder.alreadyExistOpening.focused });
+		}
 	} else if (!file) {
+		const leaf = getOpening(app, currentFolder);
 		if (leaf) {
 			const newFile = await app.vault.create(createdFilePath, "");
 			await leaf.openFile(newFile, { active: currentFolder.focused });
@@ -94,8 +116,9 @@ export function createFolderInCurrent(newFolder: FolderSettings, currentFile: TF
 	if (leaf && file instanceof TFile) {
 		leaf.openFile(file, { active: currentFolder.focused });
 	} else if (!leaf && file instanceof TFile && currentFolder.alreadyExistOpening.opening !== DefaultOpening.nothing) {
-		console.log(`open ${file.name} in ${currentFolder.alreadyExistOpening}`);
-		leaf = getOpening(app, currentFolder, currentFolder.alreadyExistOpening.opening);
+		leaf = getLeafWithNote(app, file);
+		if (!leaf)
+			leaf = getOpening(app, currentFolder, currentFolder.alreadyExistOpening.opening);
 		if (leaf) leaf.openFile(file, { active: currentFolder.alreadyExistOpening.focused });
 	} else if (!file) {
 		if (leaf) {
