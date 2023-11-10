@@ -44,6 +44,7 @@
 		"@popperjs/core": "^2.11.8",
 		"commit-and-tag-version": "^11.2.3",
 		"i18next": "^22.5.1",
-		"obsidian-plugin-cli": "^0.9.0"
+		"obsidian-plugin-cli": "^0.9.0",
+		"ts-deepmerge": "^6.2.0"
 	}
 }

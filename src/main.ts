@@ -1,5 +1,6 @@
 import i18next from "i18next";
 import { Notice, Plugin, TFile } from "obsidian";
+import merge from "ts-deepmerge";
 
 import { ressources, translationLanguage } from "./i18n/i18next";
 import {
@@ -211,8 +212,18 @@ export default class NoteInFolder extends Plugin {
 		console.info(`${this.manifest.name} v${this.manifest.version} unloaded`);
 	}
 
+	mergeFolderSettings() {
+		//add new value in the settings for each folder
+		for (const i in this.settings.folder) {
+			this.settings.folder[i] = merge(DEFAULT_FOLDER_SETTINGS, this.settings.folder[i]) as unknown as FolderSettings;
+		}
+		return this.settings;
+	}
+
 	async loadSettings() {
-		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+		const loadData = await this.loadData();
+		this.settings = merge(DEFAULT_SETTINGS, loadData) as unknown as NoteInFolderSettings;
+		this.settings = this.mergeFolderSettings();
 	}
 
 	async saveSettings() {
