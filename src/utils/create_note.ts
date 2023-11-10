@@ -79,7 +79,6 @@ export function createFolderInCurrent(newFolder: FolderSettings, currentFile: TF
 	currentFolder.path = currentFolder.path === "//" ? "/" : currentFolder.path;
 	const folderPath = currentFolder.path !== "/" ? currentFolder.path.replace(/\/$/, "") : "/";
 	const defaultName = generateFileName(currentFolder, app);
-	console.log(currentFolder);
 	if (!app.vault.getAbstractFileByPath(folderPath)) {
 		if (hasBeenReplaced) {
 			//create folder if it doesn't exist
