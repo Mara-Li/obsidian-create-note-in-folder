@@ -201,15 +201,16 @@ export class AddFolderModal extends Modal {
 					});
 			});
 		this.settingSplit(opening, this.result.opening);
-
-		new Setting(contentEl)
-			.setName(i18next.t("editFolder.focus.title"))
-			.setDesc(i18next.t("editFolder.focus.desc"))
-			.addToggle(cb => cb
-				.setValue(this.result.focused)
-				.onChange(async (value) => {
-					this.result.focused = value;
-				}));
+		if (this.result.opening !== DefaultOpening.nothing) {
+			new Setting(contentEl)
+				.setName(i18next.t("editFolder.focus.title"))
+				.setDesc(i18next.t("editFolder.focus.desc"))
+				.addToggle(cb => cb
+					.setValue(this.result.focused)
+					.onChange(async (value) => {
+						this.result.focused = value;
+					}));
+		}
 
 		this.settingTemplater(contentEl);
 
