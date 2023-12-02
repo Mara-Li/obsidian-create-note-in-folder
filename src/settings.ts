@@ -103,7 +103,8 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 						.setIcon("pencil")
 						.setTooltip(i18next.t("editFolder.title"))
 						.onClick(async () => {
-							new AddFolderModal(this.app, folder, false, (result)  => {
+							const folderSettings = JSON.parse(JSON.stringify(folder)) as FolderSettings;
+							new AddFolderModal(this.app, folderSettings, false, (result)  => {
 								this.plugin.settings.folder[this.plugin.settings.folder.indexOf(folder)] = result;
 								this.plugin.saveSettings();
 							}).open();
