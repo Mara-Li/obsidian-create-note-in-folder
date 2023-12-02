@@ -29,7 +29,7 @@ export class ManageCustomVariables extends Modal {
 			ul.createEl("li", { text: i18next.t("variable.desc.insensitive") });
 		});
 		contentEl.createEl("p", undefined, (p) => {
-			p.createEl("p", { text: `⚠️ ${i18next.t("variable.desc.warn.usage")}`, cls: "title" });
+			p.createEl("p", { text: `⚠️ ${i18next.t("variable.desc.warn.usage")}`, cls: "callout-title" });
 			p.createEl("p", undefined, (pWarn) => {
 				pWarn.createEl("span", { text: i18next.t("common.example") });
 				pWarn.createEl("span", { text: " ", cls: "code" });

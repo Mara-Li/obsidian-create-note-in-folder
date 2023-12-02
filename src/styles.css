@@ -74,7 +74,7 @@ p.create-note-in-folder .is-warning p>*:not(.code) {
     text-decoration: none;
 }
 
-.create-note-in-folder .is-warning p.title {
+.create-note-in-folder .is-warning p.callout-title {
     font-weight: bold;
 }
 
