@@ -74,7 +74,8 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 			.addButton(cb => cb
 				.setButtonText(i18next.t("variable.title"))
 				.onClick(() => {
-					new ManageCustomVariables(this.app, this.plugin.settings.customVariables ?? [], async (result)  => {
+					const customVariable = JSON.parse(JSON.stringify(this.plugin.settings.customVariables ?? []));
+					new ManageCustomVariables(this.app, customVariable , async (result)  => {
 						this.plugin.settings.customVariables = result;
 						await this.plugin.saveSettings();
 					}).open();
