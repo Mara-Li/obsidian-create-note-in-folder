@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.6.0](https://github.com/Lisandra-dev/create-note-in-folder/compare/1.6.0-0...1.6.0) (2023-12-02)
+
+
+### Bug Fixes
+
+* **settings:** closing should not save the settings ([bd0ef50](https://github.com/Lisandra-dev/create-note-in-folder/commit/bd0ef50952a9ee705a7411c3c10839a8cf1f07e4)), closes [#14](https://github.com/Lisandra-dev/create-note-in-folder/issues/14)
+* **settings:** X folder settings popup save it settings ([df105c8](https://github.com/Lisandra-dev/create-note-in-folder/commit/df105c8702e464c8fd6b93b1bdbd8713683c9842)), closes [#14](https://github.com/Lisandra-dev/create-note-in-folder/issues/14)
+* **settings:** X folder settings popup save it settings ([3790baa](https://github.com/Lisandra-dev/create-note-in-folder/commit/3790baa69ebf980c43154a77e9d465b8542a7c97)), closes [#14](https://github.com/Lisandra-dev/create-note-in-folder/issues/14)
+
 ## [1.5.1](https://github.com/Lisandra-dev/create-note-in-folder/compare/1.5.0...1.5.1) (2023-10-16)
 
 
