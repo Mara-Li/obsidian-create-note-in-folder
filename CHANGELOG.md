@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.7.0](https://github.com/Lisandra-dev/create-note-in-folder/compare/1.6.0...1.7.0) (2023-12-03)
+
+
+### Features
+
+* allow to focus on the inlinetitle ([9430913](https://github.com/Lisandra-dev/create-note-in-folder/commit/943091385b59bc278f22a079e788332c7a975eba))
+* **file:** allow to focus on the inlinetitle ([3e07c6a](https://github.com/Lisandra-dev/create-note-in-folder/commit/3e07c6ab946e83c09f02111cda3827ddde1c5e17)), closes [#13](https://github.com/Lisandra-dev/create-note-in-folder/issues/13)
+
+
+### Bug Fixes
+
+* **cmd:** allow await in new commands for not {{current}} ([ee18084](https://github.com/Lisandra-dev/create-note-in-folder/commit/ee18084828b531dd9752e3322a8805d97e5c37bf))
+* **cmd:** allow await in new commands for not {{current}} ([9f42b4c](https://github.com/Lisandra-dev/create-note-in-folder/commit/9f42b4c397fb91cba339b798c186f582f61fb3f3))
+* **cmd:** allow await in new commands for not {{current}} ([563ac1b](https://github.com/Lisandra-dev/create-note-in-folder/commit/563ac1b165ebedee30917f1b209fb88785cda0b2))
+* **settings:** chaotic save settings ([dfb759f](https://github.com/Lisandra-dev/create-note-in-folder/commit/dfb759f03b6d5523b47274679dce6eb5893fb752))
+* **settings:** chaotic save settings ([76f476b](https://github.com/Lisandra-dev/create-note-in-folder/commit/76f476b5913db01316d8d002c7a3a8efbc52e6a6))
+
 ## [1.6.0](https://github.com/Lisandra-dev/create-note-in-folder/compare/1.6.0-0...1.6.0) (2023-12-02)
 
 
