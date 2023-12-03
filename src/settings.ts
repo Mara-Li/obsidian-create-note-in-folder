@@ -104,16 +104,15 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 						.setIcon("pencil")
 						.setTooltip(i18next.t("editFolder.title"))
 						.onClick(async () => {
-							let folderSettings = JSON.parse(JSON.stringify(folder)) as FolderSettings;
+							const folderSettings = JSON.parse(JSON.stringify(folder)) as FolderSettings;
 							const index = this.plugin.settings.folder.indexOf(folder);
-							new AddFolderModal(this.app, folderSettings, false, (result)  => {
+							new AddFolderModal(this.app, folderSettings, false, async (result)  => {
 								folder = result;
-								folderSettings = result;
 								this.plugin.settings.folder[index] = result;
+								await this.plugin.addNewCommands(this.plugin.settings.folder[index].commandName, this.plugin.settings.folder[index], true);
+								await this.plugin.removeCommands();
+								await this.plugin.saveSettings();
 							}).open();
-							await this.plugin.saveSettings();
-							await this.plugin.addNewCommands(folder.commandName, folder, true);
-							await this.plugin.removeCommands();
 						}))
 				.addText(cb => {
 					cb
