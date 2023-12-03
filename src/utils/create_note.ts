@@ -136,6 +136,7 @@ export async function createNoteInFolder(newFolder: FolderSettings, plugin: Note
 			const newFile = await app.vault.create(createdFilePath, "");
 			await leaf.openFile(newFile, { active: currentFolder.focused });
 			await plugin.triggerTemplater(newFile, currentFolder);
+			await focusInlineTitle(leaf);
 		} else if (isTemplaterNeeded(app, currentFolder)) {
 			//directly templater to create and templating the things
 			const templateFile = this.app.vault.getAbstractFileByPath(currentFolder.templater);
@@ -203,6 +204,12 @@ export function createFolderInCurrent(newFolder: FolderSettings, currentFile: TF
 				leaf?.openFile(file, { active: currentFolder.focused });
 				plugin.triggerTemplater(file, currentFolder);
 			});
+			new Promise((resolve) => {
+				setTimeout(() => {
+					focusInlineTitle(leaf);
+					resolve(undefined);
+				}, 50);
+			});
 		} else if (isTemplaterNeeded(app, currentFolder)) {
 			//directly templater to create and templating the things
 			const templateFile = app.vault.getAbstractFileByPath(currentFolder.templater ?? "");
@@ -217,4 +224,18 @@ export function createFolderInCurrent(newFolder: FolderSettings, currentFile: TF
 			app.vault.create(createdFilePath, "");
 		}
 	}
+}
+
+async function focusInlineTitle(leaf: WorkspaceLeaf | undefined) {
+	if (!leaf) {
+		return;
+	}
+	const titleContainerEl = leaf.view.containerEl.querySelector("div.inline-title");
+	if (!titleContainerEl) {
+		return;
+	}
+	// @ts-ignore
+	await titleContainerEl.focus();
+	window.getSelection()?.selectAllChildren(titleContainerEl);
+	return;
 }
