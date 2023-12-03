@@ -84,7 +84,7 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 
 		containerEl.createEl("h3", {text: i18next.t("title")} as const);
 
-		for (const folder of this.plugin.settings.folder) {
+		for (let folder of this.plugin.settings.folder) {
 			const sett = new Setting(containerEl)
 				.setClass("no-display")
 				.addButton(cb =>
@@ -104,11 +104,16 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 						.setIcon("pencil")
 						.setTooltip(i18next.t("editFolder.title"))
 						.onClick(async () => {
-							const folderSettings = JSON.parse(JSON.stringify(folder)) as FolderSettings;
+							let folderSettings = JSON.parse(JSON.stringify(folder)) as FolderSettings;
+							const index = this.plugin.settings.folder.indexOf(folder);
 							new AddFolderModal(this.app, folderSettings, false, (result)  => {
-								this.plugin.settings.folder[this.plugin.settings.folder.indexOf(folder)] = result;
-								this.plugin.saveSettings();
+								folder = result;
+								folderSettings = result;
+								this.plugin.settings.folder[index] = result;
 							}).open();
+							await this.plugin.saveSettings();
+							await this.plugin.addNewCommands(folder.commandName, folder, true);
+							await this.plugin.removeCommands();
 						}))
 				.addText(cb => {
 					cb
