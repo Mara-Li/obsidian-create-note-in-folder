@@ -59,7 +59,7 @@ export default class NoteInFolder extends Plugin {
 					id: `${newFolder.commandName ?? newFolder.path}`,
 					name: `${newFolder.commandName ?? newFolder.path}`,
 					callback: async () => {
-						createNoteInFolder(newFolder, this);
+						await createNoteInFolder(newFolder, this);
 					}
 				});
 			} else {
@@ -71,7 +71,6 @@ export default class NoteInFolder extends Plugin {
 						const currentFile = this.app.workspace.getActiveFile() ?? undefined;
 						if (currentFile) {
 							if (!checking) {
-								console.log(newFolder, currentFile);
 								createFolderInCurrent(newFolder, currentFile, this);
 							}
 							return true;
