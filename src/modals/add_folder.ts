@@ -250,6 +250,18 @@ export class AddFolderModal extends Modal {
 
 		this.settingTemplater(contentEl);
 
+		this.contentEl.createEl("h2", {text: i18next.t("editFolder.other.title")});
+
+		new Setting(contentEl)
+			.setName(i18next.t("editFolder.other.setting.title"))
+			.setDesc(i18next.t("editFolder.other.setting.desc"))
+			.setDisabled(!this.result.path.contains("{{current}}"))
+			.addToggle(cb => cb
+				.setValue(this.result.fileMenu)
+				.onChange(async (value) => {
+					this.result.fileMenu = value;
+				}));
+
 		new Setting(contentEl)
 			.addButton(cb =>
 				cb

@@ -131,12 +131,9 @@ export class ChooseInAllFolder extends FuzzySuggestModal<FolderSettings> {
 			const currentFolder = this.currentFile.parent?.path ?? "/";
 			//remove current folder from the list
 			templatedFolders = templatedFolders.filter((folder) => folder.path !== currentFolder);
-			console.log(this.plugin.settings.folder);
 			const userDefinedFolder = this.plugin.settings.folder.find((folder) => {
-				console.log(folder.path.replace("{{current}}", currentFolder), currentFolder);
 				return folder.path.replace("{{current}}", currentFolder) === currentFolder;
 			});
-			console.log(userDefinedFolder, currentFolder);
 			if (!this.filter && userDefinedFolder) {
 				//search in the user defined list & add it to the list
 				templatedFolders.push({

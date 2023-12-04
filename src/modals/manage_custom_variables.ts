@@ -153,7 +153,6 @@ export class ManageCustomVariables extends Modal {
 
 	addErrorClass() {
 		const wrongResultIndex = this.validateEntry();
-		console.log(wrongResultIndex);
 		if (wrongResultIndex.length === 0) {
 			//reload
 			this.onOpen();

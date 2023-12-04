@@ -49,6 +49,11 @@ export default class NoteInFolder extends Plugin {
 		newFolder: FolderSettings | undefined,
 		quickSwitcher = false
 	) {
+		console.log(
+			"oldFolder : ", oldFolder,
+			"newFolder : ", newFolder,
+			"quickSwitcher : ", quickSwitcher
+		);
 		if (oldFolder !== undefined) {
 			//@ts-ignore
 			this.app.commands.removeCommand(`create-note-in-folder:${oldFolder}`); //doesn't work in some condition
@@ -82,6 +87,37 @@ export default class NoteInFolder extends Plugin {
 		}
 		if (quickSwitcher)
 			this.quickSwitcherCommand(); //reload the quickswitcher command
+		if (newFolder?.fileMenu && newFolder.path.contains("{{current}}")) {
+			this.registerEvent(
+				this.app.workspace.on("file-menu", (menu, file) => {
+					menu
+						.addItem((item) => {
+							item
+								.setTitle(`Create note : ${newFolder.commandName ?? newFolder.path}`)
+								.setIcon("file-plus")
+								.onClick(() => {
+									createFolderInCurrent(newFolder, file, this);
+								});
+						});
+				})
+			);
+		}
+
+	}
+
+	removeDisabledMenu(disabled: FolderSettings) {
+		this.registerEvent(
+			this.app.workspace.on("file-menu", (menu) => {
+				const commandName = `Create note : ${disabled.commandName ?? disabled.path}`;
+				//search in the menu if the command is present
+				//@ts-ignore
+				for (const item of menu.items) {
+					if (item.titleEl?.getText() === commandName) {
+						item.dom.addClasses(["create-note-in-folder", "disabled"]);
+					}
+				}
+			})
+		);
 	}
 
 	async triggerTemplater(file: TFile, settings: FolderSettings) {

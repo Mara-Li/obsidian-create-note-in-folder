@@ -1,5 +1,5 @@
 import i18next from "i18next";
-import { App, getLinkpath,MarkdownView, normalizePath,Notice, TFile, TFolder, WorkspaceLeaf } from "obsidian";
+import { App, getLinkpath,MarkdownView, normalizePath,Notice, TAbstractFile, TFile, TFolder, WorkspaceLeaf } from "obsidian";
 import { DefaultOpening, FolderSettings, SplitDirection } from "src/interface";
 import NoteInFolder from "src/main";
 
@@ -153,10 +153,12 @@ export async function createNoteInFolder(newFolder: FolderSettings, plugin: Note
 	}
 }
 
-export function createFolderInCurrent(newFolder: FolderSettings, currentFile: TFile, plugin: NoteInFolder) {
+export function createFolderInCurrent(newFolder: FolderSettings, currentFile: TAbstractFile, plugin: NoteInFolder) {
 	const { settings,app } = plugin;
 	const { path, hasBeenReplaced } = replaceVariables(newFolder.path, settings.customVariables);
-	const parent = currentFile.parent ? currentFile.parent.path : "/";
+	let parent = currentFile.parent ? currentFile.parent.path : "/";
+	if (currentFile instanceof TFolder)
+		parent = currentFile.path;
 	const currentFolder = JSON.parse(JSON.stringify(newFolder)) as FolderSettings;
 	currentFolder.path = path.replace("{{current}}", `${parent}/`);
 	const folderPath = normalizePath(currentFolder.path);

@@ -59,6 +59,13 @@
       },
       "title": "Default Opening"
     },
+    "other": {
+      "setting": {
+        "desc": "Add a button in the file menu to create a note in this folder. Only works if the folder path contains \"{{current}}\"",
+        "title": "File menu"
+      },
+      "title": "Other"
+    },
     "template": {
       "dropDown": {
         "folderName": "Folder Name",

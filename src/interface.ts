@@ -45,6 +45,7 @@ export interface FolderSettings {
 		splitDefault: SplitDirection;
 		focused: boolean;
 	};
+	fileMenu: boolean;
 }
 
 
@@ -87,4 +88,5 @@ export const DEFAULT_FOLDER_SETTINGS: FolderSettings = {
 		splitDefault: SplitDirection.horizontal,
 		focused: true,
 	},
+	fileMenu: false,
 };

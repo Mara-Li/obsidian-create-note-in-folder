@@ -111,6 +111,9 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 								this.plugin.settings.folder[index] = result;
 								await this.plugin.addNewCommands(this.plugin.settings.folder[index].commandName, this.plugin.settings.folder[index], true);
 								await this.plugin.removeCommands();
+								if (!result.fileMenu) {
+									this.plugin.removeDisabledMenu(result);
+								}
 								await this.plugin.saveSettings();
 							}).open();
 						}))

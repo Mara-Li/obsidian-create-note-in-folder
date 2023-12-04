@@ -99,3 +99,6 @@ p.create-note-in-folder .is-warning p>*:not(.code) {
 }
 
 
+.menu-item.create-note-in-folder.disabled{
+    display: none;
+}

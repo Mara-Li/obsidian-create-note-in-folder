@@ -59,6 +59,13 @@
       },
       "title": "Ouverture par défaut"
     },
+    "other": {
+      "setting": {
+        "desc": "Ajouter un bouton dans le menu fichier pour créer une note dans ce dossier. Ne fonctionne que si le chemin du dossier contient \"{{current}}\"",
+        "title": "Menu \"fichier\""
+      },
+      "title": "Autre"
+    },
     "template": {
       "dropDown": {
         "folderName": "Nom du dossier",
