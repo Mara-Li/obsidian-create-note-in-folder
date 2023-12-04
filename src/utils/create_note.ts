@@ -1,5 +1,5 @@
 import i18next from "i18next";
-import { App, getLinkpath,MarkdownView, normalizePath,Notice, TAbstractFile, TFile, TFolder, WorkspaceLeaf } from "obsidian";
+import { App, getLinkpath,MarkdownView, normalizePath,Notice, Platform, TAbstractFile, TFile, TFolder, WorkspaceLeaf } from "obsidian";
 import { DefaultOpening, FolderSettings, SplitDirection } from "src/interface";
 import NoteInFolder from "src/main";
 
@@ -202,6 +202,14 @@ export function createFolderInCurrent(newFolder: FolderSettings, currentFile: TA
 	} else if (!file) {
 		if (leaf) {
 			leaf = leaf as WorkspaceLeaf;
+			let timeout = 50;
+			if (settings.timeOutForInlineTitle) {
+				if (settings.timeOutForInlineTitle instanceof Object) {
+					timeout = settings.timeOutForInlineTitle[Platform.isMobile ? "mobile" : "desktop"];
+				} else if (typeof settings.timeOutForInlineTitle === "number") {
+					timeout = settings.timeOutForInlineTitle;
+				}
+			}
 			app.vault.create(createdFilePath, "").then((file) => {
 				leaf?.openFile(file, { active: currentFolder.focused });
 				plugin.triggerTemplater(file, currentFolder);
@@ -210,7 +218,7 @@ export function createFolderInCurrent(newFolder: FolderSettings, currentFile: TA
 				setTimeout(() => {
 					focusInlineTitle(leaf);
 					resolve(undefined);
-				}, settings.timeOutForInlineTitle);
+				}, timeout);
 			});
 		} else if (isTemplaterNeeded(app, currentFolder)) {
 			//directly templater to create and templating the things

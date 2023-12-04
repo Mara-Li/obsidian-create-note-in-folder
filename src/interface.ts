@@ -55,6 +55,11 @@ export interface CustomVariables {
 	value: string
 }
 
+export type TimeoutTitle = {
+	mobile: number,
+	desktop: number
+}
+
 export interface NoteInFolderSettings {
 	folder: FolderSettings[];
 	customVariables: CustomVariables[];
@@ -62,7 +67,7 @@ export interface NoteInFolderSettings {
 	defaultTemplate?: FolderSettings;
 	listAllFolderInModals?: boolean;
 	filterAnyFolderCommand?: boolean;
-	timeOutForInlineTitle?: number;
+	timeOutForInlineTitle?: TimeoutTitle | number;
 }
 
 export const DEFAULT_SETTINGS: NoteInFolderSettings = {

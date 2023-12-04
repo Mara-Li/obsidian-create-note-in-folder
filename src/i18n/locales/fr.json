@@ -2,7 +2,7 @@
   "allFolder": {
     "default": {
       "title": "Template par défaut",
-      "tooltip": "Set the default template for all folders if they are not registered"
+      "tooltip": "Définir le modèle par défaut pour tous les dossiers s'ils ne sont pas enregistrés"
     },
     "enable": "Activer le plugin pour tous les dossier",
     "filterAnyFolderCommand": {
