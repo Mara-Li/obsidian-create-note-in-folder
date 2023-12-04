@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.8.1](https://github.com/Lisandra-dev/obsidian-create-note-in-folder/compare/1.8.0...1.8.1) (2023-12-04)
+
+
+### Bug Fixes
+
+* **inline:** trying to fix the "go into inline" bug ([ca1b19f](https://github.com/Lisandra-dev/obsidian-create-note-in-folder/commit/ca1b19f60984863e55e22c6ee53543d1a751fdd1))
+
 ## [1.8.0](https://github.com/Lisandra-dev/create-note-in-folder/compare/1.7.0...1.8.0) (2023-12-04)
 
 
