@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.8.0](https://github.com/Lisandra-dev/create-note-in-folder/compare/1.7.0...1.8.0) (2023-12-04)
+
+
+### Features
+
+* allow to add a file menu commands for {{current}} commands ([206cecf](https://github.com/Lisandra-dev/create-note-in-folder/commit/206cecfa2c43e4b4c94ace819a20ca118e0e9076))
+
 ## [1.7.0](https://github.com/Lisandra-dev/create-note-in-folder/compare/1.6.0...1.7.0) (2023-12-03)
 
 
