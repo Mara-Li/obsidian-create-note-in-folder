@@ -62,11 +62,13 @@ export interface NoteInFolderSettings {
 	defaultTemplate?: FolderSettings;
 	listAllFolderInModals?: boolean;
 	filterAnyFolderCommand?: boolean;
+	timeOutForInlineTitle?: number;
 }
 
 export const DEFAULT_SETTINGS: NoteInFolderSettings = {
 	folder: [],
 	customVariables: [],
+	timeOutForInlineTitle: 50
 };
 
 export const DEFAULT_FOLDER_SETTINGS: FolderSettings = {

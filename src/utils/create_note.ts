@@ -210,7 +210,7 @@ export function createFolderInCurrent(newFolder: FolderSettings, currentFile: TA
 				setTimeout(() => {
 					focusInlineTitle(leaf);
 					resolve(undefined);
-				}, 50);
+				}, settings.timeOutForInlineTitle);
 			});
 		} else if (isTemplaterNeeded(app, currentFolder)) {
 			//directly templater to create and templating the things
