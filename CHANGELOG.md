@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.8.2](https://github.com/Lisandra-dev/create-note-in-folder/compare/1.8.1...1.8.2) (2023-12-04)
+
+
+### Bug Fixes
+
+* **inlineTitle:** fix the amount of time to select the inline title ([252d7e3](https://github.com/Lisandra-dev/create-note-in-folder/commit/252d7e3ffec22bbfa7d30e64c88155074df78f38)), closes [#15](https://github.com/Lisandra-dev/create-note-in-folder/issues/15)
+
 ## [1.8.1](https://github.com/Lisandra-dev/obsidian-create-note-in-folder/compare/1.8.0...1.8.1) (2023-12-04)
 
 
