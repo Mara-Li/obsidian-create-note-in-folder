@@ -3,7 +3,7 @@ import { App, getLinkpath,MarkdownView, normalizePath,Notice, Platform, TAbstrac
 import { DefaultOpening, FolderSettings, SplitDirection } from "src/interface";
 import NoteInFolder from "src/main";
 
-import { generateFileName, isTemplaterNeeded, replaceVariables } from "./utils";
+import { generateFileName, generateFileNameWithCurrent, isTemplaterNeeded, replaceVariables } from "./utils";
 
 function scrollToPosition(app: App, parts: {
 	path: string
@@ -155,14 +155,7 @@ export async function createNoteInFolder(newFolder: FolderSettings, plugin: Note
 
 export function createFolderInCurrent(newFolder: FolderSettings, currentFile: TAbstractFile, plugin: NoteInFolder) {
 	const { settings,app } = plugin;
-	const { path, hasBeenReplaced } = replaceVariables(newFolder.path, settings.customVariables);
-	let parent = currentFile.parent ? currentFile.parent.path : "/";
-	if (currentFile instanceof TFolder)
-		parent = currentFile.path;
-	const currentFolder = JSON.parse(JSON.stringify(newFolder)) as FolderSettings;
-	currentFolder.path = path.replace("{{current}}", `${parent}/`);
-	const folderPath = normalizePath(currentFolder.path);
-	const defaultName = generateFileName(currentFolder, app);
+	const { folderPath, defaultName, hasBeenReplaced, currentFolder} = generateFileNameWithCurrent(newFolder, currentFile, plugin);
 	if (!app.vault.getAbstractFileByPath(folderPath)) {
 		if (hasBeenReplaced) {
 			//create folder if it doesn't exist

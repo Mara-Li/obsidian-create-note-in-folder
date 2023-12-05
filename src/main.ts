@@ -1,5 +1,5 @@
 import i18next from "i18next";
-import { Notice, Plugin, TFile } from "obsidian";
+import { normalizePath,Notice, Plugin, TFile } from "obsidian";
 import merge from "ts-deepmerge";
 
 import { ressources, translationLanguage } from "./i18n/i18next";
@@ -14,6 +14,7 @@ import {
 import { ChooseFolder, ChooseInAllFolder } from "./modals/choose_in_folder";
 import { NoteInFolderSettingsTab } from "./settings";
 import { createFolderInCurrent, createNoteInFolder } from "./utils/create_note";
+import { generateFileNameWithCurrent } from "./utils/utils";
 
 export default class NoteInFolder extends Plugin {
 	settings: NoteInFolderSettings;
@@ -49,11 +50,6 @@ export default class NoteInFolder extends Plugin {
 		newFolder: FolderSettings | undefined,
 		quickSwitcher = false
 	) {
-		console.log(
-			"oldFolder : ", oldFolder,
-			"newFolder : ", newFolder,
-			"quickSwitcher : ", quickSwitcher
-		);
 		if (oldFolder !== undefined) {
 			//@ts-ignore
 			this.app.commands.removeCommand(`create-note-in-folder:${oldFolder}`); //doesn't work in some condition
@@ -91,7 +87,9 @@ export default class NoteInFolder extends Plugin {
 			this.registerEvent(
 				this.app.workspace.on("file-menu", (menu, file) => {
 					let commandName = `Create note : ${newFolder.commandName ?? newFolder.path}`;
-					const fileAlreadyExists = this.app.vault.getAbstractFileByPath(newFolder.path.replace("{{current}}", file.path));
+					const { folderPath, defaultName} = generateFileNameWithCurrent(newFolder, file, this);
+					const path = normalizePath(`${folderPath}/${defaultName}`);
+					const fileAlreadyExists = this.app.vault.getAbstractFileByPath(newFolder.path.replace("{{current}}", path));
 					if (fileAlreadyExists && !newFolder.template.increment)
 						commandName = `Open note : ${newFolder.commandName ?? newFolder.path}`;
 					menu

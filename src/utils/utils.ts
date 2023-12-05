@@ -1,4 +1,5 @@
-import { App, moment, normalizePath } from "obsidian";
+import { App, moment, normalizePath,TAbstractFile, TFolder } from "obsidian";
+import NoteInFolder from "src/main";
 
 import { CustomVariables, FolderSettings, Position, TemplateType } from "../interface";
 
@@ -65,4 +66,17 @@ export function replaceVariables(filePath: string, customVariables: CustomVariab
 		}
 	}
 	return { path: filePath, hasBeenReplaced: hasBeenReplaced.length > 0 };
+}
+
+export function generateFileNameWithCurrent(newFolder: FolderSettings, currentFile: TAbstractFile, plugin: NoteInFolder) {
+	const { settings, app } = plugin;
+	const { path, hasBeenReplaced } = replaceVariables(newFolder.path, settings.customVariables);
+	let parent = currentFile.parent ? currentFile.parent.path : "/";
+	if (currentFile instanceof TFolder)
+		parent = currentFile.path;
+	const currentFolder = JSON.parse(JSON.stringify(newFolder)) as FolderSettings;
+	currentFolder.path = normalizePath(path.replace("{{current}}", `${parent}/`));
+	const folderPath = normalizePath(currentFolder.path);
+	const defaultName = generateFileName(currentFolder, app);
+	return { folderPath, defaultName, hasBeenReplaced, currentFolder };
 }
