@@ -111,8 +111,12 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 								this.plugin.settings.folder[index] = result;
 								await this.plugin.addNewCommands(this.plugin.settings.folder[index].commandName, this.plugin.settings.folder[index], true);
 								await this.plugin.removeCommands();
-								if (!result.fileMenu) {
-									this.plugin.removeDisabledMenu(result);
+								if (!result.fileMenu || !result.path.contains("{{current}}")) {
+									this.plugin.removeDisabledMenu(result, "all");
+								} else if (!result.template.increment) {
+									this.plugin.removeDisabledMenu(result, "create");
+								} else if (result.template.increment) {
+									this.plugin.removeDisabledMenu(result, "increment");
 								}
 								await this.plugin.saveSettings();
 							}).open();

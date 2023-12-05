@@ -87,13 +87,17 @@ export default class NoteInFolder extends Plugin {
 		}
 		if (quickSwitcher)
 			this.quickSwitcherCommand(); //reload the quickswitcher command
-		if (newFolder?.fileMenu && newFolder.path.contains("{{current}}")) {
+		if (newFolder?.fileMenu && newFolder?.path.contains("{{current}}")) {
 			this.registerEvent(
 				this.app.workspace.on("file-menu", (menu, file) => {
+					let commandName = `Create note : ${newFolder.commandName ?? newFolder.path}`;
+					const fileAlreadyExists = this.app.vault.getAbstractFileByPath(newFolder.path.replace("{{current}}", file.path));
+					if (fileAlreadyExists && !newFolder.template.increment)
+						commandName = `Open note : ${newFolder.commandName ?? newFolder.path}`;
 					menu
 						.addItem((item) => {
 							item
-								.setTitle(`Create note : ${newFolder.commandName ?? newFolder.path}`)
+								.setTitle(commandName)
 								.setIcon("file-plus")
 								.onClick(() => {
 									createFolderInCurrent(newFolder, file, this);
@@ -104,15 +108,25 @@ export default class NoteInFolder extends Plugin {
 		}
 
 	}
-
-	removeDisabledMenu(disabled: FolderSettings) {
+	/**
+	 *
+	 * @param disabled
+	 * @param increment Only remove the "open note" command if the increment is true; otherwise, remove all the commands
+	 */
+	removeDisabledMenu(disabled: FolderSettings, toRemove: "all" | "increment" | "create" = "all") {
 		this.registerEvent(
 			this.app.workspace.on("file-menu", (menu) => {
-				const commandName = `Create note : ${disabled.commandName ?? disabled.path}`;
+				let commandName = `Create note : ${disabled.commandName ?? disabled.path}`;
+				if (toRemove === "increment")
+					commandName = `Open note : ${disabled.commandName ?? disabled.path}`;
+				else if (toRemove === "create")
+					commandName = `Create note : ${disabled.commandName ?? disabled.path}`;
 				//search in the menu if the command is present
 				//@ts-ignore
 				for (const item of menu.items) {
-					if (item.titleEl?.getText() === commandName) {
+					if (item.titleEl?.getText() === commandName)
+						item.dom.addClasses(["create-note-in-folder", "disabled"]);
+					else if (toRemove === "all" && (item.titleEl?.getText() === commandName || item.titleEl?.getText() === `Open note : ${disabled.commandName ?? disabled.path}`)) {
 						item.dom.addClasses(["create-note-in-folder", "disabled"]);
 					}
 				}
