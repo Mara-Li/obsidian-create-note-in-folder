@@ -1,6 +1,6 @@
 {
 	"name": "create-note-in-folder",
-	"version": "1.9.1",
+	"version": "1.9.2",
 	"description": "Add commands to create a note in a specific folder.",
 	"main": "main.js",
 	"scripts": {

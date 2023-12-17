@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.9.2](https://github.com/Lisandra-dev/create-note-in-folder/compare/1.9.1...1.9.2) (2023-12-17)
+
+
+### Bug Fixes
+
+* loadSettings crash when no data.json /loadData exists/is empty ([dca1a0a](https://github.com/Lisandra-dev/create-note-in-folder/commit/dca1a0a5c0239259ed73e80b2edc47a9d9582a86))
+
 ## [1.9.1](https://github.com/Lisandra-dev/create-note-in-folder/compare/1.9.0...1.9.1) (2023-12-05)
 
 
