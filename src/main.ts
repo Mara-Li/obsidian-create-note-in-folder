@@ -269,8 +269,13 @@ export default class NoteInFolder extends Plugin {
 
 	async loadSettings() {
 		const loadData = await this.loadData();
-		this.settings = merge(DEFAULT_SETTINGS, loadData) as unknown as NoteInFolderSettings;
-		this.settings = this.mergeFolderSettings();
+		try {
+			this.settings = merge(DEFAULT_SETTINGS, loadData) as unknown as NoteInFolderSettings;
+			this.settings = this.mergeFolderSettings();
+		} catch (e) {
+			console.warn("Error while merging folder settings ; use default merge");
+			this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+		}
 	}
 
 	async saveSettings() {
