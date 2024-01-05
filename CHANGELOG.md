@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.10.0](https://github.com/Lisandra-dev/create-note-in-folder/compare/1.9.2...1.10.0) (2024-01-05)
+
+
+### Features
+
+* compatibility with frontmatter title plugin ([56057b4](https://github.com/Lisandra-dev/create-note-in-folder/commit/56057b4dee6eb6691d2c5d9f6bbdfbede2c34b76)), closes [#13](https://github.com/Lisandra-dev/create-note-in-folder/issues/13)
+
 ## [1.9.2](https://github.com/Lisandra-dev/create-note-in-folder/compare/1.9.1...1.9.2) (2023-12-17)
 
 
