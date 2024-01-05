@@ -136,7 +136,7 @@ export async function createNoteInFolder(newFolder: FolderSettings, plugin: Note
 			const newFile = await app.vault.create(createdFilePath, "");
 			await leaf.openFile(newFile, { active: currentFolder.focused });
 			await plugin.triggerTemplater(newFile, currentFolder);
-			await focusInlineTitle(leaf);
+			await focusInlineTitle(leaf, app);
 		} else if (isTemplaterNeeded(app, currentFolder)) {
 			//directly templater to create and templating the things
 			const templateFile = this.app.vault.getAbstractFileByPath(currentFolder.templater);
@@ -209,7 +209,7 @@ export function createFolderInCurrent(newFolder: FolderSettings, currentFile: TA
 			});
 			new Promise((resolve) => {
 				setTimeout(() => {
-					focusInlineTitle(leaf);
+					focusInlineTitle(leaf, app);
 					resolve(undefined);
 				}, timeout);
 			});
@@ -229,7 +229,7 @@ export function createFolderInCurrent(newFolder: FolderSettings, currentFile: TA
 	}
 }
 
-async function focusInlineTitle(leaf: WorkspaceLeaf | undefined) {
+async function focusInlineTitle(leaf: WorkspaceLeaf | undefined, app: App) {
 	if (!leaf) {
 		return;
 	}
@@ -237,8 +237,19 @@ async function focusInlineTitle(leaf: WorkspaceLeaf | undefined) {
 	if (!titleContainerEl) {
 		return;
 	}
+	let innerTitle = titleContainerEl;
 	// @ts-ignore
-	await titleContainerEl.focus();
-	window.getSelection()?.selectAllChildren(titleContainerEl);
+	const frontmatterTitle = app.plugins.enabledPlugins.has("obsidian-front-matter-title-plugin");
+	if (titleContainerEl.hasAttribute("ofmt-fake-id") && frontmatterTitle) { //plugin frontmattert title
+		const innerTitleFMT = leaf.view.containerEl.querySelector("div.inline-title[ofmt-original-id]");
+		if (innerTitleFMT?.hasAttribute("hidden")) {
+			titleContainerEl.setAttribute("hidden", "");
+			innerTitleFMT.removeAttribute("hidden");
+			innerTitle = innerTitleFMT;
+		}
+	}
+	// @ts-ignore
+	await innerTitle.focus();
+	window.getSelection()?.selectAllChildren(innerTitle);
 	return;
 }
