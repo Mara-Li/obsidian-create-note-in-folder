@@ -234,6 +234,7 @@ async function focusInlineTitle(leaf: WorkspaceLeaf | undefined, app: App) {
 		return;
 	}
 	const titleContainerEl = leaf.view.containerEl.querySelector("div.inline-title");
+	//scroll to top
 	if (!titleContainerEl) {
 		return;
 	}
@@ -248,6 +249,7 @@ async function focusInlineTitle(leaf: WorkspaceLeaf | undefined, app: App) {
 			innerTitle = innerTitleFMT;
 		}
 	}
+	innerTitle.scrollIntoView();
 	// @ts-ignore
 	await innerTitle.focus();
 	window.getSelection()?.selectAllChildren(innerTitle);
