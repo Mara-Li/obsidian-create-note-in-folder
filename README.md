@@ -118,7 +118,7 @@ Will set the value for desktop and mobile to different amount of time.
 
 After changing the setting, you need to reload the plugin.
 
----
+-—
 # Installation
 
 - [x] From Obsidian's community plugins
@@ -129,17 +129,22 @@ After changing the setting, you need to reload the plugin.
   - In Obsidian settings, reload the plugin
   - Enable the plugin
 
-# Translations
+# 🎼 Translation
 
 - [x] English
 - [x] French
 
 To add a translation:
-- Fork the repository
-- Add a new file in `plugin/i18n/locales` with the name of the language (ex: `de.ts`)
-- Copy the content of [`plugin/i18n/locales/en.ts`](src/i18n/locales/en.json) in the new file
-- Translate the content of the file
-- Create a pull request
+1. Fork the repository
+2. Add the translation in the `src/i18n/locales` folder with the name of the language (ex: `fr.json`). 
+    - You can get your locale language from Obsidian using [obsidian translation](https://github.com/obsidianmd/obsidian-translations) or using the commands (in templater for example) : `<% tp.obsidian.moment.locale() %>`
+    - Copy the content of the [`en.json`](./src/i18n/locales/en.json) file in the new file
+    - Translate the content
+3. Edit `i18n/i18next.ts` :
+    - Add `import * as <lang> from "./locales/<lang>.json";`
+    - Edit the `ressource` part with adding : `<lang> : {translation: <lang>}`
+
+---
 
 # Credit
 Many thanks to @SilentVoid13 and @RafaelGB for their [Templater](https://github.com/SilentVoid13/Templater) and [dbFolder](https://github.com/RafaelGB/obsidian-db-folder), where some part of the code where taken.
