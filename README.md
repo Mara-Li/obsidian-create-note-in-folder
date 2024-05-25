@@ -122,7 +122,7 @@ After changing the setting, you need to reload the plugin.
 # Installation
 
 - [x] From Obsidian's community plugins
-- [x] Using [BRAT](https://github.com/TfTHacker/obsidian42-brat#adding-a-beta-plugin) using `https://github.com/Lisandra-dev/create-note-in-folder`
+- [x] Using [BRAT](https://github.com/TfTHacker/obsidian42-brat#adding-a-beta-plugin) using `https://github.com/mara-li/create-note-in-folder`
 - [x] From the release page:
   - Download the latest release
   - Unzip create-note-in-path.zip in `.obsidian/plugins/` path
