@@ -1,26 +1,26 @@
 export enum DefaultOpening {
-	newTab = "newTab",
-	current = "current",
-	split = "split",
-	newWindow = "newWindow",
-	nothing = "nothing" //don't open the note at all! Useful for templates
+	NewTab = "newTab",
+	Current = "current",
+	Split = "split",
+	NewWindow = "newWindow",
+	Nothing = "nothing", //don't open the note at all! Useful for templates
 }
 
 export enum SplitDirection {
-	horizontal = "horizontal",
-	vertical = "vertical"
+	Horizontal = "horizontal",
+	Vertical = "vertical",
 }
 
 export enum TemplateType {
-	date = "date",
-	folderName = "folderName",
-	none = "none"
+	Date = "date",
+	FolderName = "folderName",
+	None = "none",
 }
 
 export enum Position {
-	prepend = "prepend",
-	append = "append",
-	none = "none"
+	Prepend = "prepend",
+	Append = "append",
+	None = "none",
 }
 
 export interface Template {
@@ -28,7 +28,7 @@ export interface Template {
 	format: string;
 	position: Position;
 	separator: string;
-	increment ?: boolean;
+	increment?: boolean;
 }
 
 export interface FolderSettings {
@@ -48,17 +48,16 @@ export interface FolderSettings {
 	fileMenu: boolean;
 }
 
-
 export interface CustomVariables {
-	name: string,
-	type: "string" | "date"
-	value: string
+	name: string;
+	type: "string" | "date";
+	value: string;
 }
 
 export type TimeoutTitle = {
-	mobile: number,
-	desktop: number
-}
+	mobile: number;
+	desktop: number;
+};
 
 export interface NoteInFolderSettings {
 	folder: FolderSettings[];
@@ -73,26 +72,26 @@ export interface NoteInFolderSettings {
 export const DEFAULT_SETTINGS: NoteInFolderSettings = {
 	folder: [],
 	customVariables: [],
-	timeOutForInlineTitle: 50
+	timeOutForInlineTitle: 50,
 };
 
 export const DEFAULT_FOLDER_SETTINGS: FolderSettings = {
 	path: "",
 	commandName: "",
 	template: {
-		type: TemplateType.none,
+		type: TemplateType.None,
 		format: "",
-		position: Position.append,
+		position: Position.Append,
 		separator: "",
 		increment: true,
 	},
 	fileName: "Untitled",
-	opening: DefaultOpening.newTab,
+	opening: DefaultOpening.NewTab,
 	focused: true,
-	splitDefault: SplitDirection.horizontal,
+	splitDefault: SplitDirection.Horizontal,
 	alreadyExistOpening: {
-		opening: DefaultOpening.newTab,
-		splitDefault: SplitDirection.horizontal,
+		opening: DefaultOpening.NewTab,
+		splitDefault: SplitDirection.Horizontal,
 		focused: true,
 	},
 	fileMenu: false,

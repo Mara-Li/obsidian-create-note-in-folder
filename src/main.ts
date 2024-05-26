@@ -25,7 +25,6 @@ export default class NoteInFolder extends Plugin {
 	 * @returns {Promise<void>}
 	 */
 	async removeCommands(): Promise<void> {
-		//@ts-ignore
 		let pluginCommands = Object.keys(this.app.commands.commands).filter((command) =>
 			command.startsWith("create-note-in-folder")
 		);
@@ -241,10 +240,10 @@ export default class NoteInFolder extends Plugin {
 				folder.fileName = folder.formatName;
 				folder.template = {
 					//@ts-ignore
-					type: folder.typeName === "string" ? TemplateType.none : folder.typeName,
+					type: folder.typeName === "string" ? TemplateType.None : folder.typeName,
 					//@ts-ignore
 					format: folder.formatName,
-					position: Position.append,
+					position: Position.Append,
 					separator: "",
 				};
 				//@ts-ignore

@@ -1,6 +1,6 @@
 import i18next from "i18next";
-import { App, Modal, Notice, Setting } from "obsidian";
-import { CustomVariables } from "src/interface";
+import { type App, Modal, Notice, Setting } from "obsidian";
+import type { CustomVariables } from "src/interface";
 import { validateDate } from "src/utils/utils";
 
 export class ManageCustomVariables extends Modal {

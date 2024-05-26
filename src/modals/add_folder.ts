@@ -92,24 +92,24 @@ export class AddFolderModal extends Modal {
 		fileNameSetting: Setting
 	) {
 		let paramName: Setting | null = null;
-		if (typeName !== TemplateType.none) {
+		if (typeName !== TemplateType.None) {
 			fileNameSetting.setClass("create-note-in-folder");
 			fileNameSetting.setClass("edit");
 			fileNameSetting.setClass("is-facultative");
 			fileNameSetting.setDesc(i18next.t("template.desc"));
 			contentEl.createEl("h3", { text: i18next.t("template.header") });
 
-			if (TemplateType.date === this.result.template.type) {
+			if (TemplateType.Date === this.result.template.type) {
 				paramName = this.settingsTemplateDate(contentEl);
-			} else if (TemplateType.folderName === this.result.template.type) {
+			} else if (TemplateType.FolderName === this.result.template.type) {
 				this.result.template.format = this.result.path.split("/").pop() as string;
 			}
 
 			new Setting(contentEl)
 				.setName(i18next.t("template.position.title"))
 				.addDropdown((cb) => {
-					cb.addOption(Position.prepend, i18next.t("template.position.prepend"))
-						.addOption(Position.append, i18next.t("template.position.append"))
+					cb.addOption(Position.Prepend, i18next.t("template.position.prepend"))
+						.addOption(Position.Append, i18next.t("template.position.append"))
 						.setValue(this.result.template.position)
 						.onChange((value) => {
 							this.result.template.position = value as Position;
@@ -143,15 +143,15 @@ export class AddFolderModal extends Modal {
 				? this.result.splitDefault
 				: this.result.alreadyExistOpening.splitDefault;
 
-		if (split === DefaultOpening.split) {
+		if (split === DefaultOpening.Split) {
 			settingComp.addDropdown((cb) =>
 				cb
 					.addOption(
-						SplitDirection.horizontal,
+						SplitDirection.Horizontal,
 						i18next.t("editFolder.opening.split.horizontal")
 					)
 					.addOption(
-						SplitDirection.vertical,
+						SplitDirection.Vertical,
 						i18next.t("editFolder.opening.split.vertical")
 					)
 					.setValue(value)
@@ -191,10 +191,10 @@ export class AddFolderModal extends Modal {
 		new Setting(contentEl)
 			.setName(i18next.t("editFolder.template.title"))
 			.addDropdown((cb) => {
-				cb.addOption(TemplateType.none, i18next.t("editFolder.template.dropDown.none"))
-					.addOption(TemplateType.date, i18next.t("common.date"))
+				cb.addOption(TemplateType.None, i18next.t("editFolder.template.dropDown.none"))
+					.addOption(TemplateType.Date, i18next.t("common.date"))
 					.addOption(
-						TemplateType.folderName,
+						TemplateType.FolderName,
 						i18next.t("editFolder.template.dropDown.folderName")
 					)
 					.setValue(this.result.template.type)
@@ -216,20 +216,20 @@ export class AddFolderModal extends Modal {
 			.setDesc(i18next.t("editFolder.opening.desc"))
 			.addDropdown((cb) => {
 				cb.addOption(
-					DefaultOpening.newTab,
+					DefaultOpening.NewTab,
 					i18next.t("editFolder.opening.dropDown.newTab")
 				)
 					.addOption(
-						DefaultOpening.current,
+						DefaultOpening.Current,
 						i18next.t("editFolder.opening.dropDown.current")
 					)
 					.addOption(
-						DefaultOpening.newWindow,
+						DefaultOpening.NewWindow,
 						i18next.t("editFolder.opening.dropDown.newWindow")
 					)
-					.addOption(DefaultOpening.split, i18next.t("editFolder.opening.dropDown.split"))
+					.addOption(DefaultOpening.Split, i18next.t("editFolder.opening.dropDown.split"))
 					.addOption(
-						DefaultOpening.nothing,
+						DefaultOpening.Nothing,
 						i18next.t("editFolder.opening.dropDown.nothing")
 					)
 					.setValue(this.result.opening)
@@ -239,7 +239,7 @@ export class AddFolderModal extends Modal {
 					});
 			});
 		this.settingSplit(opening, this.result.opening);
-		if (this.result.opening !== DefaultOpening.nothing) {
+		if (this.result.opening !== DefaultOpening.Nothing) {
 			new Setting(contentEl)
 				.setName(i18next.t("editFolder.focus.title"))
 				.setDesc(i18next.t("editFolder.focus.desc"))
@@ -250,7 +250,7 @@ export class AddFolderModal extends Modal {
 				);
 		} else if (
 			!this.result.template.increment &&
-			this.result.opening === DefaultOpening.nothing
+			this.result.opening === DefaultOpening.Nothing
 		) {
 			contentEl.createEl("h3", { text: i18next.t("editFolder.opening.nothing") });
 			contentEl.createEl("p", { text: i18next.t("editFolder.alreadyExist.desc") });
@@ -259,19 +259,19 @@ export class AddFolderModal extends Modal {
 				.setName(i18next.t("editFolder.alreadyExist.title"))
 				.addDropdown((cb) => {
 					cb.addOption(
-						DefaultOpening.newTab,
+						DefaultOpening.NewTab,
 						i18next.t("editFolder.opening.dropDown.newTab")
 					)
 						.addOption(
-							DefaultOpening.current,
+							DefaultOpening.Current,
 							i18next.t("editFolder.opening.dropDown.current")
 						)
 						.addOption(
-							DefaultOpening.newWindow,
+							DefaultOpening.NewWindow,
 							i18next.t("editFolder.opening.dropDown.newWindow")
 						)
 						.addOption(
-							DefaultOpening.split,
+							DefaultOpening.Split,
 							i18next.t("editFolder.opening.dropDown.split")
 						)
 						.setValue(this.result.alreadyExistOpening.opening as DefaultOpening)
@@ -281,7 +281,7 @@ export class AddFolderModal extends Modal {
 						});
 				});
 			this.settingSplit(dp, alreadyExist.opening, "exists");
-			if (alreadyExist.opening !== DefaultOpening.nothing) {
+			if (alreadyExist.opening !== DefaultOpening.Nothing) {
 				new Setting(contentEl)
 					.setName(i18next.t("editFolder.focus.title"))
 					.setDesc(i18next.t("editFolder.alreadyExist.focus"))
@@ -310,13 +310,13 @@ export class AddFolderModal extends Modal {
 		new Setting(contentEl).addButton((cb) =>
 			cb.setButtonText(i18next.t("common.submit")).onClick(() => {
 				if (
-					this.result.template.type === TemplateType.none &&
+					this.result.template.type === TemplateType.None &&
 					this.result.fileName.trim().length === 0
 				) {
 					new Notice(i18next.t("error.fileName"));
 					fileNameSettings.controlEl.classList.add("is-error");
 				} else if (
-					this.result.template.type === TemplateType.date &&
+					this.result.template.type === TemplateType.Date &&
 					!validateDate(this.result.template.format)
 				) {
 					new Notice(i18next.t("error.date"));

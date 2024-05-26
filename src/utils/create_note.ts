@@ -84,13 +84,13 @@ function getOpening(
 	split: SplitDirection = currentFolder.splitDefault
 ) {
 	switch (param) {
-		case DefaultOpening.split:
+		case DefaultOpening.Split:
 			return app.workspace.getLeaf("split", split);
-		case DefaultOpening.newWindow:
+		case DefaultOpening.NewWindow:
 			return app.workspace.getLeaf("window");
-		case DefaultOpening.newTab:
+		case DefaultOpening.NewTab:
 			return app.workspace.getLeaf(true);
-		case DefaultOpening.nothing:
+		case DefaultOpening.Nothing:
 			return undefined;
 		default:
 			return app.workspace.getLeaf(false);
@@ -142,7 +142,7 @@ export async function createNoteInFolder(
 	const file = app.vault.getAbstractFileByPath(createdFilePath);
 
 	if (file instanceof TFile) {
-		if (currentFolder.opening !== DefaultOpening.nothing) {
+		if (currentFolder.opening !== DefaultOpening.Nothing) {
 			//search if the file is already open to prevent opening it twice
 			let leaf = getLeafWithNote(app, file);
 			if (leaf) {
@@ -157,7 +157,7 @@ export async function createNoteInFolder(
 				) as WorkspaceLeaf;
 				await leaf.openFile(file, { active: currentFolder.focused });
 			}
-		} else if (currentFolder.alreadyExistOpening.opening !== DefaultOpening.nothing) {
+		} else if (currentFolder.alreadyExistOpening.opening !== DefaultOpening.Nothing) {
 			//search if the file is already open to prevent opening it twice
 			let leaf = getLeafWithNote(app, file);
 			if (leaf) {
@@ -231,7 +231,7 @@ export function createFolderInCurrent(
 	const createdFilePath = normalizePath(`${currentFolder.path}/${defaultName}`);
 	const file = app.vault.getAbstractFileByPath(createdFilePath);
 	if (file instanceof TFile) {
-		if (currentFolder.opening !== DefaultOpening.nothing) {
+		if (currentFolder.opening !== DefaultOpening.Nothing) {
 			//search if the file is already open to prevent opening it twice
 			let leaf = getLeafWithNote(app, file);
 			if (leaf) {
@@ -246,7 +246,7 @@ export function createFolderInCurrent(
 				) as WorkspaceLeaf;
 				leaf.openFile(file, { active: currentFolder.focused });
 			}
-		} else if (currentFolder.alreadyExistOpening.opening !== DefaultOpening.nothing) {
+		} else if (currentFolder.alreadyExistOpening.opening !== DefaultOpening.Nothing) {
 			//search if the file is already open to prevent opening it twice
 			let leaf = getLeafWithNote(app, file);
 			if (leaf) {

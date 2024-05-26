@@ -12,7 +12,8 @@
 		"bump": "node release.mjs",
 		"postbump": "git push --follow-tags origin master",
 		"predeploy": "pnpm run bump",
-		"deploy": "pnpm run export"
+		"deploy": "pnpm run export",
+		"lint": "pnpm biome lint --apply src/"
 	},
 	"commit-and-tag-version": {
 		"t": ""
@@ -21,6 +22,7 @@
 	"author": "Mara-Li",
 	"license": "GNU General Public License v3.0",
 	"devDependencies": {
+		"@biomejs/biome": "1.7.3",
 		"@types/electron": "npm:@ophidian/electron-types@^24.3.1",
 		"@types/node": "^18.19.33",
 		"@types/obsidian-typings": "npm:obsidian-typings@^1.1.5",
