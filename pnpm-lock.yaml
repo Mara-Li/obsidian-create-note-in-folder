@@ -8,12 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@popperjs/core':
-        specifier: ^2.11.8
-        version: 2.11.8
-      electron@npm:
-        specifier: link:types\electron@npm
-        version: link:types/electron@npm
       i18next:
         specifier: ^22.5.1
         version: 22.5.1
@@ -330,9 +324,6 @@ packages:
 
   '@ophidian/electron-types@24.3.1':
     resolution: {integrity: sha512-fzvB7sQMxTbQHbp3rcYIxaqHiWjFnpSBVvZBSDH0Rq0xMvihBH1D4/O2JqybSlVpYtbvXR4nVKeH3w4JmHLTag==}
-
-  '@popperjs/core@2.11.8':
-    resolution: {integrity: sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==}
 
   '@types/codemirror@5.60.8':
     resolution: {integrity: sha512-VjFgDF/eB+Aklcy15TtOTLQeMjTo07k7KAjql8OK5Dirr7a6sJY4T1uVBDuTVG9VEmn1uUsohOpYnVfgC6/jyw==}
@@ -1572,8 +1563,6 @@ snapshots:
       fastq: 1.15.0
 
   '@ophidian/electron-types@24.3.1': {}
-
-  '@popperjs/core@2.11.8': {}
 
   '@types/codemirror@5.60.8':
     dependencies:
