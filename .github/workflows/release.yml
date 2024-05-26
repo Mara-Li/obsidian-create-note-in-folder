@@ -24,6 +24,7 @@ jobs:
         with:
             PLUGIN_NAME: "create-note-in-folder"
             STYLE: true
+            CACHE: "pnpm"
         secrets:
             GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     bump-version:
@@ -33,5 +34,6 @@ jobs:
             PLUGIN_NAME: "create-note-in-folder"
             STYLE: true
             BETA: ${{ inputs.beta }}
+            CACHE: "pnpm"
         secrets:
             GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
