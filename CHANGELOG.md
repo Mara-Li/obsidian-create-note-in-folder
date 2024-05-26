@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.11.0](https://github.com/Lisandra-dev/create-note-in-folder/compare/1.10.1...1.11.0) (2024-05-26)
+
+
+### Features
+
+* switch to obsidian native folder/file search ([b83cfb4](https://github.com/Lisandra-dev/create-note-in-folder/commit/b83cfb4c631f850c7436ab824bfff88d80f11d47))
+
 ## [1.10.1](https://github.com/Lisandra-dev/create-note-in-folder/compare/1.10.0...1.10.1) (2024-01-06)
 
 
