@@ -1,332 +1,81 @@
-/** Credit to @liamcain, @RafaelGB and @SilentVoid13 for the original code. */
+import i18next from "i18next";
+import { AbstractInputSuggest, type App, Notice, TFile, TFolder } from "obsidian";
 
-import { createPopper, Instance as PopperInstance } from "@popperjs/core";
-import {App, ISuggestOwner, normalizePath, Notice, Scope, TAbstractFile, TFile, TFolder, Vault} from "obsidian";
-import {App as AppUndocumented} from "obsidian-undocumented";
-
-export enum FileSuggestMode {
-    TemplateFiles,
-    ScriptFiles,
-}
-
-const wrapAround = (value: number, size: number): number => {
-	return ((value % size) + size) % size;
-};
-
-class Suggest<T> {
-	private owner: ISuggestOwner<T>;
-	private values: T[];
-	private suggestions: HTMLDivElement[];
-	private selectedItem: number;
-	private containerEl: HTMLElement;
-
+export class FolderSuggester extends AbstractInputSuggest<TFolder> {
 	constructor(
-		owner: ISuggestOwner<T>,
-		containerEl: HTMLElement,
-		scope: Scope
+		private inputEl: HTMLInputElement,
+		app: App,
+		private onSubmit: (value: TFolder) => void
 	) {
-		this.owner = owner;
-		this.containerEl = containerEl;
-
-		containerEl.on(
-			"click",
-			".suggestion-item",
-			this.onSuggestionClick.bind(this)
-		);
-		containerEl.on(
-			"mousemove",
-			".suggestion-item",
-			this.onSuggestionMouseover.bind(this)
-		);
-
-		scope.register([], "ArrowUp", (event) => {
-			if (!event.isComposing) {
-				this.setSelectedItem(this.selectedItem - 1, true);
-				return false;
-			}
-		});
-
-		scope.register([], "ArrowDown", (event) => {
-			if (!event.isComposing) {
-				this.setSelectedItem(this.selectedItem + 1, true);
-				return false;
-			}
-		});
-
-		scope.register([], "Enter", (event) => {
-			if (!event.isComposing) {
-				this.useSelectedItem(event);
-				return false;
-			}
-		});
+		super(app, inputEl);
 	}
 
-	onSuggestionClick(event: MouseEvent, el: HTMLDivElement): void {
-		event.preventDefault();
-
-		const item = this.suggestions.indexOf(el);
-		this.setSelectedItem(item, false);
-		this.useSelectedItem(event);
+	renderSuggestion(value: TFolder, el: HTMLElement): void {
+		el.setText(value.path);
 	}
 
-	onSuggestionMouseover(_event: MouseEvent, el: HTMLDivElement): void {
-		const item = this.suggestions.indexOf(el);
-		this.setSelectedItem(item, false);
-	}
-
-	setSuggestions(values: T[]) {
-		this.containerEl.empty();
-		const suggestionEls: HTMLDivElement[] = [];
-
-		values.forEach((value) => {
-			const suggestionEl = this.containerEl.createDiv("suggestion-item");
-			this.owner.renderSuggestion(value, suggestionEl);
-			suggestionEls.push(suggestionEl);
-		});
-
-		this.values = values;
-		this.suggestions = suggestionEls;
-		this.setSelectedItem(0, false);
-	}
-
-	useSelectedItem(event: MouseEvent | KeyboardEvent) {
-		const currentValue = this.values[this.selectedItem];
-		if (currentValue) {
-			this.owner.selectSuggestion(currentValue, event);
-		}
-	}
-
-	setSelectedItem(selectedIndex: number, scrollIntoView: boolean) {
-		const normalizedIndex = wrapAround(
-			selectedIndex,
-			this.suggestions.length
-		);
-		const prevSelectedSuggestion = this.suggestions[this.selectedItem];
-		const selectedSuggestion = this.suggestions[normalizedIndex];
-
-		prevSelectedSuggestion?.removeClass("is-selected");
-		selectedSuggestion?.addClass("is-selected");
-
-		this.selectedItem = normalizedIndex;
-
-		if (scrollIntoView) {
-			selectedSuggestion.scrollIntoView(false);
-		}
-	}
-}
-
-
-export abstract class TextInputSuggest<T> implements ISuggestOwner<T> {
-	protected inputEl: HTMLInputElement;
-
-	private popper: PopperInstance;
-	private scope: Scope;
-	private suggestEl: HTMLElement;
-	private suggest: Suggest<T>;
-
-	constructor(inputEl: HTMLInputElement) {
-		this.inputEl = inputEl;
-		this.scope = new Scope();
-
-		this.suggestEl = createDiv("suggestion-container");
-		const suggestion = this.suggestEl.createDiv("suggestion");
-		this.suggest = new Suggest(this, suggestion, this.scope);
-
-		this.scope.register([], "Escape", this.close.bind(this));
-
-		this.inputEl.addEventListener("input", this.onInputChanged.bind(this));
-		this.inputEl.addEventListener("focus", this.onInputChanged.bind(this));
-		this.inputEl.addEventListener("blur", this.close.bind(this));
-		this.suggestEl.on(
-			"mousedown",
-			".suggestion-container",
-			(event: MouseEvent) => {
-				event.preventDefault();
-			}
-		);
-	}
-
-	onInputChanged(): void {
-		const inputStr = this.inputEl.value;
-		const suggestions = this.getSuggestions(inputStr);
-
-		if (!suggestions) {
-			this.close();
-			return;
-		}
-
-		if (suggestions.length > 0) {
-			this.suggest.setSuggestions(suggestions);
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			this.open((<any>app).dom.appContainerEl, this.inputEl);
-		} else {
-			this.close();
-		}
-	}
-
-	open(container: HTMLElement, inputEl: HTMLElement): void {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		(<any>app).keymap.pushScope(this.scope);
-
-		container.appendChild(this.suggestEl);
-		this.popper = createPopper(inputEl, this.suggestEl, {
-			placement: "bottom-start",
-			modifiers: [
-				{
-					name: "sameWidth",
-					enabled: true,
-					fn: ({ state, instance }) => {
-						// Note: positioning needs to be calculated twice -
-						// first pass - positioning it according to the width of the popper
-						// second pass - position it with the width bound to the reference element
-						// we need to early exit to avoid an infinite loop
-						const targetWidth = `${state.rects.reference.width}px`;
-						if (state.styles.popper.width === targetWidth) {
-							return;
-						}
-						state.styles.popper.width = targetWidth;
-						instance.update();
-					},
-					phase: "beforeWrite",
-					requires: ["computeStyles"],
-				},
-			],
-		});
-	}
-
-	close(): void {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		(<any>app).keymap.popScope(this.scope);
-
-		this.suggest.setSuggestions([]);
-		if (this.popper) this.popper.destroy();
-		this.suggestEl.detach();
-	}
-
-		abstract getSuggestions(inputStr: string): T[];
-		abstract renderSuggestion(item: T, el: HTMLElement): void;
-		abstract selectSuggestion(item: T): void;
-}
-
-export class FolderSuggest extends TextInputSuggest<TFolder> {
-	getSuggestions(inputStr: string): TFolder[] {
-		const abstractFiles = app.vault.getAllLoadedFiles();
+	getSuggestions(query: string): TFolder[] {
 		const folders: TFolder[] = [];
-		const lowerCaseInputStr = inputStr.toLowerCase();
-
-		abstractFiles.forEach((folder: TAbstractFile) => {
-			if (
-				folder instanceof TFolder &&
-                folder.path.toLowerCase().contains(lowerCaseInputStr)
-			) {
+		this.app.vault.getAllLoadedFiles().forEach((folder) => {
+			if (folder instanceof TFolder && folder.path.contains(query.toLowerCase())) {
 				folders.push(folder);
 			}
 		});
-
 		return folders;
 	}
 
-	renderSuggestion(file: TFolder, el: HTMLElement): void {
-		el.setText(file.path);
-	}
-
-	selectSuggestion(file: TFolder): void {
-		this.inputEl.value = file.path;
+	selectSuggestion(value: TFolder, _evt: MouseEvent | KeyboardEvent): void {
+		this.onSubmit(value);
+		this.inputEl.value = value.path;
+		this.inputEl.focus();
 		this.inputEl.trigger("input");
 		this.close();
 	}
 }
 
-
-
-export class FileSuggest extends TextInputSuggest<TFile> {
+export class FileSuggester extends AbstractInputSuggest<TFile> {
 	constructor(
-	public inputEl: HTMLInputElement,
-		public app: App,
+		private inputEl: HTMLInputElement,
+		app: App,
+		private onSubmit: (value: TFile) => void
 	) {
-		super(inputEl);
-		this.app = app;
+		super(app, inputEl);
 	}
 
-	get_folder(): string {
-		const templaterPlugin = (this.app as AppUndocumented).plugins.getPlugin("templater-obsidian");
+	renderSuggestion(value: TFile, el: HTMLElement): void {
+		el.setText(value.path);
+	}
+
+	private errorMessages = i18next.t("template.error");
+
+	getSuggestions(query: string): TFile[] {
+		const templaterPlugin = this.app.plugins.getPlugin("templater-obsidian");
 		if (!templaterPlugin) {
-			return "";
-		} else {
+			new Notice(this.errorMessages);
+			return [];
+		}
+		const templaterFolder = this.app.vault.getAbstractFileByPath(
 			//@ts-ignore
-			return this.app.plugins.getPlugin("templater-obsidian").settings.templates_folder;
-		}
-	}
-
-	get_error_msg(): string {
-		return "Templates folder doesn't exist";
-		
-	}
-	
-	resolve_tfolder(folder_str: string): TFolder | null {
-		folder_str = normalizePath(folder_str);
-
-		const folder = this.app.vault.getAbstractFileByPath(folder_str);
-		if (!folder) {
-			return null;
-		}
-		if (!(folder instanceof TFolder)) {
-			return null;
-		}
-
-		return folder;
-	}
-
-	get_tfiles_from_folder(folder_str: string): Array<TFile> {
-		const folder = this.resolve_tfolder(folder_str);
-		if (!folder) {
-			new Notice(this.get_error_msg());
+			templaterPlugin.settings.templates_folder
+		);
+		if (!templaterFolder || !(templaterFolder instanceof TFolder)) {
+			new Notice(this.errorMessages);
 			return [];
 		}
-		const files: Array<TFile> = [];
-		Vault.recurseChildren(folder, (file: TAbstractFile) => {
-			if (file instanceof TFile) {
-				files.push(file);
-			}
-		});
-
-		files.sort((a, b) => {
-			return a.basename.localeCompare(b.basename);
-		});
-
-		return files;
-	}
-	
-	getSuggestions(input_str: string): TFile[] {
-		const all_files = this.get_tfiles_from_folder(this.get_folder());
-		if (!all_files) {
-			return [];
-		}
-
-		const files: TFile[] = [];
-		const lower_input_str = input_str.toLowerCase();
-
-		all_files.forEach((file: TAbstractFile) => {
-			if (
+		const files: TFile[] = templaterFolder.children.filter(
+			(file) =>
 				file instanceof TFile &&
-                file.extension === "md" &&
-                file.path.toLowerCase().contains(lower_input_str)
-			) {
-				files.push(file);
-			}
-		});
-
+				file.extension === "md" &&
+				file.path.contains(query.toLowerCase())
+		) as TFile[];
 		return files;
 	}
 
-	renderSuggestion(file: TFile, el: HTMLElement): void {
-		el.setText(file.path);
-	}
-
-	selectSuggestion(file: TFile): void {
-		this.inputEl.value = file.path;
+	selectSuggestion(value: TFile, _evt: MouseEvent | KeyboardEvent): void {
+		this.onSubmit(value);
+		this.inputEl.value = value.path;
+		this.inputEl.focus();
 		this.inputEl.trigger("input");
 		this.close();
 	}
 }
-
