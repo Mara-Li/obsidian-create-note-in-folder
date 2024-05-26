@@ -111,6 +111,7 @@
         "url": "https://momentjs.com/docs/#/displaying/format/"
       }
     },
+    "error": "Aucun fichier n'a été trouvé dans le dossier templater.",
     "header": "Modèle",
     "position": {
       "append": "Ajouter après",

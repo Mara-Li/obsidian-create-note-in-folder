@@ -1,39 +1,37 @@
 name: Release obsidian plugin
 on:
-  workflow_dispatch:
-    inputs:
-      bump:
-        default: false
-        description: "Bump version based on semantic release"
-        type: boolean
-        required: false
-      beta:
-        default: false
-        description: "Make a beta release"
-        type: boolean
-        required: false
-  push:
-    tags:
-      - "*"
+    workflow_dispatch:
+        inputs:
+            bump:
+                default: false
+                description: "Bump version based on semantic release"
+                type: boolean
+                required: false
+            beta:
+                default: false
+                description: "Make a beta release"
+                type: boolean
+                required: false
+    push:
+        tags:
+            - "*"
 permissions:
-  contents: write
+    contents: write
 jobs:
-  release:
-    if: (github.event_name == 'push') || (github.event_name == 'workflow_dispatch' && !inputs.bump)
-    uses: lisandra-dev/reusable-workflows/.github/workflows/obsidian-plugin-release.yaml@main
-    with:
-        PLUGIN_NAME: "create-note-in-folder"
-        STYLE: true
-        BETA: ${{ inputs.beta || false }}
-    secrets:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  bump-version:
-    if: ${{ inputs.bump }}
-    uses: lisandra-dev/reusable-workflows/.github/workflows/obsidian-plugin-bump-version.yaml@main
-    with:
-        PLUGIN_NAME: "create-note-in-folder"
-        STYLE: true
-        BETA: ${{ inputs.beta }}
-    secrets:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+    release:
+        if: (github.event_name == 'push') || (github.event_name == 'workflow_dispatch' && !inputs.bump)
+        uses: lisandra-dev/reusable-workflows/.github/workflows/obsidian-plugin-release.yaml@main
+        with:
+            PLUGIN_NAME: "create-note-in-folder"
+            STYLE: true
+        secrets:
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    bump-version:
+        if: ${{ inputs.bump }}
+        uses: lisandra-dev/reusable-workflows/.github/workflows/obsidian-plugin-bump-version.yaml@main
+        with:
+            PLUGIN_NAME: "create-note-in-folder"
+            STYLE: true
+            BETA: ${{ inputs.beta }}
+        secrets:
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -95,6 +95,7 @@
   },
   "example": "Example: path/to/path",
   "log": "Creating note in path {{- path}}, with name {{- name}}",
+  "moveUp": "",
   "path": "folder-path",
   "quickSwitcher": {
     "anyFolder": "Quick Switcher (any folder)",
@@ -110,6 +111,7 @@
         "url": "https://momentjs.com/docs/#/displaying/format/"
       }
     },
+    "error": "No files were found in the templater folder.",
     "header": "Template",
     "position": {
       "append": "Append",

@@ -1,0 +1,86 @@
+{
+  "folder": [
+    {
+      "path": "ObsidianPublisher Repository",
+      "commandName": "second",
+      "template": {
+        "type": "none",
+        "format": "",
+        "position": "append",
+        "separator": "",
+        "increment": true
+      },
+      "fileName": "OTHER FOLDERS",
+      "opening": "current",
+      "focused": true,
+      "splitDefault": "horizontal",
+      "alreadyExistOpening": {
+        "opening": "newTab",
+        "splitDefault": "horizontal",
+        "focused": true
+      },
+      "fileMenu": false
+    },
+    {
+      "path": "{{current}}",
+      "commandName": "test",
+      "template": {
+        "type": "none",
+        "format": "",
+        "position": "append",
+        "separator": "",
+        "increment": true
+      },
+      "fileName": "test++",
+      "opening": "current",
+      "focused": true,
+      "splitDefault": "horizontal",
+      "alreadyExistOpening": {
+        "opening": "newTab",
+        "splitDefault": "horizontal",
+        "focused": true
+      },
+      "fileMenu": true,
+      "templater": ""
+    }
+  ],
+  "customVariables": [
+    {
+      "name": "coucou",
+      "value": "cc",
+      "type": "string"
+    },
+    {
+      "name": "month",
+      "value": "MM",
+      "type": "date"
+    },
+    {
+      "name": "/\\d+/gi",
+      "value": "nombre",
+      "type": "string"
+    }
+  ],
+  "timeOutForInlineTitle": {
+    "mobile": 1000,
+    "desktop": 500
+  },
+  "enableAllFolder": true,
+  "defaultTemplate": {
+    "path": "",
+    "commandName": "",
+    "template": {
+      "type": "none",
+      "format": "",
+      "position": "append",
+      "separator": "",
+      "increment": true
+    },
+    "fileName": "xxxxxxxxxxx",
+    "opening": "current",
+    "focused": true,
+    "splitDefault": "horizontal"
+  },
+  "listAllFolderInModals": true,
+  "filterAnyFolderCommand": true
+}

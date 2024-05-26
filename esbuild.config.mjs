@@ -1,7 +1,24 @@
-import esbuild from "esbuild";
-import process from "process";
 import builtins from "builtin-modules";
-import fs from "fs";
+import { Command } from "commander";
+import dotenv from "dotenv";
+import esbuild from "esbuild";
+import * as fs from "fs";
+import * as path from "path";
+import process from "process";
+
+dotenv.config();
+
+const program = new Command();
+program
+	.option("-p, --production", "Production build")
+	.option("-v, --vault", "Use vault path")
+	.option("-o, --output-dir <path>", "Output path")
+	.parse();
+
+program.parse();
+const opt = program.opts();
+const prod = opt.production ?? false;
+const exportToVault = opt.vault ?? false;	
 
 const banner =
 `/*
@@ -10,23 +27,71 @@ if you want to view the source, please visit the github repository of this plugi
 */
 `;
 
+const manifest = JSON.parse(fs.readFileSync("./manifest.json", "utf-8"));
+const pluginID = manifest.id;
+const vaultPath = process.env.VAULT;
+const folderPlugin = vaultPath ? path.join(vaultPath, ".obsidian", "plugins", pluginID) : undefined;
 
-const moveStyles = {
-	name: 'move-styles',
-	setup(build) {
-		build.onEnd(() => {
-			fs.copyFileSync('plugin/styles.css', './styles.css');
-		});
-	}
+if (vaultPath && exportToVault && !fs.existsSync(folderPlugin)) {
+	fs.mkdirSync(folderPlugin, {recursive: true});
 }
 
-const prod = (process.argv[2] === "production");
+let outdir = "./";
+if (opt.outputDir) {
+	outdir = opt.outputDir;
+} else if (exportToVault) {
+	outdir = folderPlugin;
+} else if (prod) {
+	outdir = "./dist";
+}
+
+
+
+const moveStyles = {
+	name: "move-styles",
+	setup(build) {
+		build.onEnd(() => {
+			if (fs.existsSync("src/styles.css")) fs.copyFileSync("src/styles.css", "./styles.css");
+		});
+	}
+};
+
+const exportToVaultFunc = {
+	name: "export-to-vault",
+	setup(build) {
+		build.onEnd(() => {
+			if (!(prod && exportToVault)) {
+				return;
+			}
+			if (!folderPlugin) {
+				console.error("VAULT environment variable not set, skipping export to vault");
+				return;
+			}
+			
+			fs.copyFileSync(`${outdir}/main.js`, path.join(folderPlugin, "main.js"));
+			if (fs.existsSync(`${outdir}/styles.css`)) fs.copyFileSync("./styles.css", path.join(folderPlugin, "styles.css"));
+			fs.copyFileSync("./manifest.json", path.join(folderPlugin, "manifest.json"));
+		});
+	}
+};
+
+const exportToDist = {
+	name: "export-to-dist",
+	setup(build) {
+		build.onEnd(() => {
+			if (!prod) {
+				return;
+			}
+			fs.copyFileSync("manifest.json", path.join(outdir, "manifest.json"));
+		});
+	}
+};
 
 const context = await esbuild.context({
 	banner: {
 		js: banner,
 	},
-	entryPoints: ["plugin/main.ts", "plugin/styles.css"],
+	entryPoints: ["src/main.ts", "src/styles.css"],
 	bundle: true,
 	external: [
 		"obsidian",
@@ -44,17 +109,24 @@ const context = await esbuild.context({
 		"@lezer/lr",
 		...builtins],
 	format: "cjs",
-	target: "es2018",
+	target: "esnext",
 	logLevel: "info",
 	sourcemap: prod ? false : "inline",
 	treeShaking: true,
-	outdir: "./",
-	plugins: [moveStyles],
+	minifySyntax: prod,
+	minifyWhitespace: prod,
+	outdir,
+	plugins: [moveStyles, exportToDist, exportToVaultFunc],
 });
 
 if (prod) {
+	console.log("🎉 Build for production");
+	console.log(`📤 Output directory: ${outdir}`);
 	await context.rebuild();
+	console.log("✅ Build successful");
 	process.exit(0);
 } else {
+	console.log("🚀 Start development build");
+	console.log(`📤 Output directory: ${outdir}`);
 	await context.watch();
 }

@@ -1,23 +1,40 @@
 import i18next from "i18next";
-import { App, getLinkpath,MarkdownView, normalizePath,Notice, Platform, TAbstractFile, TFile, TFolder, WorkspaceLeaf } from "obsidian";
-import { DefaultOpening, FolderSettings, SplitDirection } from "src/interface";
-import NoteInFolder from "src/main";
+import {
+	type App,
+	getLinkpath,
+	MarkdownView,
+	normalizePath,
+	Notice,
+	Platform,
+	type TAbstractFile,
+	TFile,
+	type TFolder,
+	type WorkspaceLeaf,
+} from "obsidian";
+import { DefaultOpening, type FolderSettings, type SplitDirection } from "src/interface";
+import type NoteInFolder from "src/main";
 
-import { generateFileName, generateFileNameWithCurrent, isTemplaterNeeded, replaceVariables } from "./utils";
+import {
+	generateFileName,
+	generateFileNameWithCurrent,
+	isTemplaterNeeded,
+	replaceVariables,
+} from "./utils";
 
-function scrollToPosition(app: App, parts: {
-	path: string
-	heading?: string
-	block?: string
-}) {
+function scrollToPosition(
+	app: App,
+	parts: {
+		path: string;
+		heading?: string;
+		block?: string;
+	}
+) {
 	const cache = app.metadataCache.getCache(parts.path);
 	const view = app.workspace.getActiveViewOfType(MarkdownView);
 	if (!view || !cache) return;
 	// Get the corresponding position for the heading/block
 	if (parts.heading) {
-		const heading = cache.headings?.find(
-			heading => heading.heading === parts.heading
-		);
+		const heading = cache.headings?.find((heading) => heading.heading === parts.heading);
 		if (heading) {
 			view.editor.setCursor(heading.position.start.line);
 		}
@@ -29,10 +46,13 @@ function scrollToPosition(app: App, parts: {
 	}
 }
 
-function getLinkParts(path: string, app: App): {
-	path: string
-	heading?: string
-	block?: string
+function getLinkParts(
+	path: string,
+	app: App
+): {
+	path: string;
+	heading?: string;
+	block?: string;
 } {
 	// Extract the #^block from the path
 	const blockMatch = path.match(/\^(.*)$/);
@@ -57,19 +77,23 @@ function getLinkParts(path: string, app: App): {
 	};
 }
 
-
-function getOpening(app: App, currentFolder: FolderSettings, param: DefaultOpening = currentFolder.opening, split: SplitDirection = currentFolder.splitDefault) {
+function getOpening(
+	app: App,
+	currentFolder: FolderSettings,
+	param: DefaultOpening = currentFolder.opening,
+	split: SplitDirection = currentFolder.splitDefault
+) {
 	switch (param) {
-	case DefaultOpening.split:
-		return app.workspace.getLeaf("split", split);
-	case DefaultOpening.newWindow:
-		return app.workspace.getLeaf("window");
-	case DefaultOpening.newTab:
-		return app.workspace.getLeaf(true);
-	case DefaultOpening.nothing:
-		return undefined;
-	default:
-		return app.workspace.getLeaf(false);
+		case DefaultOpening.split:
+			return app.workspace.getLeaf("split", split);
+		case DefaultOpening.newWindow:
+			return app.workspace.getLeaf("window");
+		case DefaultOpening.newTab:
+			return app.workspace.getLeaf(true);
+		case DefaultOpening.nothing:
+			return undefined;
+		default:
+			return app.workspace.getLeaf(false);
 	}
 }
 
@@ -85,9 +109,16 @@ function getLeafWithNote(app: App, file: TFile): undefined | WorkspaceLeaf {
 	return openedLeaf;
 }
 
-export async function createNoteInFolder(newFolder: FolderSettings, plugin: NoteInFolder, quickSwitcher = false) {
-	const {settings, app} = plugin;
-	const { path, hasBeenReplaced } = replaceVariables(newFolder.path, settings.customVariables);
+export async function createNoteInFolder(
+	newFolder: FolderSettings,
+	plugin: NoteInFolder,
+	quickSwitcher = false
+) {
+	const { settings, app } = plugin;
+	const { path, hasBeenReplaced } = replaceVariables(
+		newFolder.path,
+		settings.customVariables
+	);
 	const currentFolder = JSON.parse(JSON.stringify(newFolder)) as FolderSettings;
 	currentFolder.path = normalizePath(path);
 	const defaultName = generateFileName(currentFolder, app);
@@ -98,7 +129,9 @@ export async function createNoteInFolder(newFolder: FolderSettings, plugin: Note
 		} else if (!quickSwitcher) {
 			new Notice(i18next.t("error.pathNoFound", { path: newFolder.path }));
 			//remove from settings
-			settings.folder = settings.folder.filter((folder) => folder.commandName !== currentFolder.commandName);
+			settings.folder = settings.folder.filter(
+				(folder) => folder.commandName !== currentFolder.commandName
+			);
 			await plugin.saveSettings();
 			await plugin.addNewCommands(currentFolder.commandName, undefined);
 			return;
@@ -116,7 +149,12 @@ export async function createNoteInFolder(newFolder: FolderSettings, plugin: Note
 				leaf.openFile(file, { active: currentFolder.focused });
 				scrollToPosition(app, getLinkParts(defaultName, app));
 			} else {
-				leaf = getOpening(app, currentFolder, currentFolder.opening, currentFolder.splitDefault) as WorkspaceLeaf;
+				leaf = getOpening(
+					app,
+					currentFolder,
+					currentFolder.opening,
+					currentFolder.splitDefault
+				) as WorkspaceLeaf;
 				await leaf.openFile(file, { active: currentFolder.focused });
 			}
 		} else if (currentFolder.alreadyExistOpening.opening !== DefaultOpening.nothing) {
@@ -126,8 +164,16 @@ export async function createNoteInFolder(newFolder: FolderSettings, plugin: Note
 				leaf.openFile(file, { active: currentFolder.alreadyExistOpening.focused });
 				scrollToPosition(app, getLinkParts(defaultName, app));
 			} else {
-				leaf = getOpening(app, currentFolder, currentFolder.alreadyExistOpening.opening, currentFolder.alreadyExistOpening.splitDefault);
-				if (leaf) await leaf.openFile(file, { active: currentFolder.alreadyExistOpening.focused });
+				leaf = getOpening(
+					app,
+					currentFolder,
+					currentFolder.alreadyExistOpening.opening,
+					currentFolder.alreadyExistOpening.splitDefault
+				);
+				if (leaf)
+					await leaf.openFile(file, {
+						active: currentFolder.alreadyExistOpening.focused,
+					});
 			}
 		}
 	} else if (!file) {
@@ -141,21 +187,35 @@ export async function createNoteInFolder(newFolder: FolderSettings, plugin: Note
 			//directly templater to create and templating the things
 			const templateFile = this.app.vault.getAbstractFileByPath(currentFolder.templater);
 			if (!templateFile || !(templateFile instanceof TFile)) {
-				new Notice(i18next.t("error.templateNotFound", { path: currentFolder.templater }));
+				new Notice(
+					i18next.t("error.templateNotFound", { path: currentFolder.templater })
+				);
 				return;
 			}
-			const folder = app.vault.getAbstractFileByPath(normalizePath(currentFolder.path)) as TFolder;
+			const folder = app.vault.getAbstractFileByPath(
+				normalizePath(currentFolder.path)
+			) as TFolder;
 			//@ts-ignore
-			app.plugins.plugins["templater-obsidian"].templater.create_new_note_from_template(templateFile, folder, defaultName, false);
+			app.plugins.plugins["templater-obsidian"].templater.create_new_note_from_template(
+				templateFile,
+				folder,
+				defaultName,
+				false
+			);
 		} else {
 			await app.vault.create(createdFilePath, "");
 		}
 	}
 }
 
-export function createFolderInCurrent(newFolder: FolderSettings, currentFile: TAbstractFile, plugin: NoteInFolder) {
-	const { settings,app } = plugin;
-	const { folderPath, defaultName, hasBeenReplaced, currentFolder} = generateFileNameWithCurrent(newFolder, currentFile, plugin);
+export function createFolderInCurrent(
+	newFolder: FolderSettings,
+	currentFile: TAbstractFile,
+	plugin: NoteInFolder
+) {
+	const { settings, app } = plugin;
+	const { folderPath, defaultName, hasBeenReplaced, currentFolder } =
+		generateFileNameWithCurrent(newFolder, currentFile, plugin);
 	if (!app.vault.getAbstractFileByPath(folderPath)) {
 		if (hasBeenReplaced) {
 			//create folder if it doesn't exist
@@ -178,7 +238,12 @@ export function createFolderInCurrent(newFolder: FolderSettings, currentFile: TA
 				leaf.openFile(file, { active: currentFolder.focused });
 				scrollToPosition(app, getLinkParts(defaultName, app));
 			} else {
-				leaf = getOpening(app, currentFolder, currentFolder.opening, currentFolder.splitDefault) as WorkspaceLeaf;
+				leaf = getOpening(
+					app,
+					currentFolder,
+					currentFolder.opening,
+					currentFolder.splitDefault
+				) as WorkspaceLeaf;
 				leaf.openFile(file, { active: currentFolder.focused });
 			}
 		} else if (currentFolder.alreadyExistOpening.opening !== DefaultOpening.nothing) {
@@ -188,8 +253,14 @@ export function createFolderInCurrent(newFolder: FolderSettings, currentFile: TA
 				leaf.openFile(file, { active: currentFolder.alreadyExistOpening.focused });
 				scrollToPosition(app, getLinkParts(defaultName, app));
 			} else {
-				leaf = getOpening(app, currentFolder, currentFolder.alreadyExistOpening.opening, currentFolder.alreadyExistOpening.splitDefault);
-				if (leaf) leaf.openFile(file, { active: currentFolder.alreadyExistOpening.focused });
+				leaf = getOpening(
+					app,
+					currentFolder,
+					currentFolder.alreadyExistOpening.opening,
+					currentFolder.alreadyExistOpening.splitDefault
+				);
+				if (leaf)
+					leaf.openFile(file, { active: currentFolder.alreadyExistOpening.focused });
 			}
 		}
 	} else if (!file) {
@@ -198,7 +269,8 @@ export function createFolderInCurrent(newFolder: FolderSettings, currentFile: TA
 			let timeout = 50;
 			if (settings.timeOutForInlineTitle) {
 				if (settings.timeOutForInlineTitle instanceof Object) {
-					timeout = settings.timeOutForInlineTitle[Platform.isMobile ? "mobile" : "desktop"];
+					timeout =
+						settings.timeOutForInlineTitle[Platform.isMobile ? "mobile" : "desktop"];
 				} else if (typeof settings.timeOutForInlineTitle === "number") {
 					timeout = settings.timeOutForInlineTitle;
 				}
@@ -217,12 +289,21 @@ export function createFolderInCurrent(newFolder: FolderSettings, currentFile: TA
 			//directly templater to create and templating the things
 			const templateFile = app.vault.getAbstractFileByPath(currentFolder.templater ?? "");
 			if (!templateFile || !(templateFile instanceof TFile)) {
-				new Notice(i18next.t("error.templateNotFound", { path: currentFolder.templater }));
+				new Notice(
+					i18next.t("error.templateNotFound", { path: currentFolder.templater })
+				);
 				return;
 			}
-			const folder = app.vault.getAbstractFileByPath(normalizePath(currentFolder.path)) as TFolder;
+			const folder = app.vault.getAbstractFileByPath(
+				normalizePath(currentFolder.path)
+			) as TFolder;
 			//@ts-ignore
-			app.plugins.plugins["templater-obsidian"].templater.create_new_note_from_template(templateFile, folder, defaultName, false);
+			app.plugins.plugins["templater-obsidian"].templater.create_new_note_from_template(
+				templateFile,
+				folder,
+				defaultName,
+				false
+			);
 		} else {
 			app.vault.create(createdFilePath, "");
 		}
@@ -234,20 +315,21 @@ async function focusInlineTitle(leaf: WorkspaceLeaf | undefined, app: App) {
 		return;
 	}
 	const titleContainerEl = leaf.view.containerEl.querySelector("div.inline-title");
-	//scroll to top
 	if (!titleContainerEl) {
 		return;
 	}
 	let innerTitle = titleContainerEl;
-	// @ts-ignore
-	const frontmatterTitle = app.plugins.enabledPlugins.has("obsidian-front-matter-title-plugin");
-	if (titleContainerEl.hasAttribute("ofmt-fake-id") && frontmatterTitle) { //plugin frontmattert title
-		const innerTitleFMT = leaf.view.containerEl.querySelector("div.inline-title[ofmt-original-id]");
-		if (innerTitleFMT?.hasAttribute("hidden")) {
-			titleContainerEl.setAttribute("hidden", "");
-			innerTitleFMT.removeAttribute("hidden");
-			innerTitle = innerTitleFMT;
-		}
+	const frontmatterTitle = app.plugins.enabledPlugins.has(
+		"obsidian-front-matter-title-plugin"
+	);
+	if (frontmatterTitle) {
+		//plugin frontmattert title
+		const innerFrontmatterTitle = Array.from(
+			leaf.view.containerEl.querySelectorAll("div.inline-title")
+		);
+		if (innerFrontmatterTitle)
+			// @ts-ignore
+			innerTitle = innerFrontmatterTitle.filter((e) => e.hidden).first();
 	}
 	innerTitle.scrollIntoView();
 	// @ts-ignore

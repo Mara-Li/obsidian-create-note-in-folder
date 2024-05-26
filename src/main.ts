@@ -1,15 +1,15 @@
 import i18next from "i18next";
-import { normalizePath,Notice, Plugin, TFile } from "obsidian";
+import { normalizePath, Notice, Plugin, TFile } from "obsidian";
 import merge from "ts-deepmerge";
 
 import { ressources, translationLanguage } from "./i18n/i18next";
 import {
 	DEFAULT_FOLDER_SETTINGS,
 	DEFAULT_SETTINGS,
-	FolderSettings,
-	NoteInFolderSettings,
+	type FolderSettings,
+	type NoteInFolderSettings,
 	Position,
-	TemplateType
+	TemplateType,
 } from "./interface";
 import { ChooseFolder, ChooseInAllFolder } from "./modals/choose_in_folder";
 import { NoteInFolderSettingsTab } from "./settings";
@@ -26,19 +26,24 @@ export default class NoteInFolder extends Plugin {
 	 */
 	async removeCommands(): Promise<void> {
 		//@ts-ignore
-		let pluginCommands = Object.keys(this.app.commands.commands).filter((command) => command.startsWith("create-note-in-folder"));
+		let pluginCommands = Object.keys(this.app.commands.commands).filter((command) =>
+			command.startsWith("create-note-in-folder")
+		);
 		//remove quickswitcher command
-		pluginCommands = pluginCommands.filter((command) => !command.replace("create-note-in-folder:", "").contains("quickSwitcher-creator"));
+		pluginCommands = pluginCommands.filter(
+			(command) =>
+				!command.replace("create-note-in-folder:", "").contains("quickSwitcher-creator")
+		);
 		for (const command of pluginCommands) {
 			//remove commands if the folder is not in the settings
-			if (!this.settings.folder.some((folder) => folder.commandName === command.replace("create-note-in-folder:", ""))) {
-				//@ts-ignore
+			if (
+				!this.settings.folder.some(
+					(folder) => folder.commandName === command.replace("create-note-in-folder:", "")
+				)
+			)
 				this.app.commands.removeCommand(command);
-			}
 		}
 	}
-
-
 
 	/**
 	 * Adds or removes commands if the settings changed
@@ -51,19 +56,10 @@ export default class NoteInFolder extends Plugin {
 		quickSwitcher = false
 	) {
 		if (oldFolder !== undefined) {
-			//@ts-ignore
 			this.app.commands.removeCommand(`create-note-in-folder:${oldFolder}`); //doesn't work in some condition
 		}
 		if (newFolder !== undefined) {
-			if (!newFolder.path.contains("{{current}}")) {
-				this.addCommand({
-					id: `${newFolder.commandName ?? newFolder.path}`,
-					name: `${newFolder.commandName ?? newFolder.path}`,
-					callback: async () => {
-						await createNoteInFolder(newFolder, this);
-					}
-				});
-			} else {
+			if (newFolder.path.contains("{{current}}")) {
 				this.addCommand({
 					id: `${newFolder.commandName ?? newFolder.path}`,
 					name: `${newFolder.commandName ?? newFolder.path}`,
@@ -79,39 +75,53 @@ export default class NoteInFolder extends Plugin {
 						return false;
 					},
 				});
+			} else {
+				this.addCommand({
+					id: `${newFolder.commandName ?? newFolder.path}`,
+					name: `${newFolder.commandName ?? newFolder.path}`,
+					callback: async () => {
+						await createNoteInFolder(newFolder, this);
+					},
+				});
 			}
 		}
-		if (quickSwitcher)
-			this.quickSwitcherCommand(); //reload the quickswitcher command
+		if (quickSwitcher) this.quickSwitcherCommand(); //reload the quickswitcher command
 		if (newFolder?.fileMenu && newFolder?.path.contains("{{current}}")) {
 			this.registerEvent(
 				this.app.workspace.on("file-menu", (menu, file) => {
 					let commandName = `Create note : ${newFolder.commandName ?? newFolder.path}`;
-					const { folderPath, defaultName} = generateFileNameWithCurrent(newFolder, file, this);
+					const { folderPath, defaultName } = generateFileNameWithCurrent(
+						newFolder,
+						file,
+						this
+					);
 					const path = normalizePath(`${folderPath}/${defaultName}`);
-					const fileAlreadyExists = this.app.vault.getAbstractFileByPath(newFolder.path.replace("{{current}}", path));
+					const fileAlreadyExists = this.app.vault.getAbstractFileByPath(
+						newFolder.path.replace("{{current}}", path)
+					);
 					if (fileAlreadyExists && !newFolder.template.increment)
 						commandName = `Open note : ${newFolder.commandName ?? newFolder.path}`;
-					menu
-						.addItem((item) => {
-							item
-								.setTitle(commandName)
-								.setIcon("file-plus")
-								.onClick(() => {
-									createFolderInCurrent(newFolder, file, this);
-								});
-						});
+					menu.addItem((item) => {
+						item
+							.setTitle(commandName)
+							.setIcon("file-plus")
+							.onClick(() => {
+								createFolderInCurrent(newFolder, file, this);
+							});
+					});
 				})
 			);
 		}
-
 	}
 	/**
 	 *
 	 * @param disabled
 	 * @param increment Only remove the "open note" command if the increment is true; otherwise, remove all the commands
 	 */
-	removeDisabledMenu(disabled: FolderSettings, toRemove: "all" | "increment" | "create" = "all") {
+	removeDisabledMenu(
+		disabled: FolderSettings,
+		toRemove: "all" | "increment" | "create" = "all"
+	) {
 		this.registerEvent(
 			this.app.workspace.on("file-menu", (menu) => {
 				let commandName = `Create note : ${disabled.commandName ?? disabled.path}`;
@@ -119,12 +129,14 @@ export default class NoteInFolder extends Plugin {
 					commandName = `Open note : ${disabled.commandName ?? disabled.path}`;
 				else if (toRemove === "create")
 					commandName = `Create note : ${disabled.commandName ?? disabled.path}`;
-				//search in the menu if the command is present
-				//@ts-ignore
 				for (const item of menu.items) {
-					if (item.titleEl?.getText() === commandName)
+					if (item.titleEl === commandName)
 						item.dom.addClasses(["create-note-in-folder", "disabled"]);
-					else if (toRemove === "all" && (item.titleEl?.getText() === commandName || item.titleEl?.getText() === `Open note : ${disabled.commandName ?? disabled.path}`)) {
+					else if (
+						toRemove === "all" &&
+						(item.titleEl === commandName ||
+							item.titleEl === `Open note : ${disabled.commandName ?? disabled.path}`)
+					) {
 						item.dom.addClasses(["create-note-in-folder", "disabled"]);
 					}
 				}
@@ -133,34 +145,29 @@ export default class NoteInFolder extends Plugin {
 	}
 
 	async triggerTemplater(file: TFile, settings: FolderSettings) {
-		//@ts-ignore
-		if (this.app.plugins.enabledPlugins.has("templater-obsidian")) {
-			const templatePath = settings.templater;
-			if (!templatePath) {
-				return;
-			}
-			const templateFile = this.app.vault.getAbstractFileByPath(templatePath);
-			if (!templateFile) {
-				new Notice(i18next.t("error.templateNotFound", { path: templatePath }));
-				return;
-			} else if (!(templateFile instanceof TFile)) {
-				new Notice(i18next.t("error.templateNotFile", { path: templatePath }));
-				return;
-			}
-			const templateContent = await this.app.vault.read(templateFile);
-			//add the content to the file
-			await this.app.vault.modify(file, templateContent);
-			//trigger templater
-			try {
-				//@ts-ignore
-				//note : it will not work if the file is not opened in any leaf
-				//maybe we could run templater internally and write the result to the file
+		if (!this.app.plugins.enabledPlugins.has("templater-obsidian")) return;
 
-				this.app.commands.executeCommandById("templater-obsidian:replace-in-file-templater");
-			} catch (e) {
-				console.log(e);
-				// I think it can work if the file is not opened in main view or something. Prevent error like that.
-			}
+		const templatePath = settings.templater;
+		if (!templatePath) {
+			return;
+		}
+		const templateFile = this.app.vault.getAbstractFileByPath(templatePath);
+		if (!templateFile) {
+			new Notice(i18next.t("error.templateNotFound", { path: templatePath }));
+			return;
+		} else if (!(templateFile instanceof TFile)) {
+			new Notice(i18next.t("error.templateNotFile", { path: templatePath }));
+			return;
+		}
+		const templateContent = await this.app.vault.read(templateFile);
+		await this.app.vault.modify(file, templateContent);
+		try {
+			this.app.commands.executeCommandById(
+				"templater-obsidian:replace-in-file-templater"
+			);
+		} catch (e) {
+			console.log(e);
+			// I think it can work if the file is not opened in main view or something. Prevent error like that.
 		}
 	}
 
@@ -187,15 +194,21 @@ export default class NoteInFolder extends Plugin {
 				callback: () => {
 					try {
 						const isCurrentFile = this.app.workspace.getActiveFile() ?? undefined;
-						new ChooseInAllFolder(this.app, this, this.settings.filterAnyFolderCommand ?? false, isCurrentFile).open();
+						new ChooseInAllFolder(
+							this.app,
+							this,
+							this.settings.filterAnyFolderCommand ?? false,
+							isCurrentFile
+						).open();
 					} catch (e) {
 						console.log(e);
 					}
 				},
 			});
 		} else {
-			//@ts-ignore
-			this.app.commands.removeCommand("create-note-in-folder:quickSwitcher-creator-anyFolder");
+			this.app.commands.removeCommand(
+				"create-note-in-folder:quickSwitcher-creator-anyFolder"
+			);
 		}
 	}
 
@@ -245,7 +258,10 @@ export default class NoteInFolder extends Plugin {
 		this.addSettingTab(new NoteInFolderSettingsTab(this.app, this));
 		const folders = this.settings.folder;
 		for (const folder of folders) {
-			folder.commandName = folder.commandName && folder.commandName.length > 0 ? folder.commandName : folder.path;
+			folder.commandName =
+				folder.commandName && folder.commandName.length > 0
+					? folder.commandName
+					: folder.path;
 			await this.saveSettings();
 			await this.addNewCommands(undefined, folder);
 		}
@@ -254,7 +270,6 @@ export default class NoteInFolder extends Plugin {
 		this.quickSwitcherAnyFolder();
 	}
 
-
 	onunload() {
 		console.info(`${this.manifest.name} v${this.manifest.version} unloaded`);
 	}
@@ -262,7 +277,10 @@ export default class NoteInFolder extends Plugin {
 	mergeFolderSettings() {
 		//add new value in the settings for each folder
 		for (const i in this.settings.folder) {
-			this.settings.folder[i] = merge(DEFAULT_FOLDER_SETTINGS, this.settings.folder[i]) as unknown as FolderSettings;
+			this.settings.folder[i] = merge(
+				DEFAULT_FOLDER_SETTINGS,
+				this.settings.folder[i]
+			) as unknown as FolderSettings;
 		}
 		return this.settings;
 	}
@@ -270,9 +288,12 @@ export default class NoteInFolder extends Plugin {
 	async loadSettings() {
 		const loadData = await this.loadData();
 		try {
-			this.settings = merge(DEFAULT_SETTINGS, loadData) as unknown as NoteInFolderSettings;
+			this.settings = merge(
+				DEFAULT_SETTINGS,
+				loadData
+			) as unknown as NoteInFolderSettings;
 			this.settings = this.mergeFolderSettings();
-		} catch (e) {
+		} catch (_e) {
 			console.warn("Error while merging folder settings ; use default merge");
 			this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
 		}
@@ -282,4 +303,3 @@ export default class NoteInFolder extends Plugin {
 		await this.saveData(this.settings);
 	}
 }
-
