@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.11.1](https://github.com/Mara-Li/obsidian-create-note-in-folder/compare/1.11.0...1.11.1) (2024-05-28)
+
+
+### Bug Fixes
+
+* select inline title when using frontmatter title ([d8b3042](https://github.com/Mara-Li/obsidian-create-note-in-folder/commit/d8b3042510120c7de07c9a8f1bc6a67a3e6a1b66)), closes [#13](https://github.com/Mara-Li/obsidian-create-note-in-folder/issues/13)
+
 ## [1.11.0](https://github.com/Lisandra-dev/create-note-in-folder/compare/1.10.1...1.11.0) (2024-05-26)
 
 
