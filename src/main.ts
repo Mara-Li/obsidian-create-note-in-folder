@@ -129,12 +129,14 @@ export default class NoteInFolder extends Plugin {
 				else if (toRemove === "create")
 					commandName = `Create note : ${disabled.commandName ?? disabled.path}`;
 				for (const item of menu.items) {
-					if (item.titleEl === commandName)
+					//@ts-ignore
+					const itemName: string | undefined = item.titleEl?.getText() ?? item.titleEl;
+					if (itemName === commandName)
 						item.dom.addClasses(["create-note-in-folder", "disabled"]);
 					else if (
 						toRemove === "all" &&
-						(item.titleEl === commandName ||
-							item.titleEl === `Open note : ${disabled.commandName ?? disabled.path}`)
+						(itemName === commandName ||
+							itemName === `Open note : ${disabled.commandName ?? disabled.path}`)
 					) {
 						item.dom.addClasses(["create-note-in-folder", "disabled"]);
 					}

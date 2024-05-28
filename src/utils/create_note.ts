@@ -324,12 +324,14 @@ async function focusInlineTitle(leaf: WorkspaceLeaf | undefined, app: App) {
 	);
 	if (frontmatterTitle) {
 		//plugin frontmattert title
-		const innerFrontmatterTitle = Array.from(
-			leaf.view.containerEl.querySelectorAll("div.inline-title")
+		const innerTitleFMT = leaf.view.containerEl.querySelector(
+			"div.inline-title[ofmt-original-id]"
 		);
-		if (innerFrontmatterTitle)
-			// @ts-ignore
-			innerTitle = innerFrontmatterTitle.filter((e) => e.hidden).first();
+		if (innerTitleFMT?.hasAttribute("hidden")) {
+			titleContainerEl.setAttribute("hidden", "");
+			innerTitleFMT.removeAttribute("hidden");
+			innerTitle = innerTitleFMT;
+		}
 	}
 	innerTitle.scrollIntoView();
 	// @ts-ignore
