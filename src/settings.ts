@@ -19,7 +19,7 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 		const { containerEl } = this;
 		containerEl.empty();
 		containerEl.addClasses(["create-note-in-folder", "settingsTab"]);
-		containerEl.createEl("h1", { text: this.plugin.manifest.name });
+
 		containerEl.createEl("p", { text: i18next.t("variable.current.desc") });
 		containerEl.createEl("p", {
 			text: i18next.t("variable.current.warning"),
@@ -90,7 +90,7 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 			})
 		);
 
-		containerEl.createEl("h3", { text: i18next.t("title") } as const);
+		new Setting(containerEl).setHeading().setName(i18next.t("title"));
 
 		for (let folder of this.plugin.settings.folder) {
 			const sett = new Setting(containerEl)
