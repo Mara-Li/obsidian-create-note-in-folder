@@ -23,7 +23,6 @@ jobs:
         uses: mara-li/reusable-workflows/.github/workflows/obsidian-plugin-release.yaml@main
         with:
             PLUGIN_NAME: "create-note-in-folder"
-            STYLE: true
             CACHE: "pnpm"
         secrets:
             GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -32,7 +31,6 @@ jobs:
         uses: mara-li/reusable-workflows/.github/workflows/obsidian-plugin-bump-version.yaml@main
         with:
             PLUGIN_NAME: "create-note-in-folder"
-            STYLE: true
             BETA: ${{ inputs.beta }}
             CACHE: "pnpm"
         secrets:
