@@ -240,24 +240,27 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 				folder.commandName.replace(/ \(\d+\)+/, "")
 		);
 		if (duplicatedFolders.length > 0) {
-			defaultSettings.commandName = `${folder.commandName.replace(/ \(\d+\)+/, "")} (${
-				duplicatedFolders.length
-			})`;
+			defaultSettings.commandName = `${folder.commandName.replace(/ \(\d+\)+/, "")} (${duplicatedFolders.length
+				})`;
 		}
 		return defaultSettings;
 	}
 
 	addTooltip(text: string, cb: HTMLElement) {
 		cb.onfocus = () => {
-			const tooltip = cb.parentElement?.createEl("div", { text: text, cls: "tooltip" });
-			if (tooltip) {
-				const rec = cb.getBoundingClientRect();
-				tooltip.style.top = `${rec.top + rec.height + 5}px`;
-				tooltip.style.left = `${rec.left + rec.width / 2}px`;
-			}
+			const tooltip = document.body.createEl("div", { text, cls: "tooltip" });
+			if (!tooltip) return;
+			tooltip.createEl("div", { cls: "tooltip-arrow" });
+			const rec = cb.getBoundingClientRect();
+			tooltip.style.top = `${rec.top + rec.height + 5}px`;
+			tooltip.style.left = `${rec.left + rec.width / 2}px`;
+			tooltip.style.right = `${rec.right}px`;
+			tooltip.style.width = `max-content`;
+			tooltip.style.height = `max-content`;
 		};
 		cb.onblur = () => {
-			cb.parentElement?.querySelector(".tooltip")?.remove();
+			// biome-ignore lint/correctness/noUndeclaredVariables: <explanation>
+			activeDocument.querySelector(".tooltip")?.remove();
 		};
 	}
 }

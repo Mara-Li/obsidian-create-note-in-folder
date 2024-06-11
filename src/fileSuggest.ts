@@ -15,13 +15,10 @@ export class FolderSuggester extends AbstractInputSuggest<TFolder> {
 	}
 
 	getSuggestions(query: string): TFolder[] {
-		const folders: TFolder[] = [];
-		this.app.vault.getAllLoadedFiles().forEach((folder) => {
-			if (folder instanceof TFolder && folder.path.contains(query.toLowerCase())) {
-				folders.push(folder);
-			}
+		//@ts-ignore
+		return this.app.vault.getAllFolders().filter((folder: TFolder) => {
+			return folder.path.toLowerCase().contains(query.toLowerCase());
 		});
-		return folders;
 	}
 
 	selectSuggestion(value: TFolder, _evt: MouseEvent | KeyboardEvent): void {
@@ -46,6 +43,18 @@ export class FileSuggester extends AbstractInputSuggest<TFile> {
 		el.setText(value.path);
 	}
 
+	recursiveChildren(folder: TFolder): TFile[] {
+		const files: TFile[] = [];
+		folder.children.forEach((file) => {
+			if (file instanceof TFile) {
+				files.push(file);
+			} else if (file instanceof TFolder) {
+				files.push(...this.recursiveChildren(file));
+			}
+		});
+		return files;
+	}
+
 	private errorMessages = i18next.t("template.error");
 
 	getSuggestions(query: string): TFile[] {
@@ -62,11 +71,12 @@ export class FileSuggester extends AbstractInputSuggest<TFile> {
 			new Notice(this.errorMessages);
 			return [];
 		}
-		const files: TFile[] = templaterFolder.children.filter(
+
+		const files: TFile[] = this.recursiveChildren(templaterFolder).filter(
 			(file) =>
 				file instanceof TFile &&
 				file.extension === "md" &&
-				file.path.contains(query.toLowerCase())
+				file.path.toLowerCase().contains(query.toLowerCase())
 		) as TFile[];
 		return files;
 	}
