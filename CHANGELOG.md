@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.12.0](https://github.com/Lisandra-dev/create-note-in-folder/compare/1.11.1...1.12.0) (2024-06-11)
+
+
+### Features
+
+* allow command menu for any folder if they are the same (folder parent or folder, depending on click) ([a54a901](https://github.com/Lisandra-dev/create-note-in-folder/commit/a54a901818a85ece88e8bd6992b2660d66167cfe))
+
+
+### Bug Fixes
+
+* duplicate command when changing the command name ([325338f](https://github.com/Lisandra-dev/create-note-in-folder/commit/325338fe61621329fdede3bcc323202c5110384a))
+* lowercase broke the file suggester ([1d6c1ab](https://github.com/Lisandra-dev/create-note-in-folder/commit/1d6c1ab9a16c337716ff9c0e9de335715ad95f81))
+
 ## [1.11.1](https://github.com/Mara-Li/obsidian-create-note-in-folder/compare/1.11.0...1.11.1) (2024-05-28)
 
 
