@@ -1,5 +1,5 @@
 import i18next from "i18next";
-import { normalizePath, Notice, Plugin, TFile } from "obsidian";
+import { normalizePath, Notice, Plugin, TFile, TFolder } from "obsidian";
 import merge from "ts-deepmerge";
 
 import { ressources, translationLanguage } from "./i18n/i18next";
@@ -103,6 +103,12 @@ export default class NoteInFolder extends Plugin {
 					);
 					if (fileAlreadyExists && !newFolder.template.increment)
 						commandName = `Open note : ${newFolder.commandName ?? newFolder.path}`;
+				//prevent duplicate command
+				if (menu.items.some((item) => {
+					//@ts-ignore
+					return item.titleEl?.getText() === commandName;
+				})) return;
+				menu.addSections(["create-note-in-folder"])
 					menu.addItem((item) => {
 						item
 							.setTitle(commandName)
