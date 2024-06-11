@@ -22,11 +22,11 @@ importers:
         specifier: npm:@ophidian/electron-types@^24.3.1
         version: '@ophidian/electron-types@24.3.1'
       '@types/node':
-        specifier: ^18.19.33
-        version: 18.19.33
+        specifier: ^20.14.2
+        version: 20.14.2
       '@types/obsidian-typings':
-        specifier: npm:obsidian-typings@^1.1.5
-        version: obsidian-typings@1.1.5(@ophidian/electron-types@24.3.1)(@types/node@18.19.33)(obsidian@1.5.7-1(@codemirror/state@6.2.1)(@codemirror/view@6.17.0))
+        specifier: npm:obsidian-typings@^1.1.6
+        version: obsidian-typings@1.1.6(@ophidian/electron-types@24.3.1)(@types/node@20.14.2)(obsidian@1.5.7-1(@codemirror/state@6.2.1)(@codemirror/view@6.17.0))
       ansi-colors:
         specifier: ^4.1.3
         version: 4.1.3
@@ -334,8 +334,8 @@ packages:
   '@types/minimist@1.2.2':
     resolution: {integrity: sha512-jhuKLIRrhvCPLqwPcx6INqmKeiA5EWrsCOPhrlFSrbrmU4ZMPjj5Ul/oLCMDO98XRUIwVm78xICz4EPCektzeQ==}
 
-  '@types/node@18.19.33':
-    resolution: {integrity: sha512-NR9+KrpSajr2qBVp/Yt5TU/rp+b5Mayi3+OlMlcg2cVCfRmcG5PWZ7S4+MG9PZ5gWBoc9Pd0BKSRViuBCRPu0A==}
+  '@types/node@20.14.2':
+    resolution: {integrity: sha512-xyu6WAMVwv6AKFLB+e/7ySZVr/0zLCzOa7rSpq6jNwpqOrUbcACDWC+53d4n2QHOnDou0fbIsg8wZu/sxrnI4Q==}
 
   '@types/normalize-package-data@2.4.1':
     resolution: {integrity: sha512-Gj7cI7z+98M282Tqmp2K5EIsoouUEzbBJhQQzDE3jSIRk6r9gsz0oUokqIUR4u1R3dMHo0pDHM7sNOHyhulypw==}
@@ -998,8 +998,8 @@ packages:
     resolution: {integrity: sha512-p2W1sgqij3zMMyRC067Dg16bfzVH+w7hyegmpIvZ4JNjqtGOVAIvLmjBx3yP7YTe9vKJgkoNOPjwQGogDoMXFA==}
     engines: {node: '>=10'}
 
-  obsidian-typings@1.1.5:
-    resolution: {integrity: sha512-1p3ZjvkxAfg2GDLoTB+aJ77hsVDe7G4sP8aU+FbhzLmLmjzDHJRNUUQqDnHbfgFyHTf555G3NQvMXUqU0YeXDg==}
+  obsidian-typings@1.1.6:
+    resolution: {integrity: sha512-p3iWfvHDJfrwdYKAhb8adlBVOGtGteEy5nE7Jzhb8K5nyrTb5DvOtG+BQGneVM7Ou6UMkZnRoOLPkhJMXLquGw==}
     peerDependencies:
       '@types/electron': npm:@ophidian/electron-types
       '@types/node': ^20.10.7
@@ -1572,7 +1572,7 @@ snapshots:
 
   '@types/minimist@1.2.2': {}
 
-  '@types/node@18.19.33':
+  '@types/node@20.14.2':
     dependencies:
       undici-types: 5.26.5
 
@@ -2303,10 +2303,10 @@ snapshots:
       semver: 7.5.4
       validate-npm-package-license: 3.0.4
 
-  obsidian-typings@1.1.5(@ophidian/electron-types@24.3.1)(@types/node@18.19.33)(obsidian@1.5.7-1(@codemirror/state@6.2.1)(@codemirror/view@6.17.0)):
+  obsidian-typings@1.1.6(@ophidian/electron-types@24.3.1)(@types/node@20.14.2)(obsidian@1.5.7-1(@codemirror/state@6.2.1)(@codemirror/view@6.17.0)):
     dependencies:
       '@types/electron': '@ophidian/electron-types@24.3.1'
-      '@types/node': 18.19.33
+      '@types/node': 20.14.2
       obsidian: 1.5.7-1(@codemirror/state@6.2.1)(@codemirror/view@6.17.0)
 
   obsidian@1.5.7-1(@codemirror/state@6.2.1)(@codemirror/view@6.17.0):
