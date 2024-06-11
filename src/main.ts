@@ -35,11 +35,9 @@ export default class NoteInFolder extends Plugin {
 		);
 		for (const command of pluginCommands) {
 			//remove commands if the folder is not in the settings
-			if (
-				!this.settings.folder.some(
+			if (!this.settings.folder.some(
 					(folder) => folder.commandName === command.replace("create-note-in-folder:", "")
-				)
-			)
+			))
 				this.app.commands.removeCommand(command);
 		}
 	}
@@ -85,41 +83,41 @@ export default class NoteInFolder extends Plugin {
 			}
 		}
 		if (quickSwitcher) this.quickSwitcherCommand(); //reload the quickswitcher command
-			this.registerEvent(
-				this.app.workspace.on("file-menu", (menu, file) => {
+		this.registerEvent(
+			this.app.workspace.on("file-menu", (menu, file) => {
 				const folder = (file instanceof TFolder) ? file : file.parent;
 				if (!(newFolder?.fileMenu && newFolder?.path.contains("{{current}}") || (folder && newFolder?.path === folder.path))) {
 					return;
 				}
 				let commandName = newFolder.commandName ?? `${i18next.t("create")} ${newFolder.path}`;
-					const { folderPath, defaultName } = generateFileNameWithCurrent(
-						newFolder,
-						file,
-						this
-					);
-					const path = normalizePath(`${folderPath}/${defaultName}`);
-					const fileAlreadyExists = this.app.vault.getAbstractFileByPath(
-						newFolder.path.replace("{{current}}", path)
-					);
-					if (fileAlreadyExists && !newFolder.template.increment)
-						commandName = `Open note : ${newFolder.commandName ?? newFolder.path}`;
+				const { folderPath, defaultName } = generateFileNameWithCurrent(
+					newFolder,
+					file,
+					this
+				);
+				const path = normalizePath(`${folderPath}/${defaultName}`);
+				const fileAlreadyExists = this.app.vault.getAbstractFileByPath(
+					newFolder.path.replace("{{current}}", path)
+				);
+				if (fileAlreadyExists && !newFolder.template.increment)
+					commandName = `Open note : ${newFolder.commandName ?? newFolder.path}`;
 				//prevent duplicate command
 				if (menu.items.some((item) => {
 					//@ts-ignore
 					return item.titleEl?.getText() === commandName;
 				})) return;
 				menu.addSections(["create-note-in-folder"])
-					menu.addItem((item) => {
-						item
-							.setTitle(commandName)
-							.setIcon("file-plus")
+				menu.addItem((item) => {
+					item
+						.setTitle(commandName)
+						.setIcon("file-plus")
 						.setSection("create-note-in-folder")
-							.onClick(() => {
-								createFolderInCurrent(newFolder, file, this);
-							});
-					});
-				})
-			);
+						.onClick(() => {
+							createFolderInCurrent(newFolder, file, this);
+						});
+				});
+			})
+		);
 
 	}
 	/**
