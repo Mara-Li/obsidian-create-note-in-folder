@@ -20,6 +20,7 @@
     "submit": "Valider",
     "value": "La valeur"
   },
+  "create": "Créer une note :",
   "down": "Déplacer vers le bas",
   "duplicate": "Dupliquer",
   "editFolder": {
@@ -61,7 +62,7 @@
     },
     "other": {
       "setting": {
-        "desc": "Ajouter un bouton dans le menu fichier pour créer une note dans ce dossier. Ne fonctionne que si le chemin du dossier contient \"{{current}}\"",
+        "desc": "Ajouter un bouton dans le menu fichier pour créer une note dans ce dossier. Ne fonctionne que si le chemin du dossier contient \"{{current}}\" ou est le même dossier que celui visé.",
         "title": "Menu \"fichier\""
       },
       "title": "Autre"

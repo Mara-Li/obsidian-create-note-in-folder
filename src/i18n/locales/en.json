@@ -20,6 +20,7 @@
     "submit": "Submit",
     "value": "The value"
   },
+  "create": "Create a note:",
   "down": "Move down",
   "duplicate": "Duplicate",
   "editFolder": {
@@ -61,7 +62,7 @@
     },
     "other": {
       "setting": {
-        "desc": "Add a button in the file menu to create a note in this folder. Only works if the folder path contains \"{{current}}\"",
+        "desc": "Add a button in the file menu to create a note in this folder. Only works if the folder path contains \"{{current}}\" or use the clicked folder.",
         "title": "File menu"
       },
       "title": "Other"

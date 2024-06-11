@@ -123,7 +123,7 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 									true
 								);
 								await this.plugin.removeCommands();
-								if (!result.fileMenu || !result.path.contains("{{current}}")) {
+								if (!result.fileMenu) {
 									this.plugin.removeDisabledMenu(result, "all");
 								} else if (!result.template.increment) {
 									this.plugin.removeDisabledMenu(result, "create");
@@ -139,9 +139,11 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 						.setValue(folder.commandName ?? folder.path)
 						.onChange(async (value) => {
 							const oldCommandName = folder.commandName;
+							const oldCommand = JSON.parse(JSON.stringify(folder)) as FolderSettings;
 							folder.commandName = value;
 							await this.plugin.addNewCommands(oldCommandName, folder, true);
 							await this.plugin.removeCommands();
+							this.plugin.removeDisabledMenu(oldCommand, "all");
 							await this.plugin.saveSettings();
 						});
 					/**
@@ -159,8 +161,8 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 								? folder.commandName
 								: result.path;
 						folder.commandName = oldCommandName;
-						await this.plugin.addNewCommands(oldCommandName, folder, true);
 						await this.plugin.removeCommands();
+						await this.plugin.addNewCommands(oldCommandName, folder, true);
 						await this.plugin.saveSettings();
 					});
 

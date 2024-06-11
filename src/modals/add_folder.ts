@@ -300,7 +300,6 @@ export class AddFolderModal extends Modal {
 		new Setting(contentEl)
 			.setName(i18next.t("editFolder.other.setting.title"))
 			.setDesc(i18next.t("editFolder.other.setting.desc"))
-			.setDisabled(!this.result.path.contains("{{current}}"))
 			.addToggle((cb) =>
 				cb.setValue(this.result.fileMenu).onChange(async (value) => {
 					this.result.fileMenu = value;

@@ -85,10 +85,13 @@ export default class NoteInFolder extends Plugin {
 			}
 		}
 		if (quickSwitcher) this.quickSwitcherCommand(); //reload the quickswitcher command
-		if (newFolder?.fileMenu && newFolder?.path.contains("{{current}}")) {
 			this.registerEvent(
 				this.app.workspace.on("file-menu", (menu, file) => {
-					let commandName = `Create note : ${newFolder.commandName ?? newFolder.path}`;
+				const folder = (file instanceof TFolder) ? file : file.parent;
+				if (!(newFolder?.fileMenu && newFolder?.path.contains("{{current}}") || (folder && newFolder?.path === folder.path))) {
+					return;
+				}
+				let commandName = newFolder.commandName ?? `${i18next.t("create")} ${newFolder.path}`;
 					const { folderPath, defaultName } = generateFileNameWithCurrent(
 						newFolder,
 						file,
@@ -104,13 +107,14 @@ export default class NoteInFolder extends Plugin {
 						item
 							.setTitle(commandName)
 							.setIcon("file-plus")
+						.setSection("create-note-in-folder")
 							.onClick(() => {
 								createFolderInCurrent(newFolder, file, this);
 							});
 					});
 				})
 			);
-		}
+
 	}
 	/**
 	 *
