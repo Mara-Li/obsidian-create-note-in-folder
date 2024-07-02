@@ -1,3 +1,4 @@
+import { klona } from "klona";
 import { type App, FuzzySuggestModal, type TFile, TFolder } from "obsidian";
 import { DEFAULT_FOLDER_SETTINGS, type FolderSettings } from "src/interface";
 import type NoteInFolder from "src/main";
@@ -24,9 +25,7 @@ export class ChooseFolder extends FuzzySuggestModal<FolderSettings> {
 	}
 
 	getItems(): FolderSettings[] {
-		const allFoldersSettings = JSON.parse(
-			JSON.stringify(this.plugin.settings.folder)
-		) as FolderSettings[];
+		const allFoldersSettings = klona(this.plugin.settings.folder);
 		if (this.plugin.settings.enableAllFolder) {
 			//add a sort of placeholder to open the other modals on selection
 
@@ -184,9 +183,7 @@ export class ChooseInAllFolder extends FuzzySuggestModal<FolderSettings> {
 
 		if (this.filter) return specialSortCurrentRoot(templatedFolders);
 
-		let allFoldersSettings = JSON.parse(
-			JSON.stringify(this.plugin.settings.folder)
-		) as FolderSettings[];
+		let allFoldersSettings = klona(this.plugin.settings.folder);
 		//remove the {{current}} path from the list
 		allFoldersSettings = allFoldersSettings.filter(
 			(folder) => !folder.path.contains("{{current}}")

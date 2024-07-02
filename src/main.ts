@@ -1,7 +1,7 @@
 import i18next from "i18next";
 import { normalizePath, Notice, Plugin, TFile, TFolder } from "obsidian";
 import merge from "ts-deepmerge";
-
+import { klona } from "klona";
 import { ressources, translationLanguage } from "./i18n/i18next";
 import {
 	DEFAULT_FOLDER_SETTINGS,
@@ -35,9 +35,11 @@ export default class NoteInFolder extends Plugin {
 		);
 		for (const command of pluginCommands) {
 			//remove commands if the folder is not in the settings
-			if (!this.settings.folder.some(
+			if (
+				!this.settings.folder.some(
 					(folder) => folder.commandName === command.replace("create-note-in-folder:", "")
-			))
+				)
+			)
 				this.app.commands.removeCommand(command);
 		}
 	}
@@ -85,11 +87,17 @@ export default class NoteInFolder extends Plugin {
 		if (quickSwitcher) this.quickSwitcherCommand(); //reload the quickswitcher command
 		this.registerEvent(
 			this.app.workspace.on("file-menu", (menu, file) => {
-				const folder = (file instanceof TFolder) ? file : file.parent;
-				if (!(newFolder?.fileMenu && newFolder?.path.contains("{{current}}") || (folder && newFolder?.path === folder.path))) {
+				const folder = file instanceof TFolder ? file : file.parent;
+				if (
+					!(
+						(newFolder?.fileMenu && newFolder?.path.contains("{{current}}")) ||
+						(folder && newFolder?.path === folder.path)
+					)
+				) {
 					return;
 				}
-				let commandName = newFolder.commandName ?? `${i18next.t("create")} ${newFolder.path}`;
+				let commandName =
+					newFolder.commandName ?? `${i18next.t("create")} ${newFolder.path}`;
 				const { folderPath, defaultName } = generateFileNameWithCurrent(
 					newFolder,
 					file,
@@ -102,11 +110,14 @@ export default class NoteInFolder extends Plugin {
 				if (fileAlreadyExists && !newFolder.template.increment)
 					commandName = `Open note : ${newFolder.commandName ?? newFolder.path}`;
 				//prevent duplicate command
-				if (menu.items.some((item) => {
-					//@ts-ignore
-					return item.titleEl?.getText() === commandName;
-				})) return;
-				menu.addSections(["create-note-in-folder"])
+				if (
+					menu.items.some((item) => {
+						//@ts-ignore
+						return item.titleEl?.getText() === commandName;
+					})
+				)
+					return;
+				menu.addSections(["create-note-in-folder"]);
 				menu.addItem((item) => {
 					item
 						.setTitle(commandName)
@@ -118,7 +129,6 @@ export default class NoteInFolder extends Plugin {
 				});
 			})
 		);
-
 	}
 	/**
 	 *
@@ -235,7 +245,7 @@ export default class NoteInFolder extends Plugin {
 			const oldFolders = this.settings.folder as unknown as string[];
 			this.settings.folder = [];
 			for (const folder of oldFolders) {
-				const defaultSettings = JSON.parse(JSON.stringify(DEFAULT_FOLDER_SETTINGS)); //for some reason, i need to make a deep copy of the default settings
+				const defaultSettings = klona(DEFAULT_FOLDER_SETTINGS); //for some reason, i need to make a deep copy of the default settings
 				defaultSettings.path = folder;
 				this.settings.folder.push(defaultSettings);
 			}

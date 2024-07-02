@@ -6,6 +6,7 @@ import type NoteInFolder from "./main";
 import { AddFolderModal } from "./modals/add_folder";
 import { ManageCustomVariables } from "./modals/manage_custom_variables";
 import { FolderSuggester } from "./fileSuggest";
+import { klona } from "klona";
 
 export class NoteInFolderSettingsTab extends PluginSettingTab {
 	plugin: NoteInFolder;
@@ -43,11 +44,9 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 					.setButtonText(i18next.t("allFolder.default.title"))
 					.setTooltip(i18next.t("allFolder.default.tooltip"))
 					.onClick(() => {
-						const defaultTemplate = JSON.parse(
-							JSON.stringify(
-								this.plugin.settings.defaultTemplate ?? DEFAULT_FOLDER_SETTINGS
-							)
-						) as FolderSettings;
+						const defaultTemplate = klona(
+							this.plugin.settings.defaultTemplate ?? DEFAULT_FOLDER_SETTINGS
+						);
 						new AddFolderModal(this.app, defaultTemplate, true, (result) => {
 							this.plugin.settings.defaultTemplate = result;
 							this.plugin.saveSettings();
@@ -80,9 +79,8 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 
 		new Setting(containerEl).setClass("no-display").addButton((cb) =>
 			cb.setButtonText(i18next.t("variable.title")).onClick(() => {
-				const customVariable = JSON.parse(
-					JSON.stringify(this.plugin.settings.customVariables ?? [])
-				);
+				const customVariable = klona(this.plugin.settings.customVariables ?? []);
+
 				new ManageCustomVariables(this.app, customVariable, async (result) => {
 					this.plugin.settings.customVariables = result;
 					await this.plugin.saveSettings();
@@ -100,7 +98,7 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 						.setIcon("copy")
 						.setTooltip(i18next.t("duplicate"))
 						.onClick(async () => {
-							let defaultSettings = JSON.parse(JSON.stringify(folder));
+							let defaultSettings = klona(folder);
 							defaultSettings = this.duplicateFolder(defaultSettings);
 							this.plugin.settings.folder.push(defaultSettings);
 							await this.plugin.saveSettings();
@@ -112,7 +110,7 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 						.setIcon("pencil")
 						.setTooltip(i18next.t("editFolder.title"))
 						.onClick(async () => {
-							const folderSettings = JSON.parse(JSON.stringify(folder)) as FolderSettings;
+							const folderSettings = klona(folder);
 							const index = this.plugin.settings.folder.indexOf(folder);
 							new AddFolderModal(this.app, folderSettings, false, async (result) => {
 								folder = result;
@@ -139,7 +137,7 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 						.setValue(folder.commandName ?? folder.path)
 						.onChange(async (value) => {
 							const oldCommandName = folder.commandName;
-							const oldCommand = JSON.parse(JSON.stringify(folder)) as FolderSettings;
+							const oldCommand = klona(folder);
 							folder.commandName = value;
 							await this.plugin.addNewCommands(oldCommandName, folder, true);
 							await this.plugin.removeCommands();
@@ -224,8 +222,8 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 		new Setting(containerEl).addButton((cb) =>
 			cb.setButtonText(i18next.t("editFolder.add")).onClick(async () => {
 				//create a copy of the default settings
-				const defaultSettings = JSON.parse(
-					JSON.stringify(this.plugin.settings.defaultTemplate ?? DEFAULT_FOLDER_SETTINGS)
+				const defaultSettings = klona(
+					this.plugin.settings.defaultTemplate ?? DEFAULT_FOLDER_SETTINGS
 				);
 				this.plugin.settings.folder.push(defaultSettings);
 				await this.plugin.saveSettings();
@@ -235,15 +233,16 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 	}
 
 	duplicateFolder(folder: FolderSettings) {
-		const defaultSettings = JSON.parse(JSON.stringify(folder));
+		const defaultSettings = klona(folder);
 		const duplicatedFolders = this.plugin.settings.folder.filter(
 			(f) =>
 				f.commandName.replace(/ \(\d+\)+/, "") ===
 				folder.commandName.replace(/ \(\d+\)+/, "")
 		);
 		if (duplicatedFolders.length > 0) {
-			defaultSettings.commandName = `${folder.commandName.replace(/ \(\d+\)+/, "")} (${duplicatedFolders.length
-				})`;
+			defaultSettings.commandName = `${folder.commandName.replace(/ \(\d+\)+/, "")} (${
+				duplicatedFolders.length
+			})`;
 		}
 		return defaultSettings;
 	}

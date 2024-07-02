@@ -7,6 +7,7 @@ import {
 	Position,
 	TemplateType,
 } from "../interface";
+import { klona } from "klona";
 
 export function validateDate(date: string) {
 	return moment(moment().format(date), date, true).isValid();
@@ -92,7 +93,7 @@ export function generateFileNameWithCurrent(
 	);
 	let parent = currentFile.parent ? currentFile.parent.path : "/";
 	if (currentFile instanceof TFolder) parent = currentFile.path;
-	const currentFolder = JSON.parse(JSON.stringify(newFolder)) as FolderSettings;
+	const currentFolder = klona(newFolder);
 	currentFolder.path = normalizePath(path.replace("{{current}}", `${parent}/`));
 	const folderPath = normalizePath(currentFolder.path);
 	const defaultName = generateFileName(currentFolder, app);

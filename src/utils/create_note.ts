@@ -20,6 +20,7 @@ import {
 	isTemplaterNeeded,
 	replaceVariables,
 } from "./utils";
+import { klona } from "klona";
 
 function scrollToPosition(
 	app: App,
@@ -119,7 +120,7 @@ export async function createNoteInFolder(
 		newFolder.path,
 		settings.customVariables
 	);
-	const currentFolder = JSON.parse(JSON.stringify(newFolder)) as FolderSettings;
+	const currentFolder = klona(newFolder);
 	currentFolder.path = normalizePath(path);
 	const defaultName = generateFileName(currentFolder, app);
 	if (!app.vault.getAbstractFileByPath(currentFolder.path)) {
