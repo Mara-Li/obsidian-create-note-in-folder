@@ -9,4 +9,7 @@ export const ressources = {
 } as const;
 
 export const translationLanguage = Object.keys(ressources).find(
-	i => i == moment.locale()) ? moment.locale() : "en";
+	(i) => i == moment.locale()
+)
+	? moment.locale()
+	: "en";

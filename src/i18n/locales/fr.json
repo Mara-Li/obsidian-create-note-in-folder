@@ -1,149 +1,149 @@
 {
-  "allFolder": {
-    "default": {
-      "title": "Template par défaut",
-      "tooltip": "Définir le modèle par défaut pour tous les dossiers s'ils ne sont pas enregistrés"
-    },
-    "enable": "Activer le plugin pour tous les dossier",
-    "filterAnyFolderCommand": {
-      "desc": "Supprimera de la liste \"tous les dossiers\" les templates définies par l'utilisateur. Si désactiver, affichera les template définies avec leur chemins plutôt que leur nom de commande.",
-      "title": "Filtrer la liste de la commande \"tous les dossiers\""
-    },
-    "listAllModals": "Lister tous les dossiers dans le quick-switcher, au lieu d'ouvrir un autre menu"
-  },
-  "commandName": "Nom de la commande",
-  "common": {
-    "date": "Date",
-    "example": "Exemple :",
-    "name": "Le nom",
-    "string": "Texte",
-    "submit": "Valider",
-    "value": "La valeur"
-  },
-  "create": "Créer une note :",
-  "down": "Déplacer vers le bas",
-  "duplicate": "Dupliquer",
-  "editFolder": {
-    "add": "Ajouter un dossier",
-    "alreadyExist": {
-      "desc": "Dans le cas où vous n'ouvrez pas les notes à la création, vous permet tout de même d'ouvrir le fichier s'il existe déjà.",
-      "focus": "Focus sur la note déjà existante",
-      "title": "Ouverture par défaut des notes qui existent déjà"
-    },
-    "default": "Template par défaut pour tous les dossiers s'ils ne sont pas enregistrés",
-    "fileName": {
-      "desc": "Le nom sera incrémenté si le nom existe déjà.",
-      "title": "Choisissez la façon dont les notes seront nommées."
-    },
-    "focus": {
-      "desc": "Focus sur la nouvelle note après sa création",
-      "title": "Focus"
-    },
-    "increments": {
-      "desc": "Désactivé, n'incrémente pas le nom si le fichier existe déjà et ouvre la note existante à la place.",
-      "title": "Incrémentation"
-    },
-    "opening": {
-      "desc": "Comment la note sera ouverte après sa création",
-      "dropDown": {
-        "current": "Onglet courant",
-        "newTab": "Nouvel onglet",
-        "newWindow": "Nouvelle fenêtre",
-        "nothing": "Ne pas ouvrir",
-        "split": "Fenêtre divisée"
-      },
-      "head": "Ouverture",
-      "nothing": "Paramètre pour les notes déjà existantes",
-      "split": {
-        "horizontal": "Horizontale",
-        "vertical": "Verticale"
-      },
-      "title": "Ouverture par défaut"
-    },
-    "other": {
-      "setting": {
-        "desc": "Ajouter un bouton dans le menu fichier pour créer une note dans ce dossier. Ne fonctionne que si le chemin du dossier contient \"{{current}}\" ou est le même dossier que celui visé.",
-        "title": "Menu \"fichier\""
-      },
-      "title": "Autre"
-    },
-    "template": {
-      "dropDown": {
-        "folderName": "Nom du dossier",
-        "none": "Aucun"
-      },
-      "title": "Choisissez un modèle si vous voulez ajouter quelque chose avant ou après le nom du fichier."
-    },
-    "templater": {
-      "setting": {
-        "desc": "Permet d'utiliser une template du plugin templater",
-        "placeholder": "template",
-        "title": "Chemin de la template"
-      },
-      "title": "Paramètre de templater"
-    },
-    "title": "Modifier les paramètres spécifiques au dossier"
-  },
-  "error": {
-    "date": "Format de date invalide, veuillez utiliser un format valide.",
-    "duplicate": "{{- name}} existe déjà.",
-    "empty": "{{- name}} ne peut pas être vide",
-    "fileName": "Nom de fichier invalide, veuillez utiliser un nom de fichier si vous n'utilisez pas de modèle.",
-    "invalidExpression": "Le nom du fichier ne peut contenir aucun des caractères suivants : *, \", , /, <, >, :, |, ?",
-    "pathNoFound": "Le dossier {{- path}} n'existe pas.",
-    "templateNotFile": "{{- path}} n'est pas un fichier valide.",
-    "templateNotFound": "{{- path}} n'existe pas."
-  },
-  "example": "Exemple: chemin/vers/dossier",
-  "log": "Création de la note dans le dossier {{- path}}, avec le nom {{- name}}.",
-  "moveUp": "Déplacer en haut",
-  "path": "Chemin du dossier",
-  "quickSwitcher": {
-    "anyFolder": "Quick Switcher (tout dossier)",
-    "simple": "Quick Switcher"
-  },
-  "remove": "Supprimer le dossier",
-  "template": {
-    "desc": "Le nom du fichier peut être vide si vous utilisez un modèle.",
-    "dropDown": {
-      "date": {
-        "desc": "Les formats valides peuvent être trouvés ",
-        "here": "ici",
-        "url": "https://momentjs.com/docs/#/displaying/format/"
-      }
-    },
-    "error": "Aucun fichier n'a été trouvé dans le dossier templater.",
-    "header": "Modèle",
-    "position": {
-      "append": "Ajouter après",
-      "prepend": "Ajouter avant",
-      "title": "Choisissez où ajouter le modèle."
-    },
-    "separator": "Séparateur"
-  },
-  "title": "Dossiers",
-  "up": "Déplacer vers le haut",
-  "variable": {
-    "add": "Ajouter une nouvelle variable",
-    "current": {
-      "desc": "Vous pouvez utiliser la variable {{current}} pour utiliser le dossier actuel.",
-      "warning": "⚠️ Vous avez besoin d'avoir un fichier déjà ouvert pour utiliser la commande."
-    },
-    "desc": {
-      "explain": "Les variables personnalisées seront remplacées par leurs valeurs lors de la création.",
-      "filename": "Vous pouvez utiliser des variables personnalisées dans le chemin du fichier. ",
-      "insensitive": "Sans Regex, le nom sera sensible à la casse, y compris le type \"date\".",
-      "regex": {
-        "info": "Pour utiliser un nom avec un RegEx, il faut l'entourer de \"/\"",
-        "warn": "Les regex ne fonctionne que sur le type \"texte\"."
-      },
-      "warn": {
-        "usage": "Pour utiliser la variable, vous devez entourer son nom de \"{{}}\" dans le chemin du fichier."
-      }
-    },
-    "name": "Nom",
-    "remove": "Supprimer la variable",
-    "title": "Gérer les variables personnalisées",
-    "value": "Valeur"
-  }
+	"allFolder": {
+		"default": {
+			"title": "Template par défaut",
+			"tooltip": "Définir le modèle par défaut pour tous les dossiers s'ils ne sont pas enregistrés"
+		},
+		"enable": "Activer le plugin pour tous les dossier",
+		"filterAnyFolderCommand": {
+			"desc": "Supprimera de la liste \"tous les dossiers\" les templates définies par l'utilisateur. Si désactiver, affichera les template définies avec leur chemins plutôt que leur nom de commande.",
+			"title": "Filtrer la liste de la commande \"tous les dossiers\""
+		},
+		"listAllModals": "Lister tous les dossiers dans le quick-switcher, au lieu d'ouvrir un autre menu"
+	},
+	"commandName": "Nom de la commande",
+	"common": {
+		"date": "Date",
+		"example": "Exemple :",
+		"name": "Le nom",
+		"string": "Texte",
+		"submit": "Valider",
+		"value": "La valeur"
+	},
+	"create": "Créer une note :",
+	"down": "Déplacer vers le bas",
+	"duplicate": "Dupliquer",
+	"editFolder": {
+		"add": "Ajouter un dossier",
+		"alreadyExist": {
+			"desc": "Dans le cas où vous n'ouvrez pas les notes à la création, vous permet tout de même d'ouvrir le fichier s'il existe déjà.",
+			"focus": "Focus sur la note déjà existante",
+			"title": "Ouverture par défaut des notes qui existent déjà"
+		},
+		"default": "Template par défaut pour tous les dossiers s'ils ne sont pas enregistrés",
+		"fileName": {
+			"desc": "Le nom sera incrémenté si le nom existe déjà.",
+			"title": "Choisissez la façon dont les notes seront nommées."
+		},
+		"focus": {
+			"desc": "Focus sur la nouvelle note après sa création",
+			"title": "Focus"
+		},
+		"increments": {
+			"desc": "Désactivé, n'incrémente pas le nom si le fichier existe déjà et ouvre la note existante à la place.",
+			"title": "Incrémentation"
+		},
+		"opening": {
+			"desc": "Comment la note sera ouverte après sa création",
+			"dropDown": {
+				"current": "Onglet courant",
+				"newTab": "Nouvel onglet",
+				"newWindow": "Nouvelle fenêtre",
+				"nothing": "Ne pas ouvrir",
+				"split": "Fenêtre divisée"
+			},
+			"head": "Ouverture",
+			"nothing": "Paramètre pour les notes déjà existantes",
+			"split": {
+				"horizontal": "Horizontale",
+				"vertical": "Verticale"
+			},
+			"title": "Ouverture par défaut"
+		},
+		"other": {
+			"setting": {
+				"desc": "Ajouter un bouton dans le menu fichier pour créer une note dans ce dossier. Ne fonctionne que si le chemin du dossier contient \"{{current}}\" ou est le même dossier que celui visé.",
+				"title": "Menu \"fichier\""
+			},
+			"title": "Autre"
+		},
+		"template": {
+			"dropDown": {
+				"folderName": "Nom du dossier",
+				"none": "Aucun"
+			},
+			"title": "Choisissez un modèle si vous voulez ajouter quelque chose avant ou après le nom du fichier."
+		},
+		"templater": {
+			"setting": {
+				"desc": "Permet d'utiliser une template du plugin templater",
+				"placeholder": "template",
+				"title": "Chemin de la template"
+			},
+			"title": "Paramètre de templater"
+		},
+		"title": "Modifier les paramètres spécifiques au dossier"
+	},
+	"error": {
+		"date": "Format de date invalide, veuillez utiliser un format valide.",
+		"duplicate": "{{- name}} existe déjà.",
+		"empty": "{{- name}} ne peut pas être vide",
+		"fileName": "Nom de fichier invalide, veuillez utiliser un nom de fichier si vous n'utilisez pas de modèle.",
+		"invalidExpression": "Le nom du fichier ne peut contenir aucun des caractères suivants : *, \", , /, <, >, :, |, ?",
+		"pathNoFound": "Le dossier {{- path}} n'existe pas.",
+		"templateNotFile": "{{- path}} n'est pas un fichier valide.",
+		"templateNotFound": "{{- path}} n'existe pas."
+	},
+	"example": "Exemple: chemin/vers/dossier",
+	"log": "Création de la note dans le dossier {{- path}}, avec le nom {{- name}}.",
+	"moveUp": "Déplacer en haut",
+	"path": "Chemin du dossier",
+	"quickSwitcher": {
+		"anyFolder": "Quick Switcher (tout dossier)",
+		"simple": "Quick Switcher"
+	},
+	"remove": "Supprimer le dossier",
+	"template": {
+		"desc": "Le nom du fichier peut être vide si vous utilisez un modèle.",
+		"dropDown": {
+			"date": {
+				"desc": "Les formats valides peuvent être trouvés ",
+				"here": "ici",
+				"url": "https://momentjs.com/docs/#/displaying/format/"
+			}
+		},
+		"error": "Aucun fichier n'a été trouvé dans le dossier templater.",
+		"header": "Modèle",
+		"position": {
+			"append": "Ajouter après",
+			"prepend": "Ajouter avant",
+			"title": "Choisissez où ajouter le modèle."
+		},
+		"separator": "Séparateur"
+	},
+	"title": "Dossiers",
+	"up": "Déplacer vers le haut",
+	"variable": {
+		"add": "Ajouter une nouvelle variable",
+		"current": {
+			"desc": "Vous pouvez utiliser la variable {{current}} pour utiliser le dossier actuel.",
+			"warning": "⚠️ Vous avez besoin d'avoir un fichier déjà ouvert pour utiliser la commande."
+		},
+		"desc": {
+			"explain": "Les variables personnalisées seront remplacées par leurs valeurs lors de la création.",
+			"filename": "Vous pouvez utiliser des variables personnalisées dans le chemin du fichier. ",
+			"insensitive": "Sans Regex, le nom sera sensible à la casse, y compris le type \"date\".",
+			"regex": {
+				"info": "Pour utiliser un nom avec un RegEx, il faut l'entourer de \"/\"",
+				"warn": "Les regex ne fonctionne que sur le type \"texte\"."
+			},
+			"warn": {
+				"usage": "Pour utiliser la variable, vous devez entourer son nom de \"{{}}\" dans le chemin du fichier."
+			}
+		},
+		"name": "Nom",
+		"remove": "Supprimer la variable",
+		"title": "Gérer les variables personnalisées",
+		"value": "Valeur"
+	}
 }
