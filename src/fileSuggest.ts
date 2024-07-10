@@ -1,29 +1,34 @@
 import i18next from "i18next";
 import { AbstractInputSuggest, type App, Notice, TFile, TFolder } from "obsidian";
 
-export class FolderSuggester extends AbstractInputSuggest<TFolder> {
+export class FolderSuggester extends AbstractInputSuggest<string> {
 	constructor(
 		private inputEl: HTMLInputElement,
 		app: App,
-		private onSubmit: (value: TFolder) => void
+		private onSubmit: (value: string) => void
 	) {
 		super(app, inputEl);
 	}
 
-	renderSuggestion(value: TFolder, el: HTMLElement): void {
-		el.setText(value.path);
+	renderSuggestion(value: string, el: HTMLElement): void {
+		el.setText(value);
 	}
 
-	getSuggestions(query: string): TFolder[] {
-		//@ts-ignore
-		return this.app.vault.getAllFolders().filter((folder: TFolder) => {
-			return folder.path.toLowerCase().contains(query.toLowerCase());
-		});
+	getSuggestions(query: string): string[] {
+		const sugg = this.app.vault
+			//@ts-ignore
+			.getAllFolders()
+			.filter((folder: TFolder) => {
+				return folder.path.toLowerCase().contains(query.toLowerCase());
+			})
+			.map((folder: TFolder) => folder.path);
+		if (sugg.length === 0) return [query];
+		return sugg;
 	}
 
-	selectSuggestion(value: TFolder, _evt: MouseEvent | KeyboardEvent): void {
+	selectSuggestion(value: string, _evt: MouseEvent | KeyboardEvent): void {
+		this.inputEl.value = value;
 		this.onSubmit(value);
-		this.inputEl.value = value.path;
 		this.inputEl.focus();
 		this.inputEl.trigger("input");
 		this.close();

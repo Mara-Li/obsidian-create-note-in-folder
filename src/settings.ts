@@ -149,21 +149,20 @@ export class NoteInFolderSettingsTab extends PluginSettingTab {
 					 */
 					this.addTooltip(i18next.t("commandName"), cb.inputEl);
 				})
-				.addSearch((cb) => {
+				.addSearch(async (cb) => {
 					cb.setPlaceholder(i18next.t("example"));
 					cb.setValue(folder.path);
 					new FolderSuggester(cb.inputEl, this.app, async (result) => {
-						folder.path = result.path;
+						folder.path = result;
 						const oldCommandName =
 							folder.commandName && folder.commandName.length > 0
 								? folder.commandName
-								: result.path;
+								: result;
 						folder.commandName = oldCommandName;
 						await this.plugin.removeCommands();
 						await this.plugin.addNewCommands(oldCommandName, folder, true);
-						await this.plugin.saveSettings();
 					});
-
+					await this.plugin.saveSettings();
 					this.addTooltip(i18next.t("path"), cb.inputEl);
 				});
 
