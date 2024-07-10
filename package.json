@@ -22,26 +22,26 @@
 	"author": "Mara-Li",
 	"license": "GNU General Public License v3.0",
 	"devDependencies": {
-		"@biomejs/biome": "1.7.3",
+		"@biomejs/biome": "1.8.3",
 		"@types/electron": "npm:@ophidian/electron-types@^24.3.1",
-		"@types/node": "^20.14.2",
+		"@types/node": "^20.14.10",
 		"@types/obsidian-typings": "npm:obsidian-typings@^1.1.6",
 		"ansi-colors": "^4.1.3",
-		"builtin-modules": "3.3.0",
-		"commander": "^11.0.0",
-		"commit-and-tag-version": "^11.2.3",
+		"builtin-modules": "4.0.0",
+		"commander": "^12.1.0",
+		"commit-and-tag-version": "^12.4.1",
 		"cross-env": "^7.0.3",
-		"dedent": "^1.5.1",
-		"dotenv": "^16.3.1",
-		"esbuild": "0.17.3",
-		"eslint": "^8.48.0",
+		"dedent": "^1.5.3",
+		"dotenv": "^16.4.5",
+		"esbuild": "0.23.0",
+		"eslint": "^9.6.0",
 		"klona": "^2.0.6",
 		"obsidian": "1.5.7-1",
-		"tslib": "^2.6.2",
-		"typescript": "^4.9.5"
+		"tslib": "^2.6.3",
+		"typescript": "^5.5.3"
 	},
 	"dependencies": {
-		"i18next": "^22.5.1",
-		"ts-deepmerge": "^6.2.0"
+		"i18next": "^23.11.5",
+		"ts-deepmerge": "^7.0.0"
 	}
 }

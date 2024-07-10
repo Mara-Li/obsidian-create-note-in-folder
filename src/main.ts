@@ -1,6 +1,6 @@
 import i18next from "i18next";
 import { normalizePath, Notice, Plugin, TFile, TFolder } from "obsidian";
-import merge from "ts-deepmerge";
+import { merge } from "ts-deepmerge";
 import { klona } from "klona";
 import { ressources, translationLanguage } from "./i18n/i18next";
 import {
