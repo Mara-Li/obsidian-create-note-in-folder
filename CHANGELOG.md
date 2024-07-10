@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.12.2](https://github.com/Lisandra-dev/create-note-in-folder/compare/1.12.1...1.12.2) (2024-07-10)
+
+
+### Bug Fixes
+
+* can't enter {{current}} or any path in the settings ([6c7c927](https://github.com/Lisandra-dev/create-note-in-folder/commit/6c7c927f3d8261cfd2c481ff4ffc00959db52382)), closes [#18](https://github.com/Lisandra-dev/create-note-in-folder/issues/18)
+
 ## [1.12.1](https://github.com/Lisandra-dev/create-note-in-folder/compare/1.12.0...1.12.1) (2024-07-02)
 
 ## [1.12.0](https://github.com/Lisandra-dev/create-note-in-folder/compare/1.11.1...1.12.0) (2024-06-11)
