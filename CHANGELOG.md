@@ -1,3 +1,8 @@
+## [1.12.4](https://github.com/Mara-Li/obsidian-create-note-in-folder/compare/1.12.3...1.12.4) (2024-10-31)
+### Bug Fixes
+
+* **template:** return undefined in case of plugin not found ([971e6af](https://github.com/Mara-Li/obsidian-create-note-in-folder/commit/971e6aff2d4af5abcea1a6aa3de59eae663f7e70))
+
 ## [1.12.3](https://github.com/Mara-Li/obsidian-create-note-in-folder/compare/1.12.2...1.12.3) (2024-10-31)
 ### Bug Fixes
 
