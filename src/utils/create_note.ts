@@ -110,6 +110,37 @@ function getLeafWithNote(app: App, file: TFile): undefined | WorkspaceLeaf {
 	return openedLeaf;
 }
 
+function getTemplater(app: App) {
+	//@ts-ignore
+	return app.plugins.plugins["templater-obsidian"].templater;
+}
+
+/**
+ * Source: https://github.com/chhoumann/quickadd/blob/master/src%2FutilityObsidian.ts#L45-L61
+ * @credit chhoumann - QuickAdd
+ * @param {App} app - The Obsidian App
+ * @param {string} templateContent - The content of the template (as <%xxxx%>)
+ * @param {TFile} targetFile - File to apply the template to (needed for some function, as <% tp.file.title %>)
+ */
+export async function templaterParseTemplate(
+	app: App,
+	templateContent: string,
+	targetFile: TFile
+) {
+	const templater = getTemplater(app);
+	if (!templater) return templateContent;
+
+	return await (
+		//@ts-ignore
+		templater as {
+			parse_template: (
+				opt: { target_file: TFile; run_mode: number },
+				content: string
+			) => Promise<string>;
+		}
+	).parse_template({ target_file: targetFile, run_mode: 4 }, templateContent);
+}
+
 export async function createNoteInFolder(
 	newFolder: FolderSettings,
 	plugin: NoteInFolder,
@@ -197,7 +228,7 @@ export async function createNoteInFolder(
 				normalizePath(currentFolder.path)
 			) as TFolder;
 			//@ts-ignore
-			app.plugins.plugins["templater-obsidian"].templater.create_new_note_from_template(
+			getTemplater(app).create_new_note_from_template(
 				templateFile,
 				folder,
 				defaultName,

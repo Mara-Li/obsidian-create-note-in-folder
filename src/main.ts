@@ -13,7 +13,7 @@ import {
 } from "./interface";
 import { ChooseFolder, ChooseInAllFolder } from "./modals/choose_in_folder";
 import { NoteInFolderSettingsTab } from "./settings";
-import { createFolderInCurrent, createNoteInFolder } from "./utils/create_note";
+import {createFolderInCurrent, createNoteInFolder, templaterParseTemplate} from "./utils/create_note";
 import { generateFileNameWithCurrent } from "./utils/utils";
 
 export default class NoteInFolder extends Plugin {
@@ -179,15 +179,8 @@ export default class NoteInFolder extends Plugin {
 			return;
 		}
 		const templateContent = await this.app.vault.read(templateFile);
-		await this.app.vault.modify(file, templateContent);
-		try {
-			this.app.commands.executeCommandById(
-				"templater-obsidian:replace-in-file-templater"
-			);
-		} catch (e) {
-			console.log(e);
-			// I think it can work if the file is not opened in main view or something. Prevent error like that.
-		}
+		const templated = await templaterParseTemplate(this.app, templateContent, file)
+		await this.app.vault.modify(file, templated);
 	}
 
 	quickSwitcherCommand() {
