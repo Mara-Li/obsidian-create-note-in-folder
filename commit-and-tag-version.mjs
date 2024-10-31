@@ -2,11 +2,11 @@ import { Command, Option } from "commander";
 import commitAndTagVersion from "commit-and-tag-version";
 import dedent from "dedent";
 import pkg from "ansi-colors";
-const { red, dim, gray, italic, bold, cyan, blue, green, underline, yellow } = pkg;
+const { red, dim, gray, italic, bold, cyan, blue, green, underline, yellow, theme } = pkg;
 
 const program = new Command();
 
-pkg.theme({
+theme({
 	danger: red,
 	dark: dim.gray,
 	disabled: gray,
@@ -17,7 +17,6 @@ pkg.theme({
 	primary: blue,
 	strong: bold,
 	success: green.bold,
-	underline,
 	warning: yellow.underline,
 });
 
@@ -42,20 +41,18 @@ const opt = program.opts();
 
 const betaMsg = opt.beta ? em("- Pre-release\n\t") : "";
 const dryRunMsg = opt.dryRun ? em("- Dry run\n\t") : "";
-const releaseAsMsg = opt.releaseAs
-	? em(`- Release as ${underline(opt.releaseAs)}`)
-	: "";
+const releaseAsMsg = opt.releaseAs ? em(`- Release as ${underline(opt.releaseAs)}`) : "";
 
 const msg = dedent(`
-${heading("Options :")}
-	${betaMsg}${dryRunMsg}${releaseAsMsg}  
-`);
+	${heading("Options :")}
+		${betaMsg}${dryRunMsg}${releaseAsMsg}  
+	`);
 
 console.log(msg);
 console.log();
 
 if (opt.beta) {
-	console.log(`${bold.green(">")} ${info.underline("Bumping beta version...")}`);
+	console.log(`${bold.green(">")} ${info(underline("Bumping beta version..."))}`);
 	console.log();
 	const bumpFiles = [
 		{
@@ -77,6 +74,9 @@ if (opt.beta) {
 		prerelease: "",
 		dryRun: opt.dryRun,
 		tagPrefix: "",
+		scripts: {
+			postchangelog: "node hooks/_changelog.mjs -b",
+		},
 	})
 		.then(() => {
 			console.log("Done");
@@ -107,16 +107,18 @@ if (opt.beta) {
 		{
 			filename: "manifest.json",
 			type: "json",
-		}
+		},
 	];
-
 
 	commitAndTagVersion({
 		infile: "CHANGELOG.md",
-		bumpFiles: bumpFiles,
+		bumpFiles,
 		dryRun: opt.dryRun,
 		tagPrefix: "",
 		releaseAs: opt.releaseAs,
+		scripts: {
+			postchangelog: "node hooks/_changelog.mjs",
+		},
 	})
 		.then(() => {
 			console.log("Done");
