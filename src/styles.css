@@ -1,104 +1,100 @@
 .create-note-in-folder.settingsTab .search-input-container {
-    width: 100%;
+	width: 100%;
 }
 
 .edit.create-note-in-folder input.is-error,
 .edit.create-note-in-folder .is-error input {
-    border: 1px solid var(--text-error);
+	border: 1px solid var(--text-error);
 }
-
 
 .create-note-in-folder.edit.is-facultative .setting-item-description {
-    font-style: italic;
+	font-style: italic;
 }
 
-.suggestion-item.hr-item hr{
-    margin: 1px;
-    pointer-events: none;
+.suggestion-item.hr-item hr {
+	margin: 1px;
+	pointer-events: none;
 }
-
 
 .suggestion-item.hr-item.is-selected {
-    background-color: transparent;
-    pointer-events: none;
+	background-color: transparent;
+	pointer-events: none;
 }
 
 .create-note-in-folder .is-disabled {
-    opacity: 0.2;
+	opacity: 0.2;
 }
 
 @media (hover: hover) {
-    .create-note-in-folder .clickable-icon.is-disabled:hover {
-        background-color: var(--background-primary);
-    }
+	.create-note-in-folder .clickable-icon.is-disabled:hover {
+		background-color: var(--background-primary);
+	}
 }
 
 .create-note-in-folder.edit.is-facultative input[type="text"],
 .create-note-in-folder.edit.is-facultative .setting-item-name {
-    font-style: italic;
-    opacity: 0.7;
+	font-style: italic;
+	opacity: 0.7;
 }
 
 .create-note-in-folder .is-warning {
-    border-left: 3px solid var(--color-orange);
-    padding-left: 5px;
-    color: var(--color-orange);
-
+	border-left: 3px solid var(--color-orange);
+	padding-left: 5px;
+	color: var(--color-orange);
 }
 
 .create-note-in-folder code {
-    font-family: var(--font-monospace);
-    color: var(--code-normal);
-    background-color: var(--code-background);
-    padding: 0.1em 0.25em;
-    font-size: var(--code-size);
-    border-radius: var(--code-radius);
+	font-family: var(--font-monospace);
+	color: var(--code-normal);
+	background-color: var(--code-background);
+	padding: 0.1em 0.25em;
+	font-size: var(--code-size);
+	border-radius: var(--code-radius);
 }
 
-.create-note-in-folder .is-warning code{
-    color: var(--color-orange);
-    text-decoration: none;
+.create-note-in-folder .is-warning code {
+	color: var(--color-orange);
+	text-decoration: none;
 }
 
 p.create-note-in-folder .list,
-.create-note-in-folder .is-warning p{
-    margin: 0;
-    padding: 0;
+.create-note-in-folder .is-warning p {
+	margin: 0;
+	padding: 0;
 }
 
-p.create-note-in-folder .is-warning p>*:not(.code) {
-    text-decoration: underline;
+p.create-note-in-folder .is-warning p > *:not(.code) {
+	text-decoration: underline;
 }
 
 .create-note-in-folder .is-warning p > code {
-    text-decoration: none;
+	text-decoration: none;
 }
 
 .create-note-in-folder .is-warning p.callout-title {
-    font-weight: bold;
+	font-weight: bold;
 }
 
 .create-note-in-folder h3 {
-    margin: 15px 0 5px 0;
+	margin: 15px 0 5px 0;
 }
 
 .create-note-in-folder h2 {
-    margin: 20px 0 5px 0;
+	margin: 20px 0 5px 0;
 }
 
 .create-note-in-folder .no-display .setting-item-info {
-    display: none;
+	display: none;
 }
 
-.create-note-in-folder.manage .custom-variables input{
-    width: 100%;
+.create-note-in-folder.manage .custom-variables input {
+	width: 100%;
 }
 
 .create-note-in-folder .custom-variable select {
-    width: 25%;
+	width: 25%;
 }
 
-
-.menu-item.create-note-in-folder.disabled{
-    display: none;
+.menu-item.create-note-in-folder.disabled {
+	display: none;
 }
