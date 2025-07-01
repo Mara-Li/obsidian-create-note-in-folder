@@ -133,8 +133,8 @@ export async function templaterParseTemplate(
 	const templater = getTemplater(app);
 	if (!templater) return templateContent;
 
-	return await (
-		//@ts-ignore
+	return await //@ts-ignore
+	(
 		templater as {
 			parse_template: (
 				opt: { target_file: TFile; run_mode: number },

@@ -1,4 +1,5 @@
 name: Release obsidian plugin
+
 on:
     workflow_dispatch:
         inputs:
@@ -17,21 +18,24 @@ on:
             - "*"
 permissions:
     contents: write
+
 jobs:
     release:
         if: (github.event_name == 'push') || (github.event_name == 'workflow_dispatch' && !inputs.bump)
         uses: mara-li/reusable-workflows/.github/workflows/obsidian-plugin-release.yaml@main
+
         with:
-            PLUGIN_NAME: "create-note-in-folder"
+            PLUGIN_NAME: create-note-in-folder
             CACHE: "bun"
         secrets:
             GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    bump-version:
-        if: ${{ inputs.bump }}
+
+    bump-version-and-release:
+        if: ${{ inputs.bump || false }}
         uses: mara-li/reusable-workflows/.github/workflows/obsidian-plugin-bump-version.yaml@main
         with:
-            PLUGIN_NAME: "create-note-in-folder"
-            BETA: ${{ inputs.beta }}
+            PLUGIN_NAME: create-note-in-folder
+            BETA: ${{ inputs.beta || false}}
             CACHE: "bun"
         secrets:
             GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

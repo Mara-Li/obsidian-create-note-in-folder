@@ -13,7 +13,11 @@ import {
 } from "./interface";
 import { ChooseFolder, ChooseInAllFolder } from "./modals/choose_in_folder";
 import { NoteInFolderSettingsTab } from "./settings";
-import {createFolderInCurrent, createNoteInFolder, templaterParseTemplate} from "./utils/create_note";
+import {
+	createFolderInCurrent,
+	createNoteInFolder,
+	templaterParseTemplate,
+} from "./utils/create_note";
 import { generateFileNameWithCurrent } from "./utils/utils";
 
 export default class NoteInFolder extends Plugin {
@@ -179,7 +183,7 @@ export default class NoteInFolder extends Plugin {
 			return;
 		}
 		const templateContent = await this.app.vault.read(templateFile);
-		const templated = await templaterParseTemplate(this.app, templateContent, file)
+		const templated = await templaterParseTemplate(this.app, templateContent, file);
 		await this.app.vault.modify(file, templated);
 	}
 

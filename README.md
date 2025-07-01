@@ -1,3 +1,5 @@
+<a href='./README_tr.md' style='text-align: center'> Turkish translation</a>
+
 # Commands: Create note in folder
 
 This plugin adds a new command to create a new note in a specific path.
