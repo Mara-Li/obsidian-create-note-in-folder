@@ -1,16 +1,14 @@
-# Changelog
+## [1.13.0-0](https://github.com/Mara-Li/obsidian-create-note-in-folder/compare/1.12.4...1.13.0-0) (2025-07-01)
+### Features
 
-All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
+* add turkish translation ([244f5c0](https://github.com/Mara-Li/obsidian-create-note-in-folder/commit/244f5c020f0023205b3204b1a2b25f2929ef4a0c))
 
 ## [1.6.0-0](https://github.com/Lisandra-dev/create-note-in-folder/compare/1.5.1...1.6.0-0) (2023-11-10)
-
-
 ### Features
 
 * adding nothing to don't open a file but allow to use templater in it ([be30ef4](https://github.com/Lisandra-dev/create-note-in-folder/commit/be30ef43c551d6b1721c34f6c87a53172b682a21))
 * adding option for opening already existing file ([f509e9e](https://github.com/Lisandra-dev/create-note-in-folder/commit/f509e9e3bdb2931c2b5ad771fd8ac996d1f48029))
 * allow to focus file if they already exist ([59092c6](https://github.com/Lisandra-dev/create-note-in-folder/commit/59092c6b7b66d152d3586d0ad82c7c953222a682))
-
 
 ### Bug Fixes
 
