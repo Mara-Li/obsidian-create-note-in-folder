@@ -1,0 +1,149 @@
+{
+	"allFolder": {
+		"default": {
+			"title": "Varsayılan Şablon",
+			"tooltip": "Eğer kayıtlı değil ise varsayılan şablonu tüm dosyalara ekler"
+		},
+		"enable": "Bütün dosyalar için eklentiyi etkileştir",
+		"filterAnyFolderCommand": {
+			"desc": "Kullanıcıların tanımladığı şablonları \"tüm dosyalar\" listesinden kaldıracaktır. \nEğer etkin değilse, tanımlı şablonları komut adları yerine konumları ile gösterecektir.",
+			"title": "\"Tüm dosyalar\" komudunun listelerini filtreler"
+		},
+		"listAllModals": "Hızlı geçişteki bütün dosyaları başka bir pencere açmadan listeler"
+	},
+	"commandName": "Komut Adları",
+	"common": {
+		"date": "Tarih",
+		"example": "Örnek:",
+		"name": "İsim",
+		"string": "Dizi",
+		"submit": "Teslim",
+		"value": "Değer"
+	},
+	"create": "Bir not oluştur",
+	"down": "Aşağı taşı",
+	"duplicate": "Çoğalt",
+	"editFolder": {
+		"add": "Klasör ekleyin",
+		"alreadyExist": {
+			"desc": "Notları oluşturduktan sonra açmazsanız bile, dosya mevcutsa onu açmanıza izin verir.",
+			"focus": "Mevcut nota odaklan",
+			"title": "Çoktan mevcut notların varsayılan açılışı"
+		},
+		"default": "Eğer klasör kayıtlı değil ise şablonu varsayılan seçer",
+		"fileName": {
+			"desc": "Eğer başlık çoktan mevcut ise isim numaralandırılacaktır.",
+			"title": "Notların nasıl isimlendirileceğini seçer."
+		},
+		"focus": {
+			"desc": "Oluşturulduktan sonra yeni nota odaklanır.",
+			"title": "Odaklan"
+		},
+		"increments": {
+			"desc": "Devre dışı bırakıldığında, dosya zaten varsa ismi numaralandırmaz ve mevcut olan notu açar.",
+			"title": "Eğer dosya mevcutsa numaralandırılır"
+		},
+		"opening": {
+			"desc": "Oluşturulduktan sonra notun nasıl açılacağını seçin",
+			"dropDown": {
+				"current": "Mevcut Sekmede",
+				"newTab": "Yeni Sekmede",
+				"newWindow": "Yeni Pencerede",
+				"nothing": "Açma",
+				"split": "Bölünmüş Pencerede"
+			},
+			"head": "Açılış",
+			"nothing": "Mevcut not ayarları",
+			"split": {
+				"horizontal": "Yatay",
+				"vertical": "Dikey"
+			},
+			"title": "Varsayılan Açılış"
+		},
+		"other": {
+			"setting": {
+				"desc": "Dosya menüsüne, bu klasörde not oluşturmak için bir buton ekleyin. Sadece klasör yolu \"{{current}}\" değişkenini içeriyorsa veya tıklanan klasör kullanılıyorsa çalışır.",
+				"title": "Dosya menüsü"
+			},
+			"title": "Diğer"
+		},
+		"template": {
+			"dropDown": {
+				"folderName": "Klasör Adı",
+				"none": "Hiç"
+			},
+			"title": "Dosya isminden önce veya sonra bir şey eklemek istiyorsanız bir şablon seçin."
+		},
+		"templater": {
+			"setting": {
+				"desc": "Templater eklentisinin bir şablon açabilmesine izin vermek için aktifleştirin.",
+				"placeholder": "Şablon",
+				"title": "Şablon konumu"
+			},
+			"title": "Templater ayarları"
+		},
+		"title": "Belirli Dosya seçenekleri"
+	},
+	"error": {
+		"date": "Geçersiz tarih formatı. Lütfen geçerli bir format kullanın.",
+		"duplicate": "{{- name}} zaten mevcut.",
+		"empty": "{{- name}} boş olamaz.",
+		"fileName": "Geçersiz dosya adı, eğer şablon kullanmayacaksanız bir dosya adı kullanın.",
+		"invalidExpression": "Dosya adı şu karakterleri içeremez: *, \", , /, <, >, :, |, ?",
+		"pathNoFound": "Dosya {{- path}} mevcut değil.",
+		"templateNotFile": "{{- path}} geçerli bir dosya değil.",
+		"templateNotFound": "{{- path}} mevcut değil."
+	},
+	"example": "Örnek: belirli/dosya/konumu",
+	"log": "{{- path}} konumunda {{- name}} isminde bir not oluşturuluyor.",
+	"moveUp": "",
+	"path": "folder-path",
+	"quickSwitcher": {
+		"anyFolder": "Hızlı Geçiş (Herhangi Dosya)",
+		"simple": "Hızlı Geçiş"
+	},
+	"remove": "Klasör Kaldır",
+	"template": {
+		"desc": "Şablon kullandıkça dosya ismi boş olamaz.",
+		"dropDown": {
+			"date": {
+				"desc": "Geçerli tarih formatı ",
+				"here": "buradadır.",
+				"url": "https://momentjs.com/docs/#/displaying/format/"
+			}
+		},
+		"error": "Templater klasöründe dosya bulunamadı.",
+		"header": "Şablon",
+		"position": {
+			"append": "Ekle",
+			"prepend": "Çıkar",
+			"title": "Şablonun nereye ekleneceğini seçin"
+		},
+		"separator": "Seperatör"
+	},
+	"title": "Klasörler",
+	"up": "Yukarı taşı",
+	"variable": {
+		"add": "Yeni değişken ekle",
+		"current": {
+			"desc": "Mevcut klasörü kullanmak için \"{{current}}\" değişkenini kullanabilirsiniz.",
+			"warning": "⚠️ Bu komudu kullanmak için mevcut dosyanın açık olması gerek."
+		},
+		"desc": {
+			"explain": "Özel değişkenler, oluşturulma sırasında değerleriyle değiştirilir.",
+			"filename": "Klasör konumunda özel değişkenler kullanabilirsiniz. ",
+			"insensitive": "Regex kullanılmazsa, isim büyük/küçük harf duyarlı olur; bu durum 'date' türü için de geçerlidir.",
+			"regex": {
+				"info": "RegEx ile bir ifade kullanmak için, \"/\" şeklinde kapatın.",
+				"warn": "Regex sadece \"string\" türlerinde çalışır."
+			},
+			"warn": {
+				"usage": "Değişkeni kullanmak için, klasör yolunda ismi \"{{}}\" içine almanız gerekir."
+			}
+		},
+		"name": "İsim",
+		"remove": "Değişkeni kaldır",
+		"title": "Özel değişkenleri yapılandır",
+		"value": "Değer"
+	}
+}
