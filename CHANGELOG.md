@@ -1,3 +1,5 @@
+## [1.13.0](https://github.com/Mara-Li/obsidian-create-note-in-folder/compare/1.13.0-0...1.13.0) (2026-05-20)
+
 ## [1.12.4](https://github.com/Mara-Li/obsidian-create-note-in-folder/compare/1.12.3...1.12.4) (2024-10-31)
 ### Bug Fixes
 
