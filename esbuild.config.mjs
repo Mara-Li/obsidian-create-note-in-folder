@@ -1,14 +1,15 @@
 import * as fs from "fs";
 import * as path from "path";
-import builtins from "builtin-modules";
+import { builtinModules as builtins } from "node:module";
 import { Command } from "commander";
-import dotenv from "dotenv";
+import { loadEnvFile } from "node:process";
 import esbuild from "esbuild";
 import manifest from "./manifest.json" with { type: "json" };
 import packageJson from "./package.json" with { type: "json" };
 
 // Initial configuration
-dotenv.config({ path: [".env"] });
+if (fs.existsSync(".env")) loadEnvFile(".env");
+
 
 // Parsing command line arguments
 const program = new Command();

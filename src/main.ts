@@ -1,5 +1,5 @@
 import i18next from "i18next";
-import { normalizePath, Notice, Plugin, TFile, TFolder } from "obsidian";
+import { MenuSeparator, normalizePath, Notice, Plugin, TFile, TFolder } from "obsidian";
 import { merge } from "ts-deepmerge";
 import { klona } from "klona";
 import { ressources, translationLanguage } from "./i18n/i18next";
@@ -151,8 +151,8 @@ export default class NoteInFolder extends Plugin {
 				else if (toRemove === "create")
 					commandName = `Create note : ${disabled.commandName ?? disabled.path}`;
 				for (const item of menu.items) {
-					//@ts-ignore
-					const itemName: string | undefined = item.titleEl?.getText() ?? item.titleEl;
+					if (item instanceof MenuSeparator) continue;
+					const itemName = item.titleEl?.getText() ?? item.titleEl;
 					if (itemName === commandName)
 						item.dom.addClasses(["create-note-in-folder", "disabled"]);
 					else if (

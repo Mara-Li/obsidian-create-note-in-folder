@@ -21,9 +21,7 @@
       "ES7",
       "ESNext"
     ],
-    "types": [
-      "obsidian-typings"
-    ]
+    "types": ["@obsidian-typings/obsidian-public-latest"]
   },
   "include": [
     "**/*.ts"
